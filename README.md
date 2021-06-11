@@ -56,7 +56,7 @@ Now you can submit a PR!
 Remember to change the `requirements.txt` file in case you make any changes to the package managers. You can do this by:
 
 ```bash
-pip freeze > requirements.txt
+pip-chill --no-version > requirements.txt
 ```
 
 ## Troubleshooting
