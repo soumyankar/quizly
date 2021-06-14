@@ -1,3 +1,8 @@
+flask-bootstrap
+flask-login
 flask-sqlalchemy
+flask-wtf
 gunicorn
 pip-chill
+psycopg2-binary
+python-dotenv
