@@ -1,6 +1,3 @@
-import sys
-sys.path.append("..")
-
 from flask import Flask, request, redirect, url_for, Blueprint, render_template
 
 from flask_sqlalchemy import SQLAlchemy
@@ -24,6 +21,10 @@ class Admin(UserMixin, db.Model):
 	username=db.Column(db.String(15),unique=True)
 	email=db.Column(db.String(80),unique=True)
 	password=db.Column(db.String(80))
+	date_created=db.Column(db.DateTime, default=datetime.now())
+	
+	def __repr__(self):
+		return '<Admin %r>' % self.id
 
 class LoginForm(FlaskForm):
 	username = StringField('username', validators=[InputRequired()])
@@ -33,10 +34,10 @@ class LoginForm(FlaskForm):
 def load_user(user_id):
 	return Admin.query.get((user_id))
 
-@adminlogin.route("/adminlogin", methods=['GET'])
+@adminlogin.route("/adminlogin", methods=['GET', 'POST'])
 def adminloginPage():
 	if current_user.is_authenticated:
-		return redirect(url_for('participants'))
+		return 'This worked!'
 		flash('You are already logged in my dude')
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -44,10 +45,12 @@ def adminloginPage():
 		if user:
 			if user.password == form.password.data:
 				login_user(user,remember=False)
-				return redirect(url_for('index'))
+				return 'This worked!'
 			else:
 				return '<h1>Wrong Password</h1>'
 		else:
 			return '<h1>Username or password is invalid.</h1>'
-
 	return render_template('adminlogin.html', form=form)
+
+
+
