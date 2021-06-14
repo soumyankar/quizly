@@ -1,3 +1,8 @@
+import time
+import json
+import sys
+sys.path.append("..")
+
 from flask import Flask, request, redirect, url_for, Blueprint, render_template
 
 from flask_sqlalchemy import SQLAlchemy
@@ -8,31 +13,15 @@ from wtforms.validators import InputRequired, Email, Length
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
-import time
-import json
-adminlogin = Blueprint("adminLogin", __name__, static_folder="../static", template_folder="../templates")
-db = SQLAlchemy()
+from src.models import Admin
+from src.extensions import db, login_manager
 
-login_manager = LoginManager()
-login_manager.login_view = 'adminLoginPage'
+adminlogin = Blueprint("adminlogin", __name__, static_folder="../../static", template_folder="../../templates")
 
-class Admin(UserMixin, db.Model):
-	id=db.Column(db.Integer, primary_key=True)
-	username=db.Column(db.String(15),unique=True)
-	email=db.Column(db.String(80),unique=True)
-	password=db.Column(db.String(80))
-	date_created=db.Column(db.DateTime, default=datetime.now())
-	
-	def __repr__(self):
-		return '<Admin %r>' % self.id
 
 class LoginForm(FlaskForm):
 	username = StringField('username', validators=[InputRequired()])
 	password = PasswordField('password', validators=[InputRequired()])
-
-@login_manager.user_loader
-def load_user(user_id):
-	return Admin.query.get((user_id))
 
 @adminlogin.route("/adminlogin", methods=['GET', 'POST'])
 def adminloginPage():
