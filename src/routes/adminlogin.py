@@ -26,7 +26,7 @@ class LoginForm(FlaskForm):
 @adminlogin.route("/adminlogin", methods=['GET', 'POST'])
 def adminloginPage():
 	if current_user.is_authenticated:
-		return 'This worked!'
+		return redirect(url_for('admin.admindashboard'))
 		flash('You are already logged in my dude')
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -34,7 +34,7 @@ def adminloginPage():
 		if user:
 			if user.password == form.password.data:
 				login_user(user,remember=False)
-				return 'This worked!'
+				return redirect(url_for('admin.admindashboard'))
 			else:
 				return '<h1>Wrong Password</h1>'
 		else:

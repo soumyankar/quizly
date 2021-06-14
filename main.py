@@ -12,6 +12,8 @@ import os
 # Import src python files
 from src.routes.homepage import homepage
 from src.routes.adminlogin import adminlogin
+from src.routes.admin import admin
+from src.routes.adminlogout import adminlogout
 from src.extensions import db,login_manager
 from src.models import Admin
 
@@ -33,6 +35,8 @@ def load_user(user_id):
 # Register blueprints here.
 app.register_blueprint(homepage, url_prefix="")
 app.register_blueprint(adminlogin, url_prefix="")
+app.register_blueprint(admin, url_prefix="")
+app.register_blueprint(adminlogout, url_prefix="")
 
 if __name__ == "__main__":
     app.run()
