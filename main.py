@@ -11,6 +11,7 @@ import os
 from src.homepage import homepage
 from src.adminlogin import adminlogin, db, login_manager
 from flask_bootstrap import Bootstrap
+import psycopg2
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
