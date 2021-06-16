@@ -16,8 +16,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from src.models import Admin
 from src.extensions import db, login_manager
 
-quizcreate = Blueprint("/quiz/create", __name__, static_folder="../../static", template_folder="../../templates")
+quizplans = Blueprint("/quiz/plans", __name__, static_folder="../../static", template_folder="../../templates")
 
-@quizcreate.route("/quiz/create", methods=['GET', 'POST'])
-def quizregisterPage():
-	return render_template('quizcreate.html')
+@quizplans.route("/quiz/plans", methods=['GET', 'POST'])
+def quizplanspage():
+	return render_template('quizplans.html')
