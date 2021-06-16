@@ -1,0 +1,33 @@
+<form>
+  <h5>Quiz Creation Form</h5>
+  <div class="input-group mb-3">
+    <label class="input-group-text" for="inputGroupSelect01">Plan</label>
+    <select class="form-select" id="inputGroupSelect01">
+      <option selected>Choose...</option>
+      <option value="1">Basic</option>
+      <option value="2">Plan #2</option>
+      <option value="3">Plan #3</option>
+    </select>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="email" class="form-control" id="QuizOwnerEmail" aria-describedby="emailHelp" placeholder="name@example.com">
+    <label for="QuizOwnerEmail">Email address</label>
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="text" class="form-control" id="QuizOwnerName" aria-describedby="QuizOwnerNameHelp" placeholder="John Doe">
+    <label for="QuizOwnerName" class="form-label">Name</label>
+    <div id="QuizOwnerNameHelp" class="form-text">This would help people know who's the Quiz Host.</div>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="date" class="form-control" id="QuizDate" aria-describedby="QuizDate" placeholder="01/01/1971">
+    <label for="QuizDate" class="form-label"></label>
+    <div id="QuizDate" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
+  </div>
+  <div class="form-floating mb-3">
+    <input type="time" id="QuizTime" class="form-control" aria-describedby="QuizTime" placeholder="23:59">
+    <label for="QuizTime" class="form-label"></label>
+    <div id="QuizTime" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
