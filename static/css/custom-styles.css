@@ -10,3 +10,27 @@
   height: 100%;
   background-color: #fff;
 }
+
+.pricing-on-hover:hover {
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -webkit-font-smoothing: antialiased;
+}
+
+.currency-label sup{
+  font-size: 18px;
+  top: -20px;
+}
+
+.price-badge {
+  top: -13px;
+  left: 0;
+  right: 0;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.badge-inverse {
+  background-color: #3e4555;
+}
