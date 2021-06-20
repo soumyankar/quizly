@@ -11,18 +11,17 @@
 	<!-- <link rel="icon" type="image/x-icon" href="assets/super-cool-icon.ico" /> -->
 	<!-- Font Awesome icons (free version)-->
 	<!-- Need this for discord icon and other things -->
-	<script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/877181812c.js" crossorigin="anonymous"></script>
 	<!-- Simple line icons-->
 	<!-- This is what I meant by other times, like chevron arrow -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
 	<!-- Google fonts-->
 	<!-- I shamelessly copied this from a template, I suppose the font looks pretty. -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css" />
-	<!-- Always include last -->
-	<!-- Core theme CSS (includes Bootstrap)-->
-	<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-	<!-- Custom styling -->
-	<link href="{{ url_for('static', filename='css/custom-styles.css') }}" rel="stylesheet" type="text/css">
+	{%block css%}
+	{%include 'basecss.html'%}
+	{%endblock%}
+
 </head>
 <!-- Pace Overlay -->
 <div class="page_overlay"></div>
@@ -37,7 +36,9 @@
 	{% endblock %}
 
 	<!-- Footer Section -->
+	{%block footer%}
 	{% include 'footer_section.html' %}
+	{%endblock%}
 	<!-- Necessary scripts -->
 	<!-- Always keep on bottom! Always! -->
 	<!-- Jquery 3.6.x -->
@@ -45,14 +46,34 @@
 	<!-- Pace.js for AJAX loading -->
 	<script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/red/pace-theme-bounce.min.css">
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.1.1/gsap.min.js'></script>
 	<!-- Custom Pace.js options for async load -->
 	<script type="text/javascript" src="{{ url_for('static', filename='js/paceOptions.js') }}"></script>
+	
 	<!-- Scroll to Top Button-->
-	<a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+	<!-- <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a> -->
 	<!-- Bootstrap core JS-->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Core theme JS-->
 	<script src="{{ url_for('static', filename='js/template.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/404.js') }}"></script>
+	<script>
 
+		let arrow = document.querySelectorAll(".arrow");
+		for (var i = 0; i < arrow.length; i++) {
+			arrow[i].addEventListener("click", (e) => {
+				let arrowParent = e.target.parentElement.parentElement;
+				arrowParent.classList.toggle("showMenu");
+			});
+		}
+	  
+		let sidebar = document.querySelector(".sidebar");
+		let sidebarBtn = document.querySelector(".bx-menu");
+		console.log(sidebarBtn);
+		sidebarBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("close");
+		});
+	  </script>
+	  
 </body>
 </html>
