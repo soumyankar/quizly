@@ -9,7 +9,6 @@ import psycopg2
 import sys
 import os
 
-
 # Routes
 from src.routes.homepage import homepage
 from src.routes.admin import admin
@@ -19,8 +18,9 @@ from src.routes.quiz import quiz
 from src.routes.quizregister import quizregister
 from src.routes.quizplans import quizplans
 from src.routes.quizcreate import quizcreate
-from src.routes.errorhandler import errors
 
+# ErrorHandler
+from src.routes.errorhandler import errors
 
 # Extensions
 from src.extensions import db,login_manager
@@ -50,6 +50,7 @@ app.register_blueprint(quiz, url_prefix="")
 app.register_blueprint(quizregister, url_prefix="")
 app.register_blueprint(quizplans, url_prefix="")
 app.register_blueprint(quizcreate, url_prefix="")
+
 app.register_blueprint(errors, url_prefix="")
 if __name__ == "__main__":
     app.run()
