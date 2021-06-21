@@ -26,3 +26,5 @@ USER_REQUIRE_RETYPE_PASSWORD = True  # Prompt for `retype password` in:
 USER_ENABLE_USERNAME = False  # Register and Login with username
 USER_AFTER_LOGIN_ENDPOINT = 'userdashboard.userdashboardpage'
 USER_AFTER_LOGOUT_ENDPOINT = 'homepage.index'
+USER_UNAUTHENTICATED_ENDPOINT = 'user.login'
+USER_UNAUTHORIZED_ENDPOINT = 'user.login'
