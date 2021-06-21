@@ -11,6 +11,7 @@ from flask_script import Command
 
 from app import db
 from app.models.user_models import User, Role
+from app.models.quiz_models import Quiz, QuizRole
 
 class InitDbCommand(Command):
     """ Initialize the database."""
@@ -33,9 +34,12 @@ def create_users():
     db.create_all()
 
     # Adding roles
-    admin_role = find_or_create_role('admin', u'Admin')
-    client_role = find_or_create_role('client', u'Client')
+    admin_role = find_or_create_role_user('admin', u'Admin')
+    client_role = find_or_create_role_user('client', u'Client')
 
+    owner_role = find_or_create_role_quiz('owner', u'Owner')
+    player_role = find_or_create_role_quiz('player' u'Player')
+    
     # Add users
     user = find_or_create_user(u'GetSetQuiz', u'Admin', u'getsetquizindia@gmail.com', 'supersecretpass', 'getsetquiz9999', '9999', 'Others', 'India', admin_role)
     user = find_or_create_user(u'Client', u'Example', u'soumyankarm@gmail.com', 'supersecretpass', 'client9999', '9999', 'Others', 'India', client_role)
@@ -44,7 +48,7 @@ def create_users():
     db.session.commit()
 
 
-def find_or_create_role(name, label):
+def find_or_create_role_user(name, label):
     """ Find existing role or create new role """
     role = Role.query.filter(Role.name == name).first()
     if not role:
@@ -52,6 +56,13 @@ def find_or_create_role(name, label):
         db.session.add(role)
     return role
 
+def find_or_create_role_quiz(name, label):
+    """ Find existing role or create new role """
+    role = QuizRole.query.filter(QuizRole.name == name).first()
+    if not role:
+        role = QuizRole(name=name, label=label)
+        db.session.add(role)
+    return role
 
 def find_or_create_user(first_name, last_name, email, password, username, age, gender, nationality, role=None):
     """ Find existing user or create new user """
