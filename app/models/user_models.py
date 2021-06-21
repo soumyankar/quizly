@@ -1,10 +1,6 @@
 from flask_user import UserMixin
 from app import db
 from datetime import datetime
-from wtforms import StringField, PasswordField, BooleanField, SelectField, TextField, IntegerField, SubmitField
-from wtforms import validators, ValidationError
-from wtforms.validators import InputRequired, Email, Length
-from flask_wtf import FlaskForm 
 
 class Admin(UserMixin, db.Model):
 	__tablename__ = 'admin'

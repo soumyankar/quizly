@@ -1,9 +1,5 @@
-import time
-import json
-import sys
-
 from flask import Flask, request, redirect, url_for, Blueprint, render_template
-
+from flask_login import login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 
 from app import db
@@ -15,6 +11,7 @@ def quizhomepage():
 	return render_template('quiz/quiz.html')
 
 @quiz.route("/quiz/plans/create", methods=['GET', 'POST'])
+@login_required
 def quizcreatepage():
 	plan = request.args.get('plan', None)
 	return render_template('quiz/quizcreate.html')
