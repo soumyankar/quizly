@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app import db
 
-quiz = Blueprint("/quiz/", __name__, static_folder="../../static", template_folder="../../templates")
+quiz = Blueprint("quiz", __name__, static_folder="../../static", template_folder="../../templates")
 
 @quiz.route("/quiz/", methods=['GET', 'POST'])
 def quizhomepage():
