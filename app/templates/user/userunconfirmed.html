@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="content-section bg-light">
+	<div class="container px-4 px-lg-5 text-center">
+		<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div class="col-lg-10">
+				<h2>GetSetQuiz</h2>
+				<p class="lead mb-5">
+					Welcome to GetSetQuiz! We are absolutely delighted to have you here.
+					Take a look around and see if you would like to join a quiz or rather - Create one yourself!
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+<section>
+	<div class="container px-4 px-lg-5">
+		<div class="row gx-4 gx-lg-5">	
+			<h1>User Dashboard</h1>
+			<p>Hello, {{user.first_name}} {{user.last_name}}</p>
+			<div class="alert alert-danger d-flex align-items-center" role="alert">
+				<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+				<div>
+					Activate your account first. Didn't get the email? <a href="{{ url_for('user.resend_confirmation') }}">Resend activation mail</a>
+				</div>
+			</div>
+			<p>Before you begin using the application, you must activate your email account first. Please check your account for the email we've sent(<i>also check the spam folder</i>) and click the activation link!</p>
+			<a class="btn btn-danger" href="/user/logout">Logout</a>
+			</div>
+		</div>
+	</section>
+	{% endblock %}

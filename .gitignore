@@ -1,3 +1,5 @@
+.env
+commands.txt
 # Byte-compiled / optimized / DLL files
 .idea/
 workspace.xml

@@ -1,0 +1,59 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% from "forms/_formhelper.html" import render_field %}
+
+<form class="row g-3" action="{{ url_for('user.register') }}" method="POST">
+  {{ form.hidden_tag() }}
+  <h5>User Registration Form</h5>
+  <div class="col-12">
+    <div class="form-floating mb-3">
+      <d1>
+        {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="emailHelp") }}
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      </d1>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="form=form-floating mb-3">
+      {{ render_field(form.username, class='form-control', placeholder='username123', id='usernameHelp') }}
+    </div>
+  </div>
+  <div class="col-6">
+    {{ render_field(form.password, class='form-control', placeholder='Password', id='passwordHelp') }}
+    <div id="passwordHelp" class="form-text">Try picking a strong password.</div>
+  </div>
+  <div class="col-6">
+    {{ render_field(form.retype_password, class='form-control', placeholder='Retype Password') }}
+  </div>
+  <div class="col-6">
+    <div class="form-floating mb-3">
+      <d2>
+        {{ render_field(form.first_name, class='form-control', placeholder='First Name') }}
+      </d2>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="form-floating mb-3">
+      <d3>
+        {{ render_field(form.last_name, class='form-control', placeholder='Last Name') }}
+      </d3>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <d4>
+      {{ render_field(form.nationality, class='form-select', placeholder='Nationality') }}
+    </d4>
+  </div>
+  <div class="col-md-4">
+    <d5>
+      {{ render_field(form.gender, class='form-select', placeholder='Gender') }}
+    </d5>
+  </div>
+  <div class="col-md-2">
+    <d6>
+      {{ render_field(form.age, class='form-control', placeholder='Age') }}
+    </d6>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>

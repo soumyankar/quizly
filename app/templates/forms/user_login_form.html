@@ -1,0 +1,27 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% from "forms/_formhelper.html" import render_field, render_button %}
+
+<form class="row g-3" action="{{ url_for('user.login') }}" method="POST">
+  {{ form.hidden_tag() }}
+  <h5>User Login Form</h5>
+  <div class="row gx-4 gx-lg-5 d-flex justify-content-center">
+    <div class="col-6">
+      <div class="form-floating mb-3">
+        <d1>
+          {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="usernameHelp") }}
+          <div id="usernameHelp" class="form-text">Put in the username and password that we have provided you through email.</div>
+        </d1>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-floating mb-3">
+        <d2>
+          {{ render_field(form.password, class='form-control', placeholder='Password') }}
+        </d2>
+      </div>
+    </div>
+    <div class="col-12">
+      {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
+    </div>
+  </div>
+</form>
