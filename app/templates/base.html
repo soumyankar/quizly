@@ -26,19 +26,40 @@
 <!-- Pace Overlay -->
 <div class="page_overlay"></div>
 <body id="page-top">
+    {# One-time system messages called Flash messages #}
+    {% block flash_messages %}
+        {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category=='error' %}
+                        {% set category='danger' %}
+                    {% endif %}
+                    <div class="alert alert-{{category}} alert-dismissible fade show">
+                    	<strong>{{ message|safe }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                	</div>
+                {% endfor %}
+            {% endif %}
+        {%- endwith %}
+    {% endblock %}
+
 	{% block content %}
+	
 	{% block sidebarnav_section %}
 	{% endblock %}
+	
 	{% block masthead_section %}
 	{% endblock %}
+	
 	{% block about_section %}
 	{% endblock %}
+
 	{% endblock %}
 
 	<!-- Footer Section -->
-	{%block footer%}
+	{% block footer %}
 	{% include 'footer_section.html' %}
-	{%endblock%}
+	{% endblock %}
 	<!-- Necessary scripts -->
 	<!-- Always keep on bottom! Always! -->
 	<!-- Jquery 3.6.x -->
