@@ -12,6 +12,7 @@ from flask_script import Command
 from app import db
 from app.models.user_models import User, Role
 from app.models.quiz_models import Quiz, QuizRole
+from app.models.pricingplan_models import PricingPlan
 
 class InitDbCommand(Command):
     """ Initialize the database."""
@@ -33,10 +34,11 @@ def create_users():
     # Create all tables
     db.create_all()
 
-    # Adding roles
+    # Adding user roles
     admin_role = find_or_create_role_user('admin', u'Admin')
     client_role = find_or_create_role_user('client', u'Client')
 
+    # Adding quiz player/owner roles
     owner_role = find_or_create_role_quiz('owner', u'Owner')
     player_role = find_or_create_role_quiz('player' u'Player')
     
@@ -44,6 +46,9 @@ def create_users():
     user = find_or_create_user(u'GetSetQuiz', u'Admin', u'getsetquizindia@gmail.com', 'supersecretpass', 'getsetquiz9999', '9999', 'Others', 'India', admin_role)
     user = find_or_create_user(u'Client', u'Example', u'soumyankarm@gmail.com', 'supersecretpass', 'client9999', '9999', 'Others', 'India', client_role)
 
+    # Add Pricing Plans
+    pricingplan = find_or_create_pricingplan(u'Basic', 0, False, 20)
+    pricingplan = find_or_create_pricingplan(u'Premium', 150, True, 100)
     # Save to DB
     db.session.commit()
 
@@ -63,6 +68,14 @@ def find_or_create_role_quiz(name, label):
         role = QuizRole(name=name, label=label)
         db.session.add(role)
     return role
+
+def find_or_create_pricingplan(name, price, payment_required, total_players):
+    """ Find or create the pricing plans for quizzes """
+    plan = PricingPlan.query.filter(PricingPlan.name == name).first()
+    if not plan:
+        plan = PricingPlan(name=name, price=price, payment_required=payment_required, total_players=total_players)
+        db.session.add(plan)
+    return plan
 
 def find_or_create_user(first_name, last_name, email, password, username, age, gender, nationality, role=None):
     """ Find existing user or create new user """
