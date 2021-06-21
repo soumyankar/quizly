@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<p>Hello, {{ user.first_name }} {{ user.last_name }}</p>
+
+<h3>Admin Moderation Panel</h3>
+<a href="{{ url_for('user.logout') }}" class="btn btn-danger">Logout</a>
+<p>Hello, 123</p>
+<p>This is a new channge.</p>
+<p>Some new change</p>
+{% endblock %}
