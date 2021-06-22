@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import uuid
 
 from app import db
-from app.models.models import Quiz, PricingPlan
+from app.models.models import User, Quiz, PricingPlan
 from app.forms.quizforms import QuizRegisterForm
 from app.misc.razorpay_creds import razorpay_client, RazorpayOrder
 
@@ -47,10 +47,27 @@ def quizcreatepage(plan):
 		flash('That is not a valid plan ID. Choose again')
 		return redirect(url_for('quiz.quizplanspage'))
 
-@quiz.route("/quiz/register", methods=['GET', 'POST'])
-def quizregisterPage():
-	return render_template('quiz/quizregister.html')
+@quiz.route("/quiz/browse", methods=['GET', 'POST'])
+def quizbrowsepage():
+	quizzes = Quiz.query.all()
+	owner_names = []
+	pricing_plans = []
+	for quiz in quizzes:
+		user = User.query.filter(User.id == quiz.id).first()
+		owner_names.append(str(user.first_name + user.last_name))
+		plan = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
+		pricing_plans.append(plan.name)
 
+	return render_template('quiz/quizbrowse.html', quizzes=quizzes, owner_names=owner_names, pricing_plans=pricing_plans)
+
+@quiz.route("/quiz/register/<string:uuid>", methods=['GET', 'POST'])
+@login_required
+def quizregisterpage(uuid):
+	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
+	owner = User.query.filter(User.id == quiz.id).first()
+	pricing_plan = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
+
+	return render_template('quiz/quizregister.html', quiz=quiz, owner=owner, pricing_plan=pricing_plan)
 @quiz.route("/quiz/plans", methods=['GET', 'POST'])
 def quizplanspage():
 	pricingplans = PricingPlan.query.all()
