@@ -9,16 +9,12 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_user import UserManager
 from flask_wtf.csrf import CSRFProtect
 from flask_bootstrap import Bootstrap
-import razorpay
 
-from app.local_settings import RAZORPAY_KEY_SECRET, RAZORPAY_KEY_ID
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
 db = SQLAlchemy()
 mail = Mail()
 migrate = Migrate()
-# Razorpay
-razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID , RAZORPAY_KEY_SECRET))
 
 # Customize Flask-User 
 class CustomUserManager(UserManager):

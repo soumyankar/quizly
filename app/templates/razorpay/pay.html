@@ -1,27 +1,7 @@
 <button id="rzp-button1">Pay</button>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-var options = {
-    "key": "{{ razorpay_key }}", // Enter the Key ID generated from the Dashboard
-    "amount": "150", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "GetSetQuiz Corp",
-    "description": "Test132 Transaction",
-    "image": "https://example.com/your_logo",
-    "order_id": "{{ order_id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
-    "prefill": {
-        "name": "Rishabh Kumar",
-        "email": "rishabhtiwari0282@gmail.com",
-        "contact": "123456789"
-    },
-    "notes": {
-        "address": "GetSetQuiz Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
+var options ={{ razorpay_options | safe }};
 var rzp1 = new Razorpay(options);
 document.getElementById('rzp-button1').onclick = function(e){
     rzp1.open();

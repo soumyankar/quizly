@@ -1,0 +1,2 @@
+This is for checking all tables in schema.
+\dt public.*

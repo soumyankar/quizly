@@ -6,8 +6,7 @@ import uuid
 from app import db
 from app.models.models import Quiz, PricingPlan
 from app.forms.quizforms import QuizRegisterForm
-from app import razorpay_client
-from app.local_settings import RAZORPAY_KEY_SECRET, RAZORPAY_KEY_ID
+from app.misc.razorpay_creds import razorpay_client, RazorpayOrder
 
 quiz = Blueprint("quiz", __name__, static_folder="static", template_folder="templates")
 
@@ -66,14 +65,13 @@ def quizpaymentpage(uuid):
 		return redirect(url_for(userdashboard.userdashboardpage))
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 
-	order_amount = pricing_plan_used.price
-	order_currency = 'INR'
-	order_receipt = 'This is the receipt. IDK.'
-	notes = {'SOme note': 'This is a note'}   # OPTIONAL
-	client_order = dict(amount=order_amount, currency=order_currency, receipt=order_receipt, notes=notes)
-	print(client_order)
-	order_id = razorpay_client.order.create(client_order)
-	order_id = order_id.get('id')
-	print (order_id)
-	razorpay_key = RAZORPAY_KEY_ID
-	return render_template('quiz/quizpayment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, order_id=order_id, razorpay_key=razorpay_key)
+	razorpay_order = RazorpayOrder(order_amount=(pricing_plan_used.price*100),
+								order_receipt=pricing_plan_used.name,
+								order_client_name=current_user.first_name,
+								order_client_email=current_user.email,
+								order_pricing_plan_name=pricing_plan_used.name)
+
+	razorpay_options = razorpay_order.get_razorpay_order_options()
+
+	return render_template('quiz/quizpayment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=razorpay_options)
+
