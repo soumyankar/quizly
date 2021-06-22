@@ -1,4 +1,4 @@
-# Quizly
+# GetSetQuiz
 Home of the core build of the quizly web application.
 
 
