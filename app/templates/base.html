@@ -28,11 +28,18 @@
 <!-- Pace Overlay -->
 <div class="page_overlay"></div>
 <body id="page-top">
+<<<<<<< Updated upstream
 	{% block navbar_section %} 
 	
 	{% include 'navbar.html' %}
     
 	{% endblock %}
+=======
+
+	{% block navbar_section %}
+	{% include 'navbar.html' %}
+	{%endblock%}
+>>>>>>> Stashed changes
     {# One-time system messages called Flash messages #}
     {% block flash_messages %}
         {%- with messages = get_flashed_messages(with_categories=true) -%}
