@@ -1,6 +1,6 @@
 from flask_user import UserMixin
 from app import db
-from datetime import datetime
+from datetime import datetime, date
 
 class Admin(UserMixin, db.Model):
 	__tablename__ = 'admin'
@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
-    registered_on = db.Column(db.DateTime, nullable=False)
+    registered_on = db.Column(db.Date(), nullable=False, default=date.today())
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     email_confirmed_at = db.Column(db.DateTime, nullable=True)
 

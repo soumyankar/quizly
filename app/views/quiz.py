@@ -57,7 +57,6 @@ def quizbrowsepage():
 		owner_names.append(str(user.first_name + user.last_name))
 		plan = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 		pricing_plans.append(plan.name)
-
 	return render_template('quiz/quizbrowse.html', quizzes=quizzes, owner_names=owner_names, pricing_plans=pricing_plans)
 
 @quiz.route("/quiz/register/<string:uuid>", methods=['GET', 'POST'])
