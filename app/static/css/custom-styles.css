@@ -34,3 +34,31 @@
 .badge-inverse {
   background-color: #3e4555;
 }
+
+.content-section {
+  padding-top: 7.5rem;
+  padding-bottom: 7.5rem;
+}
+
+.content-section-heading h2, .content-section-heading .h2 {
+  font-size: 3rem;
+}
+.content-section-heading h3, .content-section-heading .h3 {
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.quiz-info-item{
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  background-color: #fff;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.quiz-info-item-header{
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.quiz-info-item-anchor{
+  text-decoration: none;
+}
