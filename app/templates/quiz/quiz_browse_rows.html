@@ -3,7 +3,7 @@
 {% else %}
 {% for quiz in quizzes %}
 {% set increment = 0 %}
-<div class="row g-3 p-3 m-3 quiz-info-item" onclick="location.href='{{ url_for('quiz.quizregisterpage', uuid= quiz.uuid) }}';">
+<div class="row g-3 p-3 m-3 quiz-info-item shadow" onclick="location.href='{{ url_for('quiz.quizregisterpage', uuid= quiz.uuid) }}';">
 	<div class="row quiz-info-item-header">
 		<div class="text-bold">
 			<h4>{{ quiz.name }}</h4>

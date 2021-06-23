@@ -7,7 +7,7 @@ from app import db
 user = Blueprint("userdashboard", __name__, static_folder="static", template_folder="templates")
 
 @user.route('/user/dashboard/', methods=['POST','GET'])
-@roles_required('client')
+@roles_required(['client', 'admin'])
 def userdashboardpage():
 	user = current_user
 	return render_template('user/userdashboard.html', user=user)

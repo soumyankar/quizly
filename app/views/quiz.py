@@ -53,7 +53,7 @@ def quizbrowsepage():
 	owner_names = []
 	pricing_plans = []
 	for quiz in quizzes:
-		user = User.query.filter(User.id == quiz.id).first()
+		user = User.query.filter(User.id == quiz.owner).first()
 		owner_names.append(str(user.first_name + user.last_name))
 		plan = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 		pricing_plans.append(plan.name)
