@@ -5,12 +5,11 @@
 # Authors: Ling Thio <ling.thio@gmail.com>
 
 import datetime
-
 from flask import current_app
 from flask_script import Command
 
 from app import db
-from app.models.models import User, Role, Quiz, PricingPlan
+from app.models.models import User, Role, UserRoles, Quiz, PricingPlan
 # from app.models.pricingplan_models import PricingPlan
 
 class InitDbCommand(Command):
@@ -38,8 +37,8 @@ def create_users():
     client_role = find_or_create_role_user('client', u'Client')
     
     # Add users
-    user = find_or_create_user(u'GetSetQuiz', u'Admin', u'getsetquizindia@gmail.com', 'supersecretpass', 'getsetquiz9999', '9999', 'Others', 'India', admin_role)
-    user = find_or_create_user(u'Client', u'Example', u'soumyankarm@gmail.com', 'supersecretpass', 'client9999', '9999', 'Others', 'India', client_role)
+    user = find_or_create_user(u'getsetquizindia@gmail.com', u'getsetquiz9999', u'supersecretpass', admin_role)
+    user = find_or_create_user(u'soumyankarm@gmail.com', u'client9999', u'supersecretpass', client_role)
 
     # Add Pricing Plans
     pricingplan = find_or_create_pricingplan(u'Basic', 0, False, False, 20, True)
@@ -64,25 +63,19 @@ def find_or_create_pricingplan(name, price, payment_required, popular_plan, tota
         db.session.add(plan)
     return plan
 
-def find_or_create_user(first_name, last_name, email, password, username, age, gender, nationality, role=None):
+def find_or_create_user(email, username, password, role=None):
     """ Find existing user or create new user """
-    user = User.query.filter(User.email == email).first()
-    if not user:
-        user = User(
+    new_user = User.query.filter(User.email == email).first()
+    if not new_user:
+        new_user = User(
             email=email,
-            first_name=first_name,
-            last_name=last_name,
             password=current_app.user_manager.password_manager.hash_password(password),
             active=True,
+            registered_on=datetime.datetime.now(),
             email_confirmed_at=datetime.datetime.now(),
-            username=username,
-            age=age,
-            gender=gender,
-            confirmed=True,
-            nationality=nationality,
-            registered_on=datetime.datetime.now()
+            username=username
             )
         if role:
-            user.roles.append(role)
-        db.session.add(user)
-    return user
+            new_user.roles.append(role)
+        db.session.add(new_user)
+    return new_user
