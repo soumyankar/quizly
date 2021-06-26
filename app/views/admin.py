@@ -9,4 +9,4 @@ admin = Blueprint("admin", __name__, static_folder="static", template_folder="te
 @admin.route('/admin/dashboard', methods=['POST','GET'])
 @roles_required('admin')
 def admindashboard():
-	return render_template('admin/admindashboard.html', user=current_user)
+	return render_template('admin/adminindex.html', user=current_user)

@@ -1,0 +1,18 @@
+{% extends 'dashboardbase.html' %}
+
+
+{% block admintopnav %}
+{% include 'admin/admintopnav.html' %}
+{% endblock %}
+
+{% block sidenav %}       
+{% include 'user/usersidenav.html' %}
+{% endblock %}
+
+{% block dashboard_content %}
+
+{% block dashboard_section %}
+{% include 'user/userdashboard.html' %}
+{% endblock %}
+
+{% endblock %}

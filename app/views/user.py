@@ -10,4 +10,4 @@ user = Blueprint("userdashboard", __name__, static_folder="static", template_fol
 @roles_required('client')
 def userdashboardpage():
 	user = current_user
-	return render_template('user/userdashboard.html', user=user)
+	return render_template('user/userindex.html', user=user)
