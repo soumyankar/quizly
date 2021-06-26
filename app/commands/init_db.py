@@ -37,8 +37,8 @@ def create_users():
     client_role = find_or_create_role_user('client', u'Client')
     
     # Add users
-    user = find_or_create_user(u'getsetquizindia@gmail.com', u'getsetquiz9999', u'supersecretpass')
-    user = find_or_create_user(u'soumyankarm@gmail.com', u'client9999', u'supersecretpass')
+    user = find_or_create_user(u'getsetquizindia@gmail.com', u'getsetquiz9999', u'supersecretpass', admin_role)
+    user = find_or_create_user(u'soumyankarm@gmail.com', u'client9999', u'supersecretpass', client_role)
 
     # Add Pricing Plans
     pricingplan = find_or_create_pricingplan(u'Basic', 0, False, False, 20, True)

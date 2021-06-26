@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
 
     # Relationships
     # # One to one relationship with thhe user profile
-    profile_id = db.Column(db.Integer(), db.ForeignKey('user_profiles.id'))
+    profile_id = db.Column(db.Integer(), db.ForeignKey('user_profiles.id'), nullable=True)
     profile = db.relationship('UserProfile', uselist=False)
     # One to many relationship with user roles
     roles = db.relationship('Role', secondary='users_roles',
