@@ -1,12 +1,13 @@
-from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash
-from flask_login import login_required, current_user
-from flask_sqlalchemy import SQLAlchemy
 import uuid
 
 from app import db
-from app.models.models import User, Quiz, PricingPlan
 from app.forms.quizforms import QuizRegisterForm
-from app.misc.razorpay_creds import razorpay_client, RazorpayOrder
+from app.misc.razorpay_creds import RazorpayOrder, razorpay_client
+from app.models.models import PricingPlan, Quiz, User
+from flask import (Blueprint, Flask, flash, redirect, render_template, request,
+                   url_for)
+from flask_login import current_user, login_required
+from flask_sqlalchemy import SQLAlchemy
 
 quiz = Blueprint("quiz", __name__, static_folder="static", template_folder="templates")
 

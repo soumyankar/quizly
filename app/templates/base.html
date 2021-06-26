@@ -44,7 +44,8 @@
 
 	{% endblock %}
 
-
+	{% block content %}
+	
 	{# One-time system messages called Flash messages #}
 	{% block flash_messages %}
 	{%- with messages = get_flashed_messages(with_categories=true) -%}
@@ -61,8 +62,6 @@
 	{% endif %}
 	{%- endwith %}
 	{% endblock %}
-
-	{% block content %}
 
 	{% block masthead_section %}
 	{% endblock %}
