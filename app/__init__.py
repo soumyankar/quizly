@@ -6,26 +6,14 @@ from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_migrate import Migrate, MigrateCommand
-from flask_user import UserManager
 from flask_wtf.csrf import CSRFProtect
 from flask_bootstrap import Bootstrap
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
-db = SQLAlchemy()
+db = SQLAlchemy(session_options={"autoflush": False})
 mail = Mail()
 migrate = Migrate()
-
-# Customize Flask-User 
-class CustomUserManager(UserManager):
-    def customize(self, app):
-        from .forms.forms import CustomRegisterForm, CustomUserProfileForm, CustomLoginForm
-        # Configure customized forms
-        self.RegisterFormClass = CustomRegisterForm
-        self.UserProfileFormClass = CustomUserProfileForm
-        self.LoginFormClass = CustomLoginForm
-        # NB: assign:  xyz_form = XyzForm   -- the class!
-        #   (and not:  xyz_form = XyzForm() -- the instance!)
 
 # Initialize Flask Application
 def create_app(extra_config_settings={}):
@@ -74,7 +62,11 @@ def create_app(extra_config_settings={}):
     # Setup Flask-User to handle user account related forms
     from .models.models import User
     # Setup Flask-User
+    from .user_manager import CustomUserManager
     user_manager = CustomUserManager(app, db, User)
+    # Setup Mail for flask-mail 
+    from .email_manager import CustomEmailManager
+    user_manager.email_manager = CustomEmailManager(app)
 
     @app.context_processor
     def context_processor():
