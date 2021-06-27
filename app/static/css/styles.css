@@ -10851,6 +10851,7 @@ textarea.form-control-lg {
 }
 html,
 body {
+  overflow-x: hidden;
   height: 100%;
 }
 
