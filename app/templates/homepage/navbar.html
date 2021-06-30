@@ -11,9 +11,9 @@
         class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">HOME</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('homepage.index')}}">HOME</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">ABOUT</a></li>
-        <li class="nav-item"><a class="nav-link" href="#!">CONTACT</a></li>
+        <li class="nav-item"><a class="nav-link" href="#footer">CONTACT</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
@@ -28,7 +28,7 @@
             <li><a class="dropdown-item" href="{{ url_for('quiz.quizbrowsepage') }}">Browse Quizzes</a></li>
           </ul>
         </li>
-        <a class="btn btn-outline-light btn-md px-4" href="#">LOGIN</a>
+        <a class="btn btn-outline-light btn-md px-4" href="#!">LOGIN</a>
       </ul>
     </div>
   </div>

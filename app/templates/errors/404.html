@@ -4,8 +4,8 @@
 
 <!-- Page Content-->
 
-    <section class="py-5">
-      <div class="container px-5">
+    <section class="py-5 pt">
+      <div class="container px-5 pt-5">
          <div class="card border-0 shadow rounded-3 overflow-hidden">
           <div class="card-body p-0">
             <div class="row gx-0">
@@ -15,8 +15,8 @@
                   <p>The page you are looking for does not exist.
                     How you got here is a mystery. But you can click the button below
                     to go back to the homepage.</p>
-                  <a class="stretched-link text-decoration-none" href="#!">
-                    Read more
+                  <a class="stretched-link text-decoration-none" href="{{ url_for('homepage.index')}}">
+                    Take me back to HOME
                     <i class="bi bi-arrow-right"></i>
                   </a>
                 </div>
