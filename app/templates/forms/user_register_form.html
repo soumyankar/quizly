@@ -1,31 +1,47 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field %}
 
-<form class="row g-3" action="{{ url_for('user.register') }}" method="POST">
+<main>
+  <div class="container pt-5 action="{{ url_for('user.register') }}" >
   {{ form.hidden_tag() }}
-  <h5>User Registration Form</h5>
-  <div class="col-12">
-    <div class="form-floating mb-3">
-      <d1>
-        {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="emailHelp") }}
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-      </d1>
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5 ">
+          <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Create an account</h3>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-floating mb-3">
+                {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="emailHelp") }}
+                
+              </div>
+			  <div class="form-floating mb-3">
+                 {{ render_field(form.username, class='form-control', placeholder='username123', id='usernameHelp') }}
+              </div>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-floating mb-3 mb-md-0">
+                    {{ render_field(form.password, class='form-control', placeholder='Password', id='passwordHelp') }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating mb-3 mb-md-0">
+                    {{ render_field(form.retype_password, class='form-control', placeholder='Retype Password') }}
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 mb-0">
+                <div class="d-grid"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer text-center py-3">
+            <div class="small">Have an account? <a href="login.html">Go to login</a></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="col-12">
-    <div class="form-floating mb-3">
-      {{ render_field(form.username, class='form-control', placeholder='username123', id='usernameHelp') }}
-    </div>
-  </div>
-  <div class="col-6">
-    {{ render_field(form.password, class='form-control', placeholder='Password', id='passwordHelp') }}
-    <div id="passwordHelp" class="form-text">Try picking a strong password.</div>
-  </div>
-  <div class="col-6">
-    {{ render_field(form.retype_password, class='form-control', placeholder='Retype Password') }}
-  </div>
-    <div class="col-12">
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </div>
-</form>
-
+</main>
