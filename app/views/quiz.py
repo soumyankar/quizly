@@ -18,35 +18,33 @@ def quizhomepage():
 @quiz.route("/quiz/plans/create/<int:plan>", methods=['GET', 'POST'])
 @login_required
 def quizcreatepage(plan):
-	try:
-		chosen_plan = PricingPlan.query.filter(PricingPlan.id == plan).first()
-		form = QuizRegisterForm()
-		if request.method == 'POST':
-			if form.validate_on_submit():
-				while True:
-					new_uuid = str(uuid.uuid4())
-					if not (Quiz.query.filter(Quiz.uuid == new_uuid).first()):
-						break
-
-				new_quiz = Quiz(
-					uuid = new_uuid,
-					name = form.name.data,
-					date = form.date.data,
-					time = form.time.data,
-					current_players = 0,
-					total_players = chosen_plan.total_players,
-					payment_status = False,
-					owner = current_user.id,
-					pricingplan = plan
-					)
-				db.session.add(new_quiz)
-				db.session.commit()
-
-				return redirect(url_for('quiz.quizpaymentpage', uuid=new_uuid))
-		return render_template('quiz/quizcreate.html', chosen_plan=chosen_plan, form=form)
-	except:
+	chosen_plan = PricingPlan.query.filter(PricingPlan.id == plan).first()
+	if not chosen_plan:
 		flash('That is not a valid plan ID. Choose again')
 		return redirect(url_for('quiz.quizplanspage'))
+	form = QuizRegisterForm()
+	form.quiz_master.choices = [(user.id, user.email) for user in User.query.all()]
+	if request.method == 'POST':
+		if form.validate_on_submit():
+			while True:
+				new_uuid = str(uuid.uuid4())
+				if not (Quiz.query.filter(Quiz.uuid == new_uuid).first()):
+					break
+			new_quiz = Quiz(
+				uuid = new_uuid,
+				name = form.name.data,
+				date = form.date.data,
+				time = form.time.data,
+				registration_price = form.subscription_price.data,
+				owner = current_user.id,
+				quiz_master = form.quiz_master.data,
+				pricing_plan = plan,
+				)
+			db.session.add(new_quiz)
+			db.session.commit()
+			# return redirect(url_for('quiz.quizpaymentpage', name=name,date=date,time=time,quiz_master=quiz_master,subscription_price=subscription_price))
+			return redirect(url_for('quiz.quizpaymentpage'))
+	return render_template('quiz/quizcreate.html', chosen_plan=chosen_plan, form=form)
 
 @quiz.route("/quiz/browse", methods=['GET', 'POST'])
 def quizbrowsepage():
@@ -73,8 +71,9 @@ def quizplanspage():
 	pricingplans = PricingPlan.query.all()
 	return render_template('quiz/quizplans.html', pricingplans=pricingplans)
 
-@quiz.route("/quiz/plans/pay/<string:uuid>")
+@quiz.route("/quiz/plans/pay/")
 @login_required
+<<<<<<< HEAD
 def quizpaymentpage(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	if not (quiz.owner == current_user.id):
@@ -88,7 +87,13 @@ def quizpaymentpage(uuid):
 								order_client_email=current_user.email,
 								order_pricing_plan_name=pricing_plan_used.name)
 
-	razorpay_options = razorpay_order.get_razorpay_order_options()
+	# razorpay_order = RazorpayOrder(order_amount=(pricing_plan_used.price*100),
+	# 							order_receipt=pricing_plan_used.name,
+	# 							order_client_name=current_user.first_name,
+	# 							order_client_email=current_user.email,
+	# 							order_pricing_plan_name=pricing_plan_used.name)
 
-	return render_template('quiz/quizpayment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=razorpay_options)
+	# razorpay_options = razorpay_order.get_razorpay_order_options()
 
+	# return render_template('quiz/quizpayment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=razorpay_options)
+	return render_template('quiz/quizpayment.html')
