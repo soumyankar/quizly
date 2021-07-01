@@ -79,7 +79,7 @@ def quizpaymentpage(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	if not (quiz.owner == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
-		return redirect(url_for(userdashboard.userdashboardpage))
+		return redirect(url_for(user.userdashboardpage))
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 
 	razorpay_order = RazorpayOrder(order_amount=(pricing_plan_used.price*100),

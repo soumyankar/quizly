@@ -1,0 +1,29 @@
+<div class="col-6">
+    <div class="form-floating mb-3">
+      <d2>
+        {{ render_field(form.first_name, class='form-control', placeholder='First Name') }}
+      </d2>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="form-floating mb-3">
+      <d3>
+        {{ render_field(form.last_name, class='form-control', placeholder='Last Name') }}
+      </d3>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <d4>
+      {{ render_field(form.nationality, class='form-select', placeholder='Nationality') }}
+    </d4>
+  </div>
+  <div class="col-md-4">
+    <d5>
+      {{ render_field(form.gender, class='form-select', placeholder='Gender') }}
+    </d5>
+  </div>
+  <div class="col-md-2">
+    <d6>
+      {{ render_field(form.age, class='form-control', placeholder='Age') }}
+    </d6>
+  </div>

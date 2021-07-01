@@ -4,20 +4,20 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="container p-4 p-lg-5 text-center">
-          <div class="row d-flex g-4 g-lg-5 justify-content-center">
-            <div class="col-md-3 col-sm-6">
+          <div class="row g-4 g-lg-5 justify-content-center">
+            <div class="col-sm-6">
               <div class="card">
-                <img src="..." class="card-img-top" alt="...">
+                <img src="{{url_for('static',filename='assets/img/create_quiz.svg') }}" class="card-img-top" alt="...">
                 <div class="card-body">
                   <a href="{{ url_for('quiz.quizplanspage')}}" class="btn btn-primary">Create Quiz</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="col-sm-6">
               <div class="card">
-                <img src="..." class="card-img-top" alt="...">
+                <img src="{{url_for('static',filename='assets/img/register.svg') }}" class="card-img-top" alt="...">
                 <div class="card-body">
-                  <a href="{{ url_for('quiz.quizbrowsepage') }}" class="btn btn-success">Browse Quiz</a>
+                  <a href="{{ url_for('quiz.quizbrowsepage') }}" class="btn btn-success">Register for Quiz</a>
                 </div>
               </div>
             </div>
