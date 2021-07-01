@@ -11,10 +11,11 @@ class CustomUserManager(UserManager):
             self.init_app(app, db, UserClass, **kwargs)
 
     def customize(self, app):
-        from .forms.forms import CustomRegisterForm, CustomUserProfileForm, CustomLoginForm
+        from .forms.forms import CustomRegisterForm, CustomUserProfileForm, CustomLoginForm, CustomChangePasswordForm
         # Configure customized forms
         self.RegisterFormClass = CustomRegisterForm
         self.UserProfileFormClass = CustomUserProfileForm
-        self.LoginFormClass = CustomLoginForm
+        # self.LoginFormClass = CustomLoginForm
+        self.ChangePasswordForm = CustomChangePasswordForm
         # NB: assign:  xyz_form = XyzForm   -- the class!
         #   (and not:  xyz_form = XyzForm() -- the instance!)

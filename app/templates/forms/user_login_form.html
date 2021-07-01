@@ -1,36 +1,35 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% from "forms/_formhelper.html" import render_field, render_button %}
+{% from "forms/_formhelper.html" import render_field, render_button, render_checkbox_field %}
 
 <main>
-  <div class="container pt-5" action="{{ url_for('user.login')}}" method="POST">
-    {{ form.hidden_tag() }}
-      <div class="row justify-content-center">
-          <div class="col-lg-5">
-              <div class="card shadow-lg border-0 rounded-lg mt-5">
-                  <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
-                  <div class="card-body">
-                      <form>
-                          <div class="form-floating mb-3">
-                            {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="usernameHelp") }}
-                          </div>
-                          <div class="form-floating mb-3">
-                            {{ render_field(form.password, class='form-control', placeholder='Password') }}
-                          </div>
-                          <div class="form-check mb-3">
-                              <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                              <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                          </div>
-                          <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                              <a class="small" href="password.html">Forgot Password?</a>
-                              {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
-                          </div>
-                      </form>
-                  </div>
-                  <div class="card-footer text-center py-3">
-                      <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
-                  </div>
+  <div class="container pt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-5">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+          <div class="card-body">
+            <form action="{{ url_for('user.login')}}" method="POST">
+              {{ form.hidden_tag() }}
+              <div class="form-floating mb-3">
+                {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="usernameHelp") }}
               </div>
+              <div class="form-floating mb-3">
+                {{ render_field(form.password, class='form-control', placeholder='Password') }}
+              </div>
+              <div class="form-floating mb-3">
+                {{ render_checkbox_field(form.remember_me, class='form-check-label') }}
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                <a class="small" href="password.html">Forgot Password?</a>
+                {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
+              </div>
+            </form>
           </div>
+          <div class="card-footer text-center py-3">
+            <div class="small"><a href="{{ url_for('user.register') }}">Need an account? Sign up!</a></div>
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 </main>

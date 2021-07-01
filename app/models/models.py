@@ -67,7 +67,7 @@ class Quiz(db.Model):
     subscription_price = db.Column(db.Integer(), nullable=False, default=0)
     # Relationships
     # One to one relationship to ownner
-    owner = db.Column(db.Integer(), db.ForeignKey('quiz_owners.id'))
+    owner = db.relationship('QuizOwner', uselist=False)
     # One to one relationship to quizmaster
     # quiz_master = db.Column(db.Integer(), db.ForeignKey('quiz_masters.id'))
     quiz_master = db.relationship("QuizMaster", uselist=False)
@@ -118,7 +118,7 @@ class QuizWinner(db.Model):
     quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
 
 class QuizPayments(db.Model):
-    __tablename__ == 'quiz_payments'
+    __tablename__ = 'quiz_payments'
 
     id = db.Column(db.Integer(), primary_key=True)
     parent_id = db.Column(db.Integer())

@@ -73,7 +73,6 @@ def quizplanspage():
 
 @quiz.route("/quiz/plans/pay/")
 @login_required
-<<<<<<< HEAD
 def quizpaymentpage(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	if not (quiz.owner == current_user.id):
