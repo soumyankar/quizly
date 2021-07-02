@@ -12,8 +12,6 @@ from datetime import date, datetime
 
 today = date.today()
 current_time = datetime.now().time()
-print(current_time)
-print(today)
 
 def date_validator(form, field):
 
