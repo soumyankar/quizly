@@ -11,6 +11,7 @@ from flask_bootstrap import Bootstrap
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
+
 db = SQLAlchemy(session_options={"autoflush": False})
 mail = Mail()
 migrate = Migrate()
