@@ -124,7 +124,9 @@ def quiz_payment_callback_url(uuid):
 		amount = quiz.quiz_payment.parent_pricing_plan.price
 		payment_state = razorpay_verify_payment_signature(params_dict, amount)
 		if payment_state == True:
-			return render_template('debug.html', data=uuid, requests=params_dict)
+			return url_for('quiz.quiz_payment_callback_success', uuid=uuid)
+		if payment_state == False:
+			return url_for('quiz.quiz_payment_callback_failure', uuid=uuid)
 
 @quiz.route('quiz/pay/success/<string:uuid>', methods=['POST'])
 def quiz_payment_callback_success(uuid):
