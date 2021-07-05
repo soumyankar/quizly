@@ -18,19 +18,19 @@
 	<div class="container px-4 px-lg-5">
 		<div class="row gx-4 gx-lg-5 justify-content-center">
 			<div class="col-lg-10">
-<!-- 				<h4>Quiz Payment Page</h4>
+				<h4>Quiz Payment Page</h4>
 				<p>Quiz Name: {{ quiz.name }}</p>
 				<p>Quiz UUID: {{ quiz.uuid }}</p>
 				<p>Quiz Pricing Plan: {{ pricing_plan_used.name }}</p>
 				<p>Quiz Date: {{ quiz.date }}</p>
 				<p>Quiz Time: {{ quiz.time }}</p>
 				<p>Quiz Total Players: {{ quiz.total_players }}</p>
-				<p>Quiz Payment Status: {{ quiz.payment_status }}</p>
+				<p>Quiz Payment Status: {{ quiz.quiz_payment.payment_status }}</p>
 
 				<h4>Please proceed to payment nnow: </h4>
 				{% block razorpay_payment_button %}
-					{% include 'razorpay/pay.html' %}
-				{% endblock %} -->
+					{% include 'forms/razorpay_payment_form.html' %}
+				{% endblock %}
 			</div>
 		</div>
 	</div>

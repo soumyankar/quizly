@@ -3,6 +3,23 @@
 <script>
 var options ={{ razorpay_options | safe }};
 var rzp1 = new Razorpay(options);
+
+rzp1.on('payment.success', function(response){
+    location.href = "/quiz/pay/callback/"+"{{ quiz.uuid }}"+"?razorpay_payment_id="+response.razorpay_payment_id+"&razorpay_order_id="+response.razorpay_order_id+"&razorpay_signature="+response.razorpay_signature;
+    // alert(response.razorpay_payment_id);
+    // alert(response.razorpay_order_id);
+    // alert(response.razorpay_signature);
+});
+
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
 document.getElementById('rzp-button1').onclick = function(e){
     rzp1.open();
     e.preventDefault();

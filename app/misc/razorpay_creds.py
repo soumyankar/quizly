@@ -1,6 +1,7 @@
 import razorpay
 from app.local_settings import RAZORPAY_KEY_SECRET, RAZORPAY_KEY_ID
 from app.settings import APP_NAME
+from flask import url_for
 import json
 # Razorpay
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
@@ -13,11 +14,11 @@ options ={
     "description": "", # pricing plan here maybe
     "image": "https://example.com/your_logo", # Need to put in logo here.
     "order_id": "", #This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/", # this will be the callback url for us.
     "prefill": {
         "name": "",
         "email": ""
     }, # Client details here.
+    "quiz_uuid": "",
     "notes": {
         "address": "GetSetQuiz Office" # Unsue how the receipt would look like so unsure what to put here.
     },
@@ -26,15 +27,33 @@ options ={
     }
 }
 
+def razorpay_verify_payment_signature(params_dict, amount):
+	result = (razorpay_client.utility.verify_payment_signature(params_dict))
+	payment_id = str(params_dict['razorpay_payment_id'])
+	payment_currency = "INR"
+	if result is None:
+		try:
+			resp = razorpay_client.payment.capture(payment_id, str(amount*100), {"currency": payment_currency} )
+			if resp['status'] == 'captured':
+				# render success page on successful caputre of payment
+				return True
+		except:
+			# if there is an error while capturing payment.
+			return False
+	else:
+		# if signature verification fails.
+		return False
+
 class RazorpayOrder():
 
-	def __init__(self, order_amount, order_receipt, order_client_name, order_client_email, order_pricing_plan_name):
+	def __init__(self, order_amount, order_receipt, order_client_name, order_client_email, order_pricing_plan_name, quiz_uuid):
 		self.new_order_id = ""
 		self.new_order_amount = order_amount
 		self.new_order_receipt = order_receipt
 		self.new_order_client_name = order_client_name
 		self.new_order_client_email = order_client_email
 		self.new_order_pricing_plan_name = order_pricing_plan_name
+		self.new_quiz_uuid = quiz_uuid
 		self.create_order()
 
 	def create_order(self):
@@ -57,5 +76,7 @@ class RazorpayOrder():
 		new_order_options['order_id'] = str(self.new_order_id)
 		new_order_options['prefill']['name'] = str(self.new_order_client_name)
 		new_order_options['prefill']['email'] = str(self.new_order_client_email)
+		new_order_options['quiz_uuid'] = str(self.new_quiz_uuid)
 
-		return json.dumps(new_order_options, indent = 4) #Need to return in JSON for jinja2 to udnerstand.
+		return dict(new_order_options)
+		# return json.dumps(new_order_options, indent = 4) #Need to return in JSON for jinja2 to udnerstand.
