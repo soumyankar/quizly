@@ -1,6 +1,7 @@
 from flask_user import UserMixin
 from app import db
 from datetime import datetime, date
+from sqlalchemy_utils import PhoneNumber
 
 # Define User data-model
 class User(db.Model, UserMixin):
@@ -19,11 +20,11 @@ class User(db.Model, UserMixin):
     # # One to one relationship with thhe user profile
     profile = db.relationship('UserProfile', backref="parent_user", uselist=False)
     # One to one relationship with owner
-    quiz_owner = db.relationship('QuizOwner', backref="owner", uselist=False)
+    quiz_owner = db.relationship('QuizOwner', backref="parent_user", uselist=False)
     # One to one relationship with master
-    quiz_master = db.relationship('QuizMaster', backref="master", uselist=False)
+    quiz_master = db.relationship('QuizMaster', backref="parent_user", uselist=False)
     # One to one relationship with quiz winner
-    quiz_winner = db.relationship('QuizWinner', backref="winner", uselist=False)
+    quiz_winner = db.relationship('QuizWinner', backref="parent_user", uselist=False)
     # One to many relationship with user roles
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
@@ -46,6 +47,14 @@ class UserProfile(db.Model):
     nationality = db.Column(db.String(50), nullable=False, default=u'')
     age = db.Column(db.Integer(), nullable=False, default=-1)
     gender = db.Column(db.String(50), nullable=False, default=u'')
+    _phone_number = db.Column(db.Unicode(20))
+    country_code = db.Column(db.Unicode(8))
+    phone_number = db.composite(
+        PhoneNumber,
+        _phone_number,
+        country_code
+    )
+
 
 # Define the Role data-model
 class Role(db.Model):
