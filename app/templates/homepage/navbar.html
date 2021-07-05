@@ -11,12 +11,12 @@
         class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('homepage.index')}}">HOME</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page"
+            href="{{ url_for('homepage.index')}}">HOME</a></li>
         <li class="nav-item"><a class="nav-link" href="#!">ABOUT</a></li>
-        <li class="nav-item"><a class="nav-link" href="#footer">CONTACT</a></li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="{{ url_for('quiz.quizhomepage')}}" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
             QUIZ
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -28,8 +28,11 @@
             <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_browse_page') }}">Browse Quizzes</a></li>
           </ul>
         </li>
-        <a class="btn btn-outline-light btn-md px-4" href="#!">LOGIN</a>
-      </ul>
+        <li class="nav-item"><a class="nav-link" href="#!">FAQ</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('homepage.contact') }}">CONTACT</a></li>
+        <div class="container px-2">
+          <a class="btn btn-outline-light btn-md px-4" href="#!">LOGIN</a>
+
+        </div>
     </div>
-  </div>
 </nav>
