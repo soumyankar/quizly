@@ -3,7 +3,7 @@
 {% else %}
 {% for quiz in quizzes %}
 {% set increment = 0 %}
-<div class="row g-3 p-3 m-3 quiz-info-item shadow" onclick="location.href='{{ url_for('quiz.quizregisterpage', uuid= quiz.uuid) }}';">
+<div class="row g-3 p-3 m-3 quiz-info-item shadow" onclick="location.href='{{ url_for('quiz.quiz_register_page', uuid= quiz.uuid) }}';">
 	<div class="row quiz-info-item-header">
 		<div class="text-bold">
 			<h4>{{ quiz.name }}</h4>
@@ -17,11 +17,15 @@
 			</div>
 			<div class="col-12">
 				<h5 class="text-muted">Pricing Plan</h5>
-				<h6 class="text-bold">{{ pricing_plans[increment] }}</h6>
+				<h6 class="text-bold">{{ quiz.quiz_payment.parent_pricing_plan.name }}</h6>
 			</div>
 			<div class="col-6">
 				<h5 class="text-muted">Host</h5>
-				<h6 class="text-bold">{{ owner_names[increment] }}</h6>
+				<h6 class="text-bold">{{ quiz.quiz_owner.parent_user.username }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Quiz Master</h5>
+				<h6 class="text-bold">{{ quiz.quiz_master.parent_user.username }}</h6>
 			</div>
 			<div class="col-6">
 				<h5 class="text-muted">Entry Fee</h5>
@@ -34,6 +38,10 @@
 			<div class="col-6">
 				<h5 class="text-muted">Slots</h5>
 				<h6 class="text-bold">{{ quiz.current_players }} / {{ quiz.total_players }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Subscription Price</h5>
+				<h6 class="text-bold">{{ quiz.subscription_price }}</h6>
 			</div>
 		</div>
 	</div>
