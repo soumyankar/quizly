@@ -11,12 +11,12 @@ from flask_sqlalchemy import SQLAlchemy
 quiz = Blueprint("quiz", __name__, static_folder="static", template_folder="templates")
 
 @quiz.route("/quiz/", methods=['GET', 'POST'])
-def quizhomepage():
+def quiz_homepage():
 	return render_template('quiz/quiz.html')
 
 @quiz.route("/quiz/create/<int:plan>", methods=['GET', 'POST'])
 @login_required
-def quizcreatepage(plan):
+def quiz_create_page(plan):
 	chosen_plan = PricingPlan.query.filter(PricingPlan.id == plan).first()
 	if not chosen_plan:
 		flash('That is not a valid plan ID. Choose again')
@@ -42,6 +42,8 @@ def quizcreatepage(plan):
 			new_quiz_owner = QuizOwner()
 			new_quiz_owner.parent_quiz = new_quiz
 			new_quiz_owner.parent_user = current_user
+			new_quiz_owner.parent_pricing_plan = chosen_plan
+			new_quiz_owner.payment_amount = chosen_plan.price
 			new_quiz_master = QuizMaster()
 			new_quiz_master.parent_quiz = new_quiz
 			new_quiz_master.parent_user = current_user
@@ -54,8 +56,8 @@ def quizcreatepage(plan):
 			db.session.add(new_quiz_master)
 			db.session.add(new_quiz_payment)
 			db.session.commit()
-			return redirect(url_for('quiz.quizpaymentpage', uuid=new_uuid))
-	return render_template('quiz/quizcreate.html', chosen_plan=chosen_plan, form=form)
+			return redirect(url_for('quiz.quiz_payment_page', uuid=new_uuid))
+	return render_template('quiz/quiz_create.html', chosen_plan=chosen_plan, form=form)
 
 @quiz.route("/quiz/browse", methods=['GET', 'POST'])
 def quiz_browse_page():
@@ -72,9 +74,12 @@ def quiz_register_page(uuid):
 		if (quiz_owner == current_user.id):
 			flash('You may not register for quizzes you already own.')
 			return redirect(url_for('quiz.quiz_browse_page'))
+		if (quiz.current_players >= quiz.total_players):
+			flash('No slots left for new players. Try registering for some other quiz.')
+			return redirect(url_for('quiz.quiz_browse_page'))
 		new_subscriber = QuizSubscriber(
 			user_confirm=False,
-			subscription_price=quiz.quiz_payment.parent_pricing_plan.price,
+			payment_amount=quiz.payment_amount,
 			payment_status=False
 			)
 		new_subscriber.parent_quiz=quiz
@@ -104,18 +109,18 @@ def quiz_register_payment_page(uuid):
 	return render_template('quiz/quiz_register_payment_page.html', quiz=quiz, razorpay_options=dict(razorpay_options))
 
 @quiz.route("/quiz/plans", methods=['GET', 'POST'])
-def quizplanspage():
-	pricingplans = PricingPlan.query.all()
-	return render_template('quiz/quizplans.html', pricingplans=pricingplans)
+def quiz_plans_page():
+	pricing_plans = PricingPlan.query.all()
+	return render_template('quiz/quiz_plans.html', pricing_plans=pricing_plans)
 
 @quiz.route("/quiz/create/pay/<string:uuid>")
 @login_required
-def quizpaymentpage(uuid):
+def quiz_payment_page(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	quiz_owner = quiz.quiz_owner.parent_user.id
 	if not (quiz_owner == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
-		return redirect(url_for(userdashboard.userdashboardpage))
+		return redirect(url_for(user_dashboard.user_dashboard_page))
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 
 	pricing_plan_used_id = quiz.quiz_payment.pricing_plan_id
@@ -130,10 +135,11 @@ def quizpaymentpage(uuid):
 								)
 
 	razorpay_options = razorpay_order.get_razorpay_order_options()
-	return render_template('quiz/quizpayment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=dict(razorpay_options))
+	return render_template('quiz/quiz_payment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=dict(razorpay_options))
 
 @csrf_protect.exempt
 @quiz.route('/quiz/register/pay/callback/<string:uuid>', methods=['POST'])
+@login_required
 def quiz_register_payment_callback_url(uuid):
 	razorpay_payment_id = request.form.get('razorpay_payment_id', '')
 	razorpay_order_id = request.form.get('razorpay_order_id', '')
@@ -145,17 +151,22 @@ def quiz_register_payment_callback_url(uuid):
 	}
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	subscriber = QuizSubscriber.query.filter(QuizSubscriber.user_id == current_user.id).first()
-	amount = quiz.subscription_price
+	amount = quiz.payment_amount
 	payment_state = razorpay_verify_payment_signature(params_dict, amount)
 	if payment_state == True:
+		description = "Registration Fee for Quiz UUID: "+quiz.uuid
 		subscriber.payment_status = True
+		subscriber.date = date.today()
+		subscriber.time = datetime.datetime.now().time()
+		quiz.current_players = quiz.current_players + 1
 		db.session.commit()
-		return redirect(url_for('quiz.quiz_payment_callback_success', uuid=uuid))
-	if payment_state == False:
-		return redirect(url_for('quiz.quiz_payment_callback_failure', uuid=uuid))
+	
+	return render_template('razorpay/payment_invoice.html', payment_state=payment_state, description=description , client=subscriber, uuid=uuid, params_dict=params_dict)
+
 
 @csrf_protect.exempt
 @quiz.route("/quiz/create/pay/callback/<string:uuid>", methods=['POST'])
+@login_required
 def quiz_create_payment_callback_url(uuid):
 	razorpay_payment_id = request.form.get('razorpay_payment_id', '')
 	razorpay_order_id = request.form.get('razorpay_order_id', '')
@@ -166,19 +177,15 @@ def quiz_create_payment_callback_url(uuid):
 	'razorpay_signature': razorpay_signature
 	}
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
-	amount = quiz.quiz_payment.parent_pricing_plan.price
+	amount = quiz.quiz_owner.payment_amount
 	payment_state = razorpay_verify_payment_signature(params_dict, amount)
+	owner = quiz.quiz_owner
 	if payment_state == True:
-		quiz.quiz_payment.payment_status = True
+		description = "Quiz Creation Fee for Quiz UUID: "+quiz.uuid
+		owner.payment_status = True
+		owner.date = date.today()
+		owner.time = datetime.datetime.now().time()
 		db.session.commit()
-		return redirect(url_for('quiz.quiz_payment_callback_success', uuid=uuid))
-	if payment_state == False:
-		return redirect(url_for('quiz.quiz_payment_callback_failure', uuid=uuid))
 
-@quiz.route('/quiz/pay/success/<string:uuid>', methods=['GET'])
-def quiz_payment_callback_success(uuid):
-	return render_template('quiz/quiz_payment_callback_success.html')
+	return render_template('razorpay/payment_invoice.html', payment_state=payment_state, description=description , client=owner, uuid=uuid, params_dict=params_dict)
 
-@quiz.route('/quiz/pay/failure/<string:uuid>', methods=['GET'])
-def quiz_payment_callback_failure(uuid):
-	return render_template('quiz/quiz_payment_callback_failure.html')

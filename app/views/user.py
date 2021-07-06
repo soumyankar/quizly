@@ -4,10 +4,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_user import roles_required
 from app import db
 
-user = Blueprint("userdashboard", __name__, static_folder="static", template_folder="templates")
+user = Blueprint("user_dashboard", __name__, static_folder="static", template_folder="templates")
 
 @user.route('/user/dashboard/', methods=['POST','GET'])
 @login_required
-def userdashboardpage():
+def user_dashboard_page():
 	user = current_user
-	return render_template('user/userindex.html', user=user)
+	return render_template('user/user_homepage.html', user=user)

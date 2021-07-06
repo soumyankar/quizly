@@ -107,8 +107,10 @@ class QuizSubscriber(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
     quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
     user_confirm = db.Column(db.Boolean(), nullable=False, default=False)
-    subscription_price = db.Column(db.Integer(), nullable=False, default=0)
+    payment_amount = db.Column(db.Integer(), nullable=False, default=0)
     payment_status = db.Column(db.Boolean(), nullable=False, default=False)
+    date = db.Column(db.Date(), nullable=True)
+    time = db.Column(db.Time(), nullable=True)
 
 class QuizPayment(db.Model):
     __tablename__ = 'quiz_payments'
@@ -133,6 +135,11 @@ class QuizOwner(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
     quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
+    pricing_plan_id = db.Column(db.Integer(), db.ForeignKey('pricing_plans.id', ondelete='CASCADE'))
+    payment_amount = db.Column(db.Integer(), nullable=False, default=0)
+    date = db.Column(db.Date(), nullable=True)
+    time = db.Column(db.Time(), nullable=True)
+    payment_status = db.Column(db.Boolean(), nullable=False, default=False)
 
 class QuizWinner(db.Model):
     __tablename__ = 'quiz_winners'
@@ -151,7 +158,12 @@ class PricingPlan(db.Model):
     popular_plan = db.Column(db.Boolean(), nullable=False, default=False)
     total_players = db.Column(db.Integer(), nullable=False, default=5)
     active = db.Column(db.Boolean(), nullable=False, default=True)
+    community_access = db.Column(db.Boolean(), nullable=False, default=False)
+    dedicated_support = db.Column(db.Boolean(), nullable=False, default=False)
+    monthly_status_reports = db.Column(db.Boolean(), nullable=False, default=False)
 
+    # One to one relationship with quiz owner payments
+    quiz_owner_payments = db.relationship('QuizOwner', backref="parent_pricing_plan", uselist=False)
     # One to one relationship with quiz payments
     quiz_payments = db.relationship('QuizPayment', backref="parent_pricing_plan", uselist=False)
 

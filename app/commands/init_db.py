@@ -41,8 +41,8 @@ def create_users():
     user = find_or_create_user(u'soumyankarm@gmail.com', u'client9999', u'supersecretpass', client_role)
 
     # Add Pricing Plans
-    pricingplan = find_or_create_pricingplan(u'Basic', 0, False, False, 20, True)
-    pricingplan = find_or_create_pricingplan(u'Premium', 150, True, True, 100, True)
+    pricingplan = find_or_create_pricingplan(u'Free', 0, False, False, 5, True, True, False, False)
+    pricingplan = find_or_create_pricingplan(u'Pro', 150, True, True, 15, True, True, True, True)
     # Save to DB
     db.session.commit()
 
@@ -55,11 +55,11 @@ def find_or_create_role_user(name, label):
         db.session.add(role)
     return role
 
-def find_or_create_pricingplan(name, price, payment_required, popular_plan, total_players, active):
+def find_or_create_pricingplan(name, price, payment_required, popular_plan, total_players, active, community_access, dedicated_support, monthly_status_reports):
     """ Find or create the pricing plans for quizzes """
     plan = PricingPlan.query.filter(PricingPlan.name == name).first()
     if not plan:
-        plan = PricingPlan(name=name, price=price, payment_required=payment_required, popular_plan=popular_plan, total_players=total_players, active=active)
+        plan = PricingPlan(name=name, price=price, payment_required=payment_required, popular_plan=popular_plan, total_players=total_players, active=active, community_access=community_access, dedicated_support=dedicated_support, monthly_status_reports=monthly_status_reports)
         db.session.add(plan)
     return plan
 

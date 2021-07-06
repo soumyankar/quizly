@@ -1,26 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="receipt-content pt-5 ">
 	<div class="container">
+		{% if payment_state %}
+		<div class="alert alert-{{ alert_category }} d-flex align-items-center" role="alert">
+			<div>
+				[ Could add an icon here for visual effect. ] Great! Payment has been approved.
+			</div>
+		</div>
 		<div class="row justify-content-center">
 			<div class="col-md-12">
 				<div class="invoice-wrapper">
 					<div class="intro">
-						Hi <strong>User</strong>,
+						Hi <strong>{{ client.parent_user.username }}</strong>,
 						<br>
-						This is the receipt for a payment of <strong>₹2.00</strong> for your purchase
+						{% if %}
+						This is the receipt for a payment of <strong>₹{{ client.subscription_price }}</strong> for your purchase
 					</div>
 
 					<div class="payment-info">
 						<div class="row">
 							<div class="col-sm-6">
-								<span>Payment No.</span>
-								<strong>434</strong>
+								<span>Order ID.</span>
+								<strong>{{ params_dict['razorpay_order_id'] }}</strong>
 							</div>
 							<div class="col-sm-6 text-end">
-								<span>Payment Date</span>
-								<strong>Jul 09, 2021 - 12:20 pm</strong>
+								<span>Payment Timestamp</span>
+								<strong>{{ client.date }} - {{ client.time }}</strong>
 							</div>
 						</div>
 					</div>
@@ -30,30 +38,24 @@
 							<div class="col-sm-6">
 								<span>Client</span>
 								<strong>
-									Gigachad
+									{{ client.parent_user.username  }}
 								</strong>
 								<p>
-									SouthCity Garden <br>
-									Behala<br>
-									700034 <br>
-									India <br>
+									[ Put name here ]<br>
 									<a href="#">
-										gigachad@gmail.com
+										{{ client.parent_user.email }}
 									</a>
 								</p>
 							</div>
 							<div class="col-sm-6 text-end">
 								<span>Payment To</span>
 								<strong>
-									GetSetQuiz
+									GetSetQuiz India
 								</strong>
 								<p>
-									Biddhanagar <br>
-									Kolkata<br>
-									700034 <br>
-									India <br>
+									[ Office address? ] <br>
 									<a href="#">
-										getsetquizindia@gmail.com
+										{{ user_manager.USER_EMAIL_SENDER_EMAIL }}
 									</a>
 								</p>
 							</div>
@@ -71,13 +73,13 @@
 						<div class="items">
 							<div class="row item">
 								<div class="col-sm-4 desc">
-									Quiz Title
+									{{ description }}
 								</div>
 								<div class="col-sm-3 qty">
-									Enterprise
+									{{ plan }}
 								</div>
 								<div class="col-sm-5 amount text-end">
-									₹20.00
+									₹{{ client.payment_amount}}
 								</div>
 							</div>
 						</div>
@@ -87,33 +89,40 @@
 								You will be mailed a copy of this receipt.
 							</p>
 							<div class="field">
-								Subtotal <span>₹79.00</span>
+								Subtotal <span>₹{{ client.payment_amount}}</span>
 							</div>
 							<div class="field">
-								Discount <span>₹.5%</span>
+								Discount <span>0%</span>
 							</div>
 							<div class="field grand-total">
-								Total <span>₹312.00</span>
+								Total <span>₹{{ client.payment_amount}}</span>
 							</div>
 						</div>
 
 						<div class="print">
 							<a class="btn btn-outline-light btn-lg px-4" href="#"><i class="fa fa-print"></i>Print
-								this receipt</a>
+							this receipt</a>
 						</div>
 						<div class="continue">
-							<a class="btn btn-outline-light btn-lg px-4" href="#"><i
-									class="fas fa-long-arrow-alt-right"></i>Continue</a>
+							<a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('userdashboard.userdashboardpage') }}"><i
+								class="fas fa-long-arrow-alt-right"></i> Continue</a>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="footer">
-					Copyright © 2021. GetSetQuiz
+					<div class="footer">
+						Copyright © 2021. GetSetQuiz
+					</div>
 				</div>
 			</div>
 		</div>
+		{% else %}
+		<div class="alert alert-warning d-flex align-items-center" role="alert">
+			<div>
+				[ Could add an icon here for visual effect. ] Something went wrong. Payment could not be approved.
+			</div>
+		</div>
+		{% endif %}		
 	</div>
-</div>
 
-{% endblock %}
+	{% endblock %}

@@ -17,7 +17,7 @@
 			</div>
 			<div class="col-12">
 				<h5 class="text-muted">Pricing Plan</h5>
-				<h6 class="text-bold">{{ quiz.quiz_payment.parent_pricing_plan.name }}</h6>
+				<h6 class="text-bold">{{ quiz.quiz_owner.parent_pricing_plan.name }}</h6>
 			</div>
 			<div class="col-6">
 				<h5 class="text-muted">Host</h5>
@@ -26,10 +26,6 @@
 			<div class="col-6">
 				<h5 class="text-muted">Quiz Master</h5>
 				<h6 class="text-bold">{{ quiz.quiz_master.parent_user.username }}</h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Entry Fee</h5>
-				<h6 class="text-bold">{{ quiz.subscription_price }}</h6>
 			</div>
 			<div class="col-6">
 				<h5 class="text-muted">Date</h5>

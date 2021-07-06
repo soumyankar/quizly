@@ -1,7 +1,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
 
-<div class="container pt-5 pb-5 " method="POST" action="{{ url_for('quiz.quizcreatepage', plan=chosen_plan.id) }}">
+<div class="container pt-5 pb-5 " method="POST" action="{{ url_for('quiz.quiz_create_page', plan=chosen_plan.id) }}">
   {{ form.hidden_tag() }}
   <div class="row justify-content-center">
     <div class="col-lg-5">

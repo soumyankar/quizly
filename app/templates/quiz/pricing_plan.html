@@ -6,101 +6,67 @@
 		</div>
 		<div class="row gx-5 justify-content-center">
 			<!-- Pricing card free-->
+			{% if pricing_plans|length < 1 %}
+			<div class="col-lg-6 col-xl-4">
+				<h4>Sorry! We are either not accepting more quiz creations right now or there are no currently active plans for you to use. Visit our discord page to know more :)</h4>
+			</div>
+			{% else %}
+			{% for plan in pricing_plans %}
 			<div class="col-lg-6 col-xl-4">
 				<div class="card mb-5 mb-xl-0">
 					<div class="card-body p-5">
-						<div class="small text-uppercase fw-bold text-muted">Free</div>
+						<div class="small text-uppercase fw-bold text-muted">
+							{% if plan.popular_plan %}
+							<i class="bi bi-star-fill text-warning"></i>
+							{% endif %}
+							{{ plan.name }}
+						</div>
 						<div class="mb-3">
-							<span class="display-4 fw-bold">₹0</span>
+							<span class="display-4 fw-bold">₹{{ plan.price }}</span>
 							<span class="text-muted">/ quiz.</span>
 						</div>
 						<ul class="list-unstyled mb-4">
 							<li class="mb-2">
 								<i class="bi bi-check text-primary"></i>
-								<strong>8 slots</strong>
+								<strong>{{ plan.total_players}} slots</strong>
 							</li>
 							<li class="mb-2">
+								{% if plan.community_access %}
 								<i class="bi bi-check text-primary"></i>
+								{% else %}
+								<i class="bi bi-x"></i>
+								{% endif %}
 								Community access
 							</li>
 							<li class="mb-2 text-muted">
+								{% if plan.dedicated_support %}
+								<i class="bi bi-check text-primary"></i>
+								{% else %}
 								<i class="bi bi-x"></i>
+								{% endif %}
 								Dedicated support
 							</li>
 							<li class="text-muted">
+								{% if plan.monthly_status_reports %}
+								<i class="bi bi-check text-primary"></i>
+								{% else %}
 								<i class="bi bi-x"></i>
+								{% endif %}
 								Monthly status reports
 							</li>
 						</ul>
-						<div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choose plan</a></div>
+						<div class="d-grid">
+							{% if plan.active %}
+							<a class="btn btn-outline-primary" href="{{ url_for('quiz.quiz_create_page', plan=plan.id) }}">Choose plan</a>
+							{% else %}
+							<p>Currently Inactive.</p>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 			</div>
-			<!-- Pricing card pro-->
-			<div class="col-lg-6 col-xl-4">
-				<div class="card mb-5 mb-xl-0">
-					<div class="card-body p-5">
-						<div class="small text-uppercase fw-bold">
-							<i class="bi bi-star-fill text-warning"></i>
-							Pro
-						</div>
-						<div class="mb-3">
-							<span class="display-4 fw-bold">₹120</span>
-							<span class="text-muted">/ quiz.</span>
-						</div>
-						<ul class="list-unstyled mb-4">
-							<li class="mb-2">
-								<i class="bi bi-check text-primary"></i>
-								<strong>15 slots</strong>
-							</li>
-							<li class="mb-2">
-								<i class="bi bi-check text-primary"></i>
-								Community access
-							</li>
-							<li class="mb-2 text-primary">
-								<i class="bi bi-x"></i>
-								Dedicated support
-							</li>
-							<li class="text-muted">
-								<i class="bi bi-x"></i>
-								Monthly status reports
-							</li>
-						</ul>
-						<div class="d-grid"><a class="btn btn-primary" href="#!">Choose plan</a></div>
-					</div>
-				</div>
-			</div>
-			<!-- Pricing card enterprise-->
-			<div class="col-lg-6 col-xl-4">
-				<div class="card">
-					<div class="card-body p-5">
-						<div class="small text-uppercase fw-bold text-muted">Enterprise</div>
-						<div class="mb-3">
-							<span class="display-4 fw-bold">₹250</span>
-							<span class="text-muted">/ quiz.</span>
-						</div>
-						<ul class="list-unstyled mb-4">
-							<li class="mb-2">
-								<i class="bi bi-check text-primary"></i>
-								<strong>20+ slots</strong>
-							</li>
-							<li class="mb-2">
-								<i class="bi bi-check text-primary"></i>
-								Community access
-							</li>
-							<li class="mb-2 text-primary">
-								<i class="bi bi-x"></i>
-								Dedicated support
-							</li>
-							<li class="text-primary">
-								<i class="bi bi-x"></i>
-								Monthly status reports
-							</li>
-						</ul>
-						<div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choose plan</a></div>
-					</div>
-				</div>
-			</div>
+			{% endfor %}
+			{% endif %}
 		</div>
 	</div>
 </section>
