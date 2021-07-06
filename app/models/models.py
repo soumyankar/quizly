@@ -29,8 +29,7 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
     # Subscriptions
-    subscriptions = db.relationship('Quiz', secondary='quiz_subscriptions',
-                                    backref=db.backref('users', lazy='dynamic'))
+    subscriptions = db.relationship('QuizSubscriber', backref="parent_user", uselist=False)
 
 # Define the User Profile data-model
 class UserProfile(db.Model):
@@ -92,8 +91,7 @@ class Quiz(db.Model):
     # # One to one relationship to Quiz paymennts
     quiz_payment = db.relationship("QuizPayment", backref="parent_quiz", uselist=False)
     # Many to many relationship to subscriber
-    subscribers = db.relationship('User', secondary='quiz_subscribers', 
-                            backref=db.backref('quizzes', lazy='dynamic'))
+    subscribers = db.relationship('QuizSubscriber', backref="parent_quiz", uselist=False)
 
 class QuizSubscription(db.Model):
     __tablename__ = 'quiz_subscriptions'
@@ -106,7 +104,7 @@ class QuizSubscriber(db.Model):
     __tablename__ = 'quiz_subscribers'
 
     id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
     quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
     user_confirm = db.Column(db.Boolean(), nullable=False, default=False)
     subscription_price = db.Column(db.Integer(), nullable=False, default=0)

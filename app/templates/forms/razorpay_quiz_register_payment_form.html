@@ -1,6 +1,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
-<form method="POST" action="{{ url_for('quiz.quiz_create_payment_callback_url', uuid=quiz.uuid) }}">
+<form method="POST" action="{{ url_for('quiz.quiz_register_payment_callback_url', uuid=quiz.uuid) }}">
 <script
     src="https://checkout.razorpay.com/v1/checkout.js"
     data-key="{{ razorpay_options['key'] }}" // Enter the Test API Key ID generated from Dashboard → Settings → API Keys

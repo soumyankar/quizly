@@ -38,6 +38,10 @@
 							<h6 class="text-bold">{{ quiz.quiz_owner.parent_user.username }} [Change to names.]</h6>
 						</div>
 						<div class="col-6">
+							<h5 class="text-muted">Quiz Master</h5>
+							<h6 class="text-bold">{{ quiz.quiz_master.parent_user.username }}</h6>
+						</div>
+						<div class="col-6">
 							<h5 class="text-muted">Entry Fee</h5>
 							<h6 class="text-bold">{{ quiz.subscription_price }}</h6>
 						</div>
@@ -50,7 +54,9 @@
 							<h6 class="text-bold">{{ quiz.current_players }} / {{ quiz.total_players }}</h6>
 						</div>
 						<div class="col-12">
-							<button class="btn btn-success btn-lg">Register!</button>
+							<form action="{{ url_for('quiz.quiz_register_page', uuid=quiz.uuid) }}" method="POST">
+								<button class="btn btn-success btn-lg" type="Submit">Register!</button>
+							</form>
 						</div>
 					</div>
 				</div>
