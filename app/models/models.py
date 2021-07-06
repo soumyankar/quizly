@@ -80,6 +80,7 @@ class Quiz(db.Model):
     subscription_price = db.Column(db.Integer(), nullable=False, default=0)
     current_players = db.Column(db.Integer(), nullable=False, default=0)
     total_players = db.Column(db.Integer(), nullable=False, default=0)
+    active = db.Column(db.Boolean(), nullable=False, default=False)
     # Relationships
     # # One to one relationship to ownner
     quiz_owner = db.relationship('QuizOwner', backref="parent_quiz", uselist=False)
@@ -111,6 +112,9 @@ class QuizSubscriber(db.Model):
     payment_status = db.Column(db.Boolean(), nullable=False, default=False)
     date = db.Column(db.Date(), nullable=True)
     time = db.Column(db.Time(), nullable=True)
+    razorpay_payment_id = db.Column(db.String(200), nullable=True)
+    razorpay_order_id = db.Column(db.String(200), nullable=True)
+    razorpay_signature = db.Column(db.String(200), nullable=True)
 
 class QuizPayment(db.Model):
     __tablename__ = 'quiz_payments'
@@ -137,8 +141,11 @@ class QuizOwner(db.Model):
     quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
     pricing_plan_id = db.Column(db.Integer(), db.ForeignKey('pricing_plans.id', ondelete='CASCADE'))
     payment_amount = db.Column(db.Integer(), nullable=False, default=0)
-    date = db.Column(db.Date(), nullable=True)
-    time = db.Column(db.Time(), nullable=True)
+    payment_date = db.Column(db.Date(), nullable=True)
+    payment_time = db.Column(db.Time(), nullable=True)
+    razorpay_payment_id = db.Column(db.String(200), nullable=True)
+    razorpay_order_id = db.Column(db.String(200), nullable=True)
+    razorpay_signature = db.Column(db.String(200), nullable=True)
     payment_status = db.Column(db.Boolean(), nullable=False, default=False)
 
 class QuizWinner(db.Model):

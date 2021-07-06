@@ -1,5 +1,5 @@
 import uuid
-
+from datetime import datetime, date
 from app import db, csrf_protect
 from app.forms.quizforms import QuizRegisterForm
 from app.misc.razorpay_creds import RazorpayOrder, razorpay_verify_payment_signature
@@ -34,6 +34,7 @@ def quiz_create_page(plan):
 				name = form.name.data,
 				date = form.date.data,
 				time = form.time.data,
+				active = False,
 				current_players = 0,
 				subscription_price = form.subscription_price.data,
 				total_players = chosen_plan.total_players
@@ -56,6 +57,14 @@ def quiz_create_page(plan):
 			db.session.add(new_quiz_master)
 			db.session.add(new_quiz_payment)
 			db.session.commit()
+			if new_quiz.quiz_payment.parent_pricing_plan.payment_required == False:
+				new_quiz_owner.payment_status = True
+				new_quiz_owner.payment_date = date.today()
+				new_quiz_owner.payment_time = datetime.now().time()
+				new_quiz_owner.razorpay_payment_id = 'free_quiz'
+				new_quiz_owner.razorpay_order_id = 'free_quiz'
+				new_quiz_owner.razorpay_signature = 'free_quiz'
+				return render_template('razorpay/payment_invoice.html', payment_state=True, description="Quiz Creation fee for Quiz UUID: "+new_quiz.uuid , client=new_quiz_owner, uuid=new_quiz.uuid, params_dict = {'razorpay_payment_id': 'free_quiz' } )
 			return redirect(url_for('quiz.quiz_payment_page', uuid=new_uuid))
 	return render_template('quiz/quiz_create.html', chosen_plan=chosen_plan, form=form)
 
@@ -121,7 +130,11 @@ def quiz_payment_page(uuid):
 	if not (quiz_owner == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
 		return redirect(url_for(user_dashboard.user_dashboard_page))
+<<<<<<< HEAD
 
+=======
+	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.quiz_payment.pricing_plan_id).first()
+>>>>>>> 684b500e377962f9f9f9b1f96b2189f63aada72b
 
 	pricing_plan_used_id = quiz.quiz_payment.pricing_plan_id
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == pricing_plan_used_id).first()
@@ -161,6 +174,9 @@ def quiz_register_payment_callback_url(uuid):
 		subscriber.payment_status = True
 		subscriber.date = date.today()
 		subscriber.time = datetime.datetime.now().time()
+		subscriber.razorpay_payment_id = razorpay_payment_id
+		subscriber.razorpay_order_id = razorpay_order_id
+		subscriber.razorpay_signature = razorpay_signature
 		quiz.current_players = quiz.current_players + 1
 		db.session.commit()
 	
@@ -183,11 +199,14 @@ def quiz_create_payment_callback_url(uuid):
 	amount = quiz.quiz_owner.payment_amount
 	payment_state = razorpay_verify_payment_signature(params_dict, amount)
 	owner = quiz.quiz_owner
+	description = "Quiz Creation Fee for Quiz UUID: "+quiz.uuid
 	if payment_state == True:
-		description = "Quiz Creation Fee for Quiz UUID: "+quiz.uuid
 		owner.payment_status = True
 		owner.date = date.today()
-		owner.time = datetime.datetime.now().time()
+		owner.time = datetime.now().time()
+		owner.razorpay_payment_id = razorpay_payment_id
+		owner.razorpay_order_id = razorpay_order_id
+		owner.razorpay_signature = razorpay_signature
 		db.session.commit()
 
 	return render_template('razorpay/payment_invoice.html', payment_state=payment_state, description=description , client=owner, uuid=uuid, params_dict=params_dict)
