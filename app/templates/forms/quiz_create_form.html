@@ -1,38 +1,46 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
 
-<form class="row g-3" method="POST" action="{{ url_for('quiz.quizcreatepage', plan=chosen_plan.id) }}">
-  <h5>Quiz Creation Form</h5>
+<div class="container pt-5 pb-5 " method="POST" action="{{ url_for('quiz.quizcreatepage', plan=chosen_plan.id) }}">
   {{ form.hidden_tag() }}
-  <div class="row gx-4 gx-lg-5 d-flex justify-content-center">
-    <div class="input-group mb-3">
-      <label class="input-group-text" for="planselect">Plan</label>
-      <select class="form-select" id="planselect" disabled>
-        <option id="{{ chosen_plan.id }}" value="{{ chosen_plan.id }}" selected>{{ chosen_plan.name }}</option>
-      </select>
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header">
+          <h3 class="text-center font-weight-light my-4">Quiz Creator</h3>
+        </div>
+        <div class="card-body">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="planselect">Plan</label>
+            <select class="form-select" id="planselect" disabled>
+              <option id="{{ chosen_plan.id }}" value="{{ chosen_plan.id }}" selected>{{ chosen_plan.name }}</option>
+            </select>
+          </div>
+          <div class="form-floating mb-3">
+            {{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz', id="quizNameHelp") }}
+            <div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
+          </div>
+          <div class="form-floating mb-3">
+            {{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master email') }}
+          </div>
+          <div class="form-floating mb-3">
+            {{ render_field(form.subscription_price, type='nummber', class='form-control', placeholder='₹ 50 ',
+            id="subscriptionHelp")}}
+            <div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
+          </div>
+          <div class="form-floating mb-3">
+            {{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971', id="dateHelp") }}
+            <div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
+          </div>
+          <div class="form-floating mb-3">
+            {{ render_field(form.time, type='time', class='form-control', placeholder='23:59', id="timeHelp") }}
+            <div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-floating mb-3">
-      {{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz', id="quizNameHelp") }}
-      <div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
-    </div>
-    <div class="form-floating mb-3">
-      {{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master email') }}
-    </div>
-    <div class="form-floating mb-3">
-      {{ render_field(form.subscription_price, type='nummber', class='form-control', placeholder='₹ 50 ', id="subscriptionHelp")}}
-      <div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
-    </div>
-    <div class="form-floating mb-3">
-      {{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971', id="dateHelp") }}
-      <div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
-    </div>
-    <div class="form-floating mb-3">
-      {{ render_field(form.time, type='time', class='form-control', placeholder='23:59', id="timeHelp") }}
-      <div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
-    </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-    <p>You will get another chance to review before you place this order on the next payment page.</p>
   </div>
-</form>
+</div>

@@ -6,6 +6,11 @@ homepage = Blueprint("homepage", __name__, static_folder="static", template_fold
 def index():
 	return render_template('homepage/index.html')
 
+@homepage.route("/contact-us", methods=['GET'])
+def contact():
+	return render_template('homepage/contact_us.html')
+
+
 @homepage.route("/userdashboard", methods=['GET'])
 def userindex():
 	return render_template('user/userindex.html')

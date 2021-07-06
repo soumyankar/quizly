@@ -80,7 +80,8 @@ def quizpaymentpage(uuid):
 	quiz_owner = quiz.quiz_owner.parent_user.id
 	if not (quiz_owner == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
-		return redirect(url_for('userdashboard.userdashboardpage'))
+		return redirect(url_for(userdashboard.userdashboardpage))
+	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.pricingplan).first()
 
 	pricing_plan_used_id = quiz.quiz_payment.pricing_plan_id
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == pricing_plan_used_id).first()

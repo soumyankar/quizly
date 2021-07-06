@@ -1,56 +1,106 @@
-<!-- Pricing Plan #1 -->
-{% if pricingplans|length < 1 %}
-<h4>Sorry, we don't seem to have any active pricing plans currently.</h4>
-{% else %}
-{% for plan in pricingplans %}
-<div class="col-lg-3 col-md-6">
-	<div class="card text-center card-shadow pricing-on-hover border-0 mb-4">
-		<div class="card-body font-14">
-			{% if plan.popular_plan == True %}
-			<span class="badge badge-inverse p-2 position-absolute price-badge font-weight-normal">Popular</span>
-			{% endif %}
-			<h5 class="mt-3 mb-1 font-weight-medium">{{ plan.name }}</h5>
-			<h6 class="subtitle font-weight-normal">Total Player Capacity: <strong>{{ plan.total_players }}</strong></h6>
-			{% if plan.payment_required == False %}
-			<div class="alert alert-success" role="alert">
-				Free!
+<section class="bg-light py-5">
+	<div class="container px-5 my-5">
+		<div class="text-center mb-5">
+			<h1 class="fw-bolder">Choose one of the Plans</h1>
+			<p class="lead fw-normal text-muted mb-0">With our no hassle pricing plans and proceed to creating a quiz</p>
+		</div>
+		<div class="row gx-5 justify-content-center">
+			<!-- Pricing card free-->
+			<div class="col-lg-6 col-xl-4">
+				<div class="card mb-5 mb-xl-0">
+					<div class="card-body p-5">
+						<div class="small text-uppercase fw-bold text-muted">Free</div>
+						<div class="mb-3">
+							<span class="display-4 fw-bold">₹0</span>
+							<span class="text-muted">/ quiz.</span>
+						</div>
+						<ul class="list-unstyled mb-4">
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								<strong>8 slots</strong>
+							</li>
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								Community access
+							</li>
+							<li class="mb-2 text-muted">
+								<i class="bi bi-x"></i>
+								Dedicated support
+							</li>
+							<li class="text-muted">
+								<i class="bi bi-x"></i>
+								Monthly status reports
+							</li>
+						</ul>
+						<div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choose plan</a></div>
+					</div>
+				</div>
 			</div>
-			{% else %}
-			<div class="currency-label my-3">
-				<sup>₹</sup>
-				<span class="monthly display-5">{{ plan.price }}</span>
-				<small class="monthly">/quiz</small>
+			<!-- Pricing card pro-->
+			<div class="col-lg-6 col-xl-4">
+				<div class="card mb-5 mb-xl-0">
+					<div class="card-body p-5">
+						<div class="small text-uppercase fw-bold">
+							<i class="bi bi-star-fill text-warning"></i>
+							Pro
+						</div>
+						<div class="mb-3">
+							<span class="display-4 fw-bold">₹120</span>
+							<span class="text-muted">/ quiz.</span>
+						</div>
+						<ul class="list-unstyled mb-4">
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								<strong>15 slots</strong>
+							</li>
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								Community access
+							</li>
+							<li class="mb-2 text-primary">
+								<i class="bi bi-x"></i>
+								Dedicated support
+							</li>
+							<li class="text-muted">
+								<i class="bi bi-x"></i>
+								Monthly status reports
+							</li>
+						</ul>
+						<div class="d-grid"><a class="btn btn-primary" href="#!">Choose plan</a></div>
+					</div>
+				</div>
 			</div>
-			{% endif %}
-			<div class="bottom-btn">
-				<a class="btn btn-dark btn-md text-white btn-block" href="{{ url_for('quiz.quizcreatepage', plan=plan.id) }}"><span>Choose Plan</span></a>
+			<!-- Pricing card enterprise-->
+			<div class="col-lg-6 col-xl-4">
+				<div class="card">
+					<div class="card-body p-5">
+						<div class="small text-uppercase fw-bold text-muted">Enterprise</div>
+						<div class="mb-3">
+							<span class="display-4 fw-bold">₹250</span>
+							<span class="text-muted">/ quiz.</span>
+						</div>
+						<ul class="list-unstyled mb-4">
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								<strong>20+ slots</strong>
+							</li>
+							<li class="mb-2">
+								<i class="bi bi-check text-primary"></i>
+								Community access
+							</li>
+							<li class="mb-2 text-primary">
+								<i class="bi bi-x"></i>
+								Dedicated support
+							</li>
+							<li class="text-primary">
+								<i class="bi bi-x"></i>
+								Monthly status reports
+							</li>
+						</ul>
+						<div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choose plan</a></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-{% endfor %}
-{% endif %}
-
-<!-- Pricing Plan #4 -->
-<div class="col-lg-3 col-md-6">
-	<div class="card text-center card-shadow pricing-on-hover border-0 mb-4">
-		<div class="card-body font-14">
-			<span class="badge badge-inverse p-2 position-absolute price-badge font-weight-normal">Popular</span>
-			<h5 class="mt-3 mb-1 font-weight-medium">Static Plan</h5>
-			<h6 class="subtitle font-weight-normal">This plan doesnt work</h6>
-			<div class="currency-label my-3">
-				<sup>₹</sup>
-				<span class="monthly display-5">50</span>
-				<small class="monthly">/mo</small>
-			</div>
-			<ul class="list-inline">
-				<li class="d-block py-2">Benefit #1</li>
-				<li class="d-block py-2">Benefit #2</li>
-				<li class="d-block py-2">Benefit #3</li>
-			</ul>
-			<div class="bottom-btn">
-				<a class="btn btn-dark btn-md text-white btn-block"><span>Choose Plan</span></a>
-			</div>
-		</div>
-	</div>
-</div>
+</section>

@@ -12,13 +12,11 @@
 			</div>
 		</div>
 	</div>
-</section>
-<section class="content-section bg-light">
 	<div class="container px-4 px-lg-5">
 		<div class="row gx-4 gx-lg-5 d-flex justify-content-around">
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<img src="..." class="card-img-top" alt="...">
+					<img src="{{url_for('static',filename='assets/img/Create2.svg') }}" class="card-img-top" alt="...">
 					<div class="card-body">
 						<a href="{{ url_for('quiz.quizplanspage') }}" class="btn btn-primary">Create Quiz</a>
 					</div>
@@ -26,7 +24,7 @@
 			</div>
 			<div class="col-lg-3 col-md-6">
 				<div class="card">
-					<img src="..." class="card-img-top" alt="...">
+					<img src="{{url_for('static',filename='assets/img/register2.svg') }}" class="card-img-top" alt="...">
 					<div class="card-body">
 						<a href="{{ url_for('quiz.quiz_browse_page') }}" class="btn btn-primary">Register</a>
 					</div>
