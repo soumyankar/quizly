@@ -5,10 +5,8 @@
 <div class="receipt-content pt-5 ">
 	<div class="container">
 		{% if payment_state %}
-		<div class="alert alert-{{ alert_category }} d-flex align-items-center" role="alert">
-			<div>
+		<div class="alert alert-success d-flex align-items-center" role="alert">
 				[ Could add an icon here for visual effect. ] Great! Payment has been approved.
-			</div>
 		</div>
 		<div class="row justify-content-center">
 			<div class="col-md-12">
@@ -16,8 +14,7 @@
 					<div class="intro">
 						Hi <strong>{{ client.parent_user.username }}</strong>,
 						<br>
-						{% if %}
-						This is the receipt for a payment of <strong>₹{{ client.subscription_price }}</strong> for your purchase
+						This is the receipt for a payment of <strong>₹{{ client.payment_amount }}</strong> for your purchase
 					</div>
 
 					<div class="payment-info">
@@ -28,7 +25,7 @@
 							</div>
 							<div class="col-sm-6 text-end">
 								<span>Payment Timestamp</span>
-								<strong>{{ client.date }} - {{ client.time }}</strong>
+								<strong>{{ client.payment_date }} - {{ client.payment_time }}</strong>
 							</div>
 						</div>
 					</div>
@@ -104,7 +101,7 @@
 							this receipt</a>
 						</div>
 						<div class="continue">
-							<a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('userdashboard.userdashboardpage') }}"><i
+							<a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('user_dashboard.user_dashboard_page') }}"><i
 								class="fas fa-long-arrow-alt-right"></i> Continue</a>
 							</div>
 						</div>
