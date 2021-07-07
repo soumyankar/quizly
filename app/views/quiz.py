@@ -130,11 +130,8 @@ def quiz_payment_page(uuid):
 	if not (quiz_owner == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
 		return redirect(url_for(user_dashboard.user_dashboard_page))
-<<<<<<< HEAD
 
-=======
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.quiz_payment.pricing_plan_id).first()
->>>>>>> 684b500e377962f9f9f9b1f96b2189f63aada72b
 
 	pricing_plan_used_id = quiz.quiz_payment.pricing_plan_id
 	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == pricing_plan_used_id).first()
