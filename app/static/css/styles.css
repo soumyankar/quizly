@@ -7154,6 +7154,15 @@ textarea.form-control-lg {
 .pt-5 {
   padding-top: 3rem !important;
 }
+.pt-6 {
+  padding-top: 4rem !important;
+}
+.pt-7 {
+  padding-top: 5rem !important;
+}
+.pt-8 {
+  padding-top: 6rem !important;
+}
 
 .pe-0 {
   padding-right: 0 !important;
@@ -7201,6 +7210,14 @@ textarea.form-control-lg {
 
 .pb-5 {
   padding-bottom: 3rem !important;
+}
+
+.pb-6 {
+  padding-bottom: 4rem !important;
+}
+
+.pb-7 {
+  padding-bottom: 5rem !important;
 }
 
 .ps-0 {
@@ -7352,6 +7369,7 @@ textarea.form-control-lg {
 /* rtl:end:remove */
 .text-primary {
   color: #0d6efd !important;
+  
 }
 
 .text-secondary {

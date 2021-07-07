@@ -1,39 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="content-section bg-light">
-	<div class="container px-4 px-lg-5 text-center">
-		<div class="row gx-4 gx-lg-5 justify-content-center">
-			<div class="col-lg-10">
-				<h2>Create A Quiz</h2>
-				<p class="lead mb-5">
-					We would require some information from you before we proceed. This should only take a minute to fill in.
-				</p>
-			</div>
+<main class="page payment-page pt-6 ">
+	<section class="payment-form dark">
+		<div class="block-heading">
+			<h2>Payment</h2>
+			<p>Take a final look before you checkout!</p>
 		</div>
-	</div>
-</section>
+		<div class="container">
+			<form>
+				<div class="products">
+					<h3 class="title">Checkout</h3>
+					<div class="item">
+						<span class="price">{{ quiz.name }}</span>
+						<p class="item-name">Quiz Name</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.uuid }}</span>
+						<p class="item-name">Quiz UUID</p>
 
-<section class="bg-light">
-	<div class="container px-4 px-lg-5">
-		<div class="row gx-4 gx-lg-5 justify-content-center">
-			<div class="col-lg-10">
-				<h4>Quiz Payment Page</h4>
-				<p>Quiz Name: {{ quiz.name }}</p>
-				<p>Quiz UUID: {{ quiz.uuid }}</p>
-				<p>Quiz Pricing Plan: {{ pricing_plan_used.name }}</p>
-				<p>Quiz Date: {{ quiz.date }}</p>
-				<p>Quiz Time: {{ quiz.time }}</p>
-				<p>Quiz Total Players: {{ quiz.total_players }}</p>
-				<p>Quiz Payment Status: {{ quiz.quiz_payment.payment_status }}</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ pricing_plan_used.name }}</span>
+						<p class="item-name">Quiz Pricing Plan</p>
 
-				<h4>Please proceed to payment nnow: </h4>
-				{% block razorpay_payment_button %}
-					{% include 'forms/razorpay_payment_form.html' %}
-				{% endblock %}
-			</div>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.date }}</span>
+						<p class="item-name">Quiz Date</p>
+
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.time }}</span>
+						<p class="item-name">Quiz Time</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.total_players }}</span>
+						<p class="item-name">Quiz Total Slots</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.quiz_payment.payment_status }}</span>
+						<p class="item-name">Quiz Payment Status</p>
+					</div>
+					<div class="total">Total<span class="price">Rs. 150</span></div>
+				</div>
+				<div class="form-group col-md-12 p-4 ">
+					<div class="d-grid gap-2" >
+						{% block razorpay_payment_button %}
+						{% include 'forms/razorpay_payment_form.html' %}
+						{% endblock %}
+					</div>
+				</div>
+
+			</form>
 		</div>
-	</div>
-</section>
+	</section>
+</main>
+
 
 {% endblock %}

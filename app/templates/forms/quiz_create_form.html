@@ -1,9 +1,11 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
 
-<div class="container pt-5 pb-5 ">
-  <form method="POST" action="{{ url_for('quiz.quiz_create_page', plan=chosen_plan.id) }}">
-    {{ form.hidden_tag() }}
+
+
+<form method="POST" action="{{ url_for('quiz.quiz_create_page', plan=chosen_plan.id) }}">
+  {{ form.hidden_tag() }}
+  <div class="container pt-5 pb-5">
     <div class="row justify-content-center">
       <div class="col-lg-5">
         <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -44,5 +46,6 @@
         </div>
       </div>
     </div>
-  </form>
-</div>
+  </div>
+</form>
+
