@@ -5,7 +5,6 @@ from flask import Flask
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
-from flask_nav import Nav
 from flask_navigation import Navigation
 from flask_migrate import Migrate, MigrateCommand
 from flask_wtf.csrf import CSRFProtect
