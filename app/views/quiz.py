@@ -3,7 +3,7 @@ from datetime import datetime, date
 from app import db, csrf_protect
 from app.forms.quizforms import QuizRegisterForm
 from app.misc.razorpay_creds import RazorpayOrder, razorpay_verify_payment_signature
-from app.models.models import PricingPlan, Quiz, User, QuizOwner, QuizPayment, QuizMaster, QuizSubscriber
+from app.models.models import PricingPlan, Quiz, User, QuizOwner, QuizMaster, QuizSubscriber
 from flask import (Blueprint, Flask, flash, redirect, render_template, request,url_for)
 from flask_login import current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -39,7 +39,6 @@ def quiz_create_page(plan):
 				subscription_price = form.subscription_price.data,
 				total_players = chosen_plan.total_players
 				)
-
 			new_quiz_owner = QuizOwner()
 			new_quiz_owner.parent_quiz = new_quiz
 			new_quiz_owner.parent_user = current_user
@@ -48,16 +47,11 @@ def quiz_create_page(plan):
 			new_quiz_master = QuizMaster()
 			new_quiz_master.parent_quiz = new_quiz
 			new_quiz_master.parent_user = current_user
-			new_quiz_payment = QuizPayment()
-			new_quiz_payment.parent_pricing_plan = chosen_plan
-			new_quiz_payment.parent_quiz = new_quiz
-
 			db.session.add(new_quiz)
 			db.session.add(new_quiz_owner)
 			db.session.add(new_quiz_master)
-			db.session.add(new_quiz_payment)
 			db.session.commit()
-			if new_quiz.quiz_payment.parent_pricing_plan.payment_required == False:
+			if new_quiz.quiz_owner.parent_pricing_plan.payment_required == False:
 				new_quiz_owner.payment_status = True
 				new_quiz_owner.payment_date = date.today()
 				new_quiz_owner.payment_time = datetime.now().time()

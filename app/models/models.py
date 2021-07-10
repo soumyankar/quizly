@@ -89,8 +89,6 @@ class Quiz(db.Model):
     quiz_master = db.relationship("QuizMaster", backref="parent_quiz", uselist=False)
     # # One to one relationship to quiz_winner
     quiz_winner = db.relationship("QuizWinner", backref="parent_quiz", uselist=False)
-    # # One to one relationship to Quiz paymennts
-    quiz_payment = db.relationship("QuizPayment", backref="parent_quiz", uselist=False)
     # Many to many relationship to subscriber
     subscribers = db.relationship('QuizSubscriber', backref="parent_quiz", uselist=False)
 
@@ -115,14 +113,6 @@ class QuizSubscriber(db.Model):
     razorpay_payment_id = db.Column(db.String(200), nullable=True)
     razorpay_order_id = db.Column(db.String(200), nullable=True)
     razorpay_signature = db.Column(db.String(200), nullable=True)
-
-class QuizPayment(db.Model):
-    __tablename__ = 'quiz_payments'
-
-    id = db.Column(db.Integer(), primary_key=True)
-    quiz_id = db.Column(db.Integer(), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
-    pricing_plan_id = db.Column(db.Integer(), db.ForeignKey('pricing_plans.id', ondelete='CASCADE'))
-    payment_status = db.Column(db.Boolean(), nullable=False, default=False)
 
 class QuizMaster(db.Model):
     __tablename__ = 'quiz_masters'
@@ -171,8 +161,6 @@ class PricingPlan(db.Model):
 
     # One to one relationship with quiz owner payments
     quiz_owner_payments = db.relationship('QuizOwner', backref="parent_pricing_plan", uselist=False)
-    # One to one relationship with quiz payments
-    quiz_payments = db.relationship('QuizPayment', backref="parent_pricing_plan", uselist=False)
 
 
 
