@@ -2,8 +2,8 @@
 {% from "forms/_formhelper.html" import render_field %}
 
 <main>
-  <div class="container pt-5 " action="{{ url_for('user.register') }}" method="POST" >
-  {{ form.hidden_tag() }}
+  <div class="container pt-5 " action="{{ url_for('user.register') }}" method="POST">
+    {{ form.hidden_tag() }}
     <div class="row justify-content-center">
       <div class="col-lg-7">
         <div class="card shadow-lg border-0 rounded-lg mt-5 ">
@@ -14,12 +14,12 @@
             <form>
               <div class="form-floating mb-3">
                 {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="emailHelp") }}
-                
+
               </div>
-			  <div class="form-floating mb-3">
-                 {{ render_field(form.username, class='form-control', placeholder='username123', id='usernameHelp') }}
+              <div class="form-floating mb-3">
+                {{ render_field(form.username, class='form-control', placeholder='username123', id='usernameHelp') }}
               </div>
-              
+
               <div class="row mb-3">
                 <div class="col-md-6">
                   <div class="form-floating mb-3 mb-md-0">
@@ -33,7 +33,7 @@
                 </div>
               </div>
               <div class="mt-4 mb-0">
-                <div class="d-grid"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div>
+                {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
               </div>
             </form>
           </div>

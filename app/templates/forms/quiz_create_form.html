@@ -1,8 +1,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
 
-
-
 <form method="POST" action="{{ url_for('quiz.quiz_create_page', plan=chosen_plan.id) }}">
   {{ form.hidden_tag() }}
   <div class="container pt-5 pb-5">
@@ -40,7 +38,7 @@
               <div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
             </div>
             <div class="col-12">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
             </div>
           </div>
         </div>
@@ -48,4 +46,3 @@
     </div>
   </div>
 </form>
-

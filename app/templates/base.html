@@ -9,7 +9,7 @@
 	<title>GetSetQuiz</title>
 	<!-- Favicon-->
 	<!-- When we would have an icon someday. -->
-	<link rel="icon" type="image/x-icon" href="{{url_for('static',filename='assets/img/icon.svg') }}" >
+	<link rel="icon" type="image/x-icon" href="{{url_for('static',filename='assets/img/icon.svg') }}">
 	<meta content="{{ csrf_token() }}" name="csrf-token">
 	<!-- Font Awesome icons (free version)-->
 	<!-- Need this for discord icon and other things -->
@@ -28,9 +28,9 @@
 	<!-- Core theme CSS (includes Bootstrap)-->
 	<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
 	<!-- Custom styling -->
-	<link href="{{ url_for('static', filename='css/custom-styles.css') }}" rel="stylesheet" type="text/css"/>
+	<link href="{{ url_for('static', filename='css/custom-styles.css') }}" rel="stylesheet" type="text/css" />
 	<!-- boxicons -->
-	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'/>
+	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet' />
 
 
 </head>
@@ -38,42 +38,44 @@
 <div class="page_overlay"></div>
 
 <body class="d-flex flex-column h-100" id="page-top">
- <main class= "flex-no-shrink">
-	{% block navbar_section %}
+	<main class="flex-no-shrink">
+		{% block navbar_section %}
+		{% include 'navbar.html' %}
+		{% endblock %}
 
-	{% include 'homepage/navbar.html' %}
 
-	{% endblock %}
+		{# One-time system messages called Flash messages #}
+		{% block flash_messages %}
+		{%- with messages = get_flashed_messages(with_categories=true) -%}
+		{% if messages %}
+		{% for category, message in messages %}
+		{% if category=='error' %}
+		{% set category='danger' %}
+		{% endif %}
+		<div class="pt-5 ">
+			<div class="alert alert-{{category}} alert-dismissible fade show">
+				<strong>{{ message|safe }}</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+		{%- endwith %}
+		{% endblock %}
 
-	<!-- Flash Messages start -->
-	{# One-time system messages called Flash messages #}
-	{% block flash_messages %}
-	{%- with messages = get_flashed_messages(with_categories=true) -%}
-	{% if messages %}
-	{% for category, message in messages %}
-	{% if category=='error' %}
-	{% set category='danger' %}
-	{% endif %}
-	<div class="alert alert-{{category}} alert-dismissible fade show">
-		<strong>{{ message|safe }}</strong>
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
-	{% endfor %}
-	{% endif %}
-	{%- endwith %}
-	{% endblock %}
-	<!-- Flash messages end -->
-	<!-- Do not edit the above block. -->
-	{% block content %}
 
-	{% block masthead_section %}
-	{% endblock %}
+		{% block content %}
 
-	{% block about_section %}
-	{% endblock %}
+		{% block masthead_section %}
+		{% endblock %}
 
-	{% endblock %}
- </main>
+		{% block about_section %}
+		{% endblock %}
+
+		{% endblock %}
+
+
+	</main>
 
 	<!-- Footer Section -->
 	{% block footer %}
