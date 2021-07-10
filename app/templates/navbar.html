@@ -6,33 +6,38 @@
       <span style="font-size: 1.2em; color: white;">
         <i class="fab fa-gofore"></i>
       </span>E T S E T Q U I Z </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-        class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" aria-current="page"
-            href="{{ url_for('homepage.index')}}">HOME</a></li>
-        <li class="nav-item"><a class="nav-link" href="#!">ABOUT</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ url_for('quiz.quiz_homepage')}}" id="navbarDropdown" role="button"
+      class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          {% for item in nav.default_navbar %}
+          {% if item.items %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href=" {{ item.url }}" id="navbarDropdown" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
-            QUIZ
+            {{ item.label }}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_plans_page')}}">Create a Quiz</a></li>
-            <li><a class="dropdown-item" href="#">Register for a Quiz</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_browse_page') }}">Browse Quizzes</a></li>
+            {% for dropdown_item in item.items %}
+            <li><a class="dropdown-item" href="{{ dropdown_item.url }}">{{ dropdown_item.label }}</a></li>
+            {% endfor %}
           </ul>
         </li>
-        <li class="nav-item"><a class="nav-link" href="#!">FAQ</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('homepage.contact') }}">CONTACT</a></li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link {{ 'active' if item.is_active else '' }}" href="{{ item.url }}">{{ item.label }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% if not current_user.is_authenticated %}
         <div class="container px-2">
           <a class="btn btn-outline-light btn-md px-4" href="{{ url_for('user.login') }}">LOGIN</a>
-
         </div>
+        {% else %}
+        <a class="nav-link active" href="{{ url_for('user_dashboard.user_dashboard_page') }}">{{ current_user.username }}</a>
+        {% endif %}
+      </ul>
     </div>
+  </div>
 </nav>

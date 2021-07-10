@@ -1,0 +1,53 @@
+{% extends 'dashboardbase.html' %}
+
+{% block admintopnav %}
+{% include 'admin/admintopnav.html' %}
+{% endblock %}
+
+{% block sidenav %}       
+{% include 'user/usersidenav.html' %}
+{% endblock %}
+
+{% block dashboard_content %}
+<main>
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">User Profile</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item active">User Profile</li>
+		</ol>
+		<div class="d-md-flex flex-items-center flex-justify-between mt-1 mb-4">
+			<div class="d-flex flex-items-center mb-2 mb-md-0">
+				<img src="" size="48" width="48" height="48" class="avatar-user avatar mr-3">
+				<div class="flex-auto">
+					<h3 class="h3 lh-condensed"> {{ current_user.username }} </h1>
+					<div class="d-flex flex-items-center flex-wrap">
+						<p class="color-text-tertiary mb-0 mr-3"> Your personal account </p>
+					</div>
+				</div>
+			</div>
+			<a href="#" class="btn btn-sm pull-right">Go to personal profile page</a>
+		</div>
+		<div class="row d-flex flex-md-row flex-column px-md-0 px-3">
+			<div class="col-md-3 col-12 pr-md-4 pr-0">
+				<ul class="nav nav-pills flex-column">
+					{% for item in nav.user_settings_navbar %}
+					<li class="nav-item">
+						<a class="nav-link {{ 'active' if item.is_active }}" aria-current="page" href="{{ item.url }}">{{ item.label }}</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-md-9 col-12">
+				<div class="mb-3">
+					<label for="exampleFormControlInput1" class="form-label">Email address</label>
+					<input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+				</div>
+				<div class="mb-3">
+					<label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+		{% endblock %}

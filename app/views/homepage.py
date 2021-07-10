@@ -11,12 +11,3 @@ def contact():
 	return render_template('homepage/contact_us.html')
 
 
-@homepage.route("/userdashboard", methods=['GET'])
-def userindex():
-	return render_template('user/userindex.html')
-	
-@homepage.route("/userpass", methods=['GET'])
-def userpasschange():
-	return render_template('flask_user/change_password.html')
-
-

@@ -64,6 +64,7 @@ def quiz_create_page(plan):
 				new_quiz_owner.razorpay_payment_id = 'free_quiz'
 				new_quiz_owner.razorpay_order_id = 'free_quiz'
 				new_quiz_owner.razorpay_signature = 'free_quiz'
+				db.session.commit()
 				return render_template('razorpay/payment_invoice.html', payment_state=True, description="Quiz Creation fee for Quiz UUID: "+new_quiz.uuid , client=new_quiz_owner, uuid=new_quiz.uuid, params_dict = {'razorpay_payment_id': 'free_quiz' } )
 			return redirect(url_for('quiz.quiz_payment_page', uuid=new_uuid))
 	return render_template('quiz/quiz_create.html', chosen_plan=chosen_plan, form=form)
@@ -85,7 +86,7 @@ def quiz_register_page(uuid):
 			return redirect(url_for('quiz.quiz_browse_page'))
 		if (quiz.current_players >= quiz.total_players):
 			flash('No slots left for new players. Try registering for some other quiz.')
-			return redirect(url_for('quiz.quiz_browse_page'))
+			return redirect(url_for('quiz.quiz_register_page', uuid=quiz.uuid))
 		new_subscriber = QuizSubscriber(
 			user_confirm=False,
 			payment_amount=quiz.payment_amount,
@@ -199,8 +200,8 @@ def quiz_create_payment_callback_url(uuid):
 	description = "Quiz Creation Fee for Quiz UUID: "+quiz.uuid
 	if payment_state == True:
 		owner.payment_status = True
-		owner.date = date.today()
-		owner.time = datetime.now().time()
+		owner.payment_date = date.today()
+		owner.payment_time = datetime.now().time()
 		owner.razorpay_payment_id = razorpay_payment_id
 		owner.razorpay_order_id = razorpay_order_id
 		owner.razorpay_signature = razorpay_signature
