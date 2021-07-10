@@ -10,6 +10,17 @@ class CustomUserManager(UserManager):
         if app:
             self.init_app(app, db, UserClass, **kwargs)
 
+    def edit_user_profile_view(self):
+        # Initialize form
+        form = self.EditUserProfileFormClass(request.form, obj=current_user)
+
+        # Process valid POST
+        if request.method == 'POST' and form.validate():
+            # Update fields
+            return redirect(self._endpoint_url(self.USER_AFTER_EDIT_USER_PROFILE_ENDPOINT))
+
+        return render_template(self.USER_EDIT_USER_PROFILE_TEMPLATE, form=form)
+
     def customize(self, app):
         from .forms.forms import CustomRegisterForm, CustomUserProfileForm, CustomLoginForm, CustomChangePasswordForm
         # Configure customized forms

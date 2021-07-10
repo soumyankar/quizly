@@ -5,6 +5,7 @@
 import os
 
 # Application settings
+BANNER_APP_NAME ="E T S E T Q U I Z "
 APP_NAME = "GetSetQuiz"
 APP_SYSTEM_ERROR_SUBJECT_LINE = APP_NAME + " system error"
 
@@ -28,3 +29,4 @@ USER_AFTER_LOGIN_ENDPOINT = 'user_dashboard.user_dashboard_page'
 USER_AFTER_LOGOUT_ENDPOINT = 'homepage.index'
 USER_UNAUTHENTICATED_ENDPOINT = 'user.login'
 USER_UNAUTHORIZED_ENDPOINT = 'user.login'
+USER_AFTER_EDIT_USER_PROFILE_ENDPOINT = 'user_dashboard.user_settings_page'

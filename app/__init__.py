@@ -5,6 +5,8 @@ from flask import Flask
 from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+from flask_nav import Nav
+from flask_navigation import Navigation
 from flask_migrate import Migrate, MigrateCommand
 from flask_wtf.csrf import CSRFProtect
 from flask_bootstrap import Bootstrap
@@ -33,6 +35,12 @@ def create_app(extra_config_settings={}):
     # Setup Flask-Bootstrap
     bootstrap = Bootstrap(app)
 
+    # Setup Flask-Nav
+    from .navbar_manager import nav
+    nav.init_app(app)
+    # nav.register_element('default_navbar', default_navbar)
+
+    nav.init_app(app)
     # Setup Flask-SQLAlchemy
     db.init_app(app)
 

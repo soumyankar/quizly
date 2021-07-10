@@ -1,0 +1,18 @@
+{% extends 'dashboardbase.html' %}
+
+
+{% block dashboard_content %}
+<p>Owned Quizzes</p>
+{% if owned_quizzes|length < 1 %}
+<p>You do not own any quizzes currently.</p>
+{% else %}
+{% for quiz in owned_quizzes %}
+<div class="p-3 m-3 row">
+	<p>Quiz Name: {{ quiz.parent_quiz.name }}</p>
+	<p>Quiz Date: {{ quiz.parent_quiz.date }} {{ quiz.parent_quiz.time }}</p>
+	<p>Quiz Payment Status: {{ quiz.payment_status }}</p>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
