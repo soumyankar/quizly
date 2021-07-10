@@ -14,7 +14,7 @@ class CustomUserManager(UserManager):
         from .forms.forms import CustomRegisterForm, CustomUserProfileForm, CustomLoginForm, CustomChangePasswordForm
         # Configure customized forms
         self.RegisterFormClass = CustomRegisterForm
-        self.UserProfileFormClass = CustomUserProfileForm
+        self.EditUserProfileFormClass = CustomUserProfileForm
         # self.LoginFormClass = CustomLoginForm
         self.ChangePasswordForm = CustomChangePasswordForm
         # NB: assign:  xyz_form = XyzForm   -- the class!

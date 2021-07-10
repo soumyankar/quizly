@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/custom-styles.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 
@@ -29,36 +30,35 @@
 
         {% endblock %}
 
-        
-        {# One-time system messages called Flash messages #}
-        {% block flash_messages %}
-        {%- with messages = get_flashed_messages(with_categories=true) -%}
-        {% if messages %}
-        {% for category, message in messages %}
-        {% if category=='error' %}
-        {% set category='danger' %}
-        {% endif %}
-        <div class="alert alert-{{category}} alert-dismissible fade show">
-            <strong>{{ message|safe }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {%- endwith %}
-        {% endblock %}
 
         <div id="layoutSidenav_content">
+            {# One-time system messages called Flash messages #}
+            {% block flash_messages %}
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category=='error' %}
+            {% set category='danger' %}
+            {% endif %}
+            <div class="alert alert-{{category}} alert-dismissible fade show">
+                <strong>{{ message|safe }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {%- endwith %}
+            {% endblock %}
 
             {% block dashboard_content %}
             {% endblock %}
 
-            
+
 
             <!-- Footer Section -->
             {% block admin_footer %}
-            
-                {% include 'dashboardfooter.html' %}
-            
+
+            {% include 'dashboardfooter.html' %}
+
             {% endblock %}
         </div>
 
