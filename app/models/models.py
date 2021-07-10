@@ -36,13 +36,13 @@ class UserProfile(db.Model):
     __tablename__ = 'user_profiles'
 
     id = db.Column(db.Integer(), primary_key=True)
-    parent_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
     # User fields
     profile_complete = db.Column(db.Boolean(), nullable=False, default=True)
     first_name = db.Column(db.String(50), nullable=False, default=u'')
     last_name = db.Column(db.String(50), nullable=False, default=u'')
-    instituion = db.Column(db.String(250), nullable=True, default=u'')
+    institution = db.Column(db.String(250), nullable=True, default=u'')
     nationality = db.Column(db.String(50), nullable=False, default=u'')
     age = db.Column(db.Integer(), nullable=False, default=-1)
     gender = db.Column(db.String(50), nullable=False, default=u'')
@@ -110,8 +110,8 @@ class QuizSubscriber(db.Model):
     user_confirm = db.Column(db.Boolean(), nullable=False, default=False)
     payment_amount = db.Column(db.Integer(), nullable=False, default=0)
     payment_status = db.Column(db.Boolean(), nullable=False, default=False)
-    date = db.Column(db.Date(), nullable=True)
-    time = db.Column(db.Time(), nullable=True)
+    payment_date = db.Column(db.Date(), nullable=True)
+    payment_time = db.Column(db.Time(), nullable=True)
     razorpay_payment_id = db.Column(db.String(200), nullable=True)
     razorpay_order_id = db.Column(db.String(200), nullable=True)
     razorpay_signature = db.Column(db.String(200), nullable=True)
@@ -143,10 +143,10 @@ class QuizOwner(db.Model):
     payment_amount = db.Column(db.Integer(), nullable=False, default=0)
     payment_date = db.Column(db.Date(), nullable=True)
     payment_time = db.Column(db.Time(), nullable=True)
+    payment_status = db.Column(db.Boolean(), nullable=False, default=False)
     razorpay_payment_id = db.Column(db.String(200), nullable=True)
     razorpay_order_id = db.Column(db.String(200), nullable=True)
     razorpay_signature = db.Column(db.String(200), nullable=True)
-    payment_status = db.Column(db.Boolean(), nullable=False, default=False)
 
 class QuizWinner(db.Model):
     __tablename__ = 'quiz_winners'
