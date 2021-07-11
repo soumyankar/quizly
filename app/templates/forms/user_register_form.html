@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-{% from "forms/_formhelper.html" import render_field %}
+{% from "forms/_formhelper.html" import render_field, render_button %}
 
 <main>
   <div class="container pt-5 " action="{{ url_for('user.register') }}" method="POST">

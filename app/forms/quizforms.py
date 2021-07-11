@@ -30,4 +30,5 @@ class QuizRegisterForm(FlaskForm):
     time = TimeField('Time', validators=[InputRequired()])
     subscription_price = IntegerField('User Registration Price', validators=[InputRequired()])
     quiz_master = SelectField('Quiz Master', choices="", validators=[InputRequired()], render_kw = {"class":"form-control"})
+    submit = SubmitField('Save')
 
