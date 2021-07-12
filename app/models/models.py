@@ -40,12 +40,12 @@ class UserProfile(db.Model):
 
     # User fields
     profile_complete = db.Column(db.Boolean(), nullable=False, default=True)
-    first_name = db.Column(db.String(50), nullable=False, default=u'')
-    last_name = db.Column(db.String(50), nullable=False, default=u'')
+    first_name = db.Column(db.String(50), nullable=True, default=u'')
+    last_name = db.Column(db.String(50), nullable=True, default=u'')
     institution = db.Column(db.String(250), nullable=True, default=u'')
-    nationality = db.Column(db.String(50), nullable=False, default=u'')
-    age = db.Column(db.Integer(), nullable=False, default=-1)
-    gender = db.Column(db.String(50), nullable=False, default=u'')
+    nationality = db.Column(db.String(50), nullable=True, default=u'')
+    dob = db.Column(db.Date(), nullable=True)
+    gender = db.Column(db.String(50), nullable=True, default=u'')
     _phone_number = db.Column(db.Unicode(20))
     country_code = db.Column(db.Unicode(8))
     phone_number = db.composite(

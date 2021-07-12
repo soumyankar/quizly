@@ -11,7 +11,7 @@
             <form action="{{ url_for('user.login')}}" method="POST">
               {{ form.hidden_tag() }}
               <div class="form-floating mb-3">
-                {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="usernameHelp") }}
+                {{ render_field(form.email, class='form-control', placeholder='name@example.com') }}
               </div>
               <div class="form-floating mb-3">
                 {{ render_field(form.password, class='form-control', placeholder='Password') }}

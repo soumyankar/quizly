@@ -1,6 +1,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
-<form>
+<form action="{{ url_for('user.edit_user_profile') }}" method="POST">
+  {{ form.hidden_tag() }}
   <h4>Edit User Profile</h4>
   <div class="col-md-6">
     <div class="form-floating mb-3 mb-md-0">
@@ -35,7 +36,7 @@
     </div>
   </div>
   <div class="mt-4 mb-0">
-    {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
+    {{ render_button(form.submit, class='btn btn-info', value='Save') }}
   </div>
 
 </form>

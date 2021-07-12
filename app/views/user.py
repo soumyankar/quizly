@@ -1,6 +1,5 @@
-from flask import Flask, request, redirect, url_for, Blueprint, render_template
-
-from app.models.models import QuizSubscriber, QuizOwner, QuizMaster
+from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash
+from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_user import roles_required
 from app import db
@@ -11,13 +10,10 @@ user_dashboard = Blueprint("user_dashboard", __name__, static_folder="static", t
 @login_required
 def user_dashboard_page():
 	user = current_user
+	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
+	if not user_profile or user_profile.profile_complete == False:
+		flash('Please <a href="'+url_for('user.edit_user_profile')+'">complete your profile</a> otherwise you may not be allowed to <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
 	return render_template('user/user_homepage.html', user=user)
-
-# @user_dashboard.route('/user/settings/edit_user_profile', methods=['POST', 'GET'])
-# @login_required
-# def user_settings_edit_profile_page():
-# 	user = current_user
-# 	return render_template('user/user_settings.html', user=user)
 
 @user_dashboard.route('/user/quiz/owned', methods=['POST', 'GET'])
 @login_required
