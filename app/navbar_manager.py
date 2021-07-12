@@ -28,11 +28,10 @@ nav.Bar('user_navbar', [
 nav.Bar('user_settings_navbar', [
 	nav.Item('Profile', 'user.edit_user_profile'),
 	nav.Item('Change username', 'user.change_username'),
-	nav.Item('Change password', 'user.change_password'),
-	nav.Item('Manage emails', 'user.manage_emails')
+	nav.Item('Change password', 'user.change_password')
 ])
 
 nav.Bar('user_topnavbar', [
-	nav.Item('Settings', 'user_dashboard.user_settings_page'),
+	nav.Item('Settings', 'user.edit_user_profile'),
 	nav.Item('Sign-out', 'user.logout')
 ])

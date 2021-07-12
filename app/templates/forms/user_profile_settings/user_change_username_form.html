@@ -1,0 +1,14 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% from "forms/_formhelper.html" import render_field, render_button, render_submit_field %}
+
+<form action="{{ url_for('user.change_username') }}" method="POST">
+    <h4>Change Password</h4>
+    {{ form.hidden_tag() }}
+    <div class="form-floating mb-3">
+        {{ render_field(form.new_username, class='form-control', placeholder='New Username', id="new_username") }}
+    </div>
+    <div class="form-floating mb-3">
+        {{ render_field(form.old_password, class='form-control', placeholder='Password', id='password') }}
+    </div>
+    {{ render_button(form.submit, class='btn btn-info') }}
+</form>

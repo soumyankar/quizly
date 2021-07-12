@@ -60,7 +60,7 @@ def quiz_create_page(plan):
 				new_quiz_owner.razorpay_signature = 'free_quiz'
 				db.session.commit()
 				return render_template('razorpay/payment_invoice.html', payment_state=True, description="Quiz Creation fee for Quiz UUID: "+new_quiz.uuid , client=new_quiz_owner, uuid=new_quiz.uuid, params_dict = {'razorpay_payment_id': 'free_quiz' } )
-			return redirect(url_for('quiz.quiz_payment_page', uuid=new_uuid))
+			return redirect(url_for('quiz.quiz_create_payment_page', uuid=new_uuid))
 	return render_template('quiz/quiz_create.html', chosen_plan=chosen_plan, form=form)
 
 @quiz.route("/quiz/browse", methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def quiz_register_page(uuid):
 			return redirect(url_for('quiz.quiz_register_page', uuid=quiz.uuid))
 		new_subscriber = QuizSubscriber(
 			user_confirm=False,
-			payment_amount=quiz.payment_amount,
+			payment_amount=quiz.subscription_price,
 			payment_status=False
 			)
 		new_subscriber.parent_quiz=quiz
@@ -92,6 +92,11 @@ def quiz_register_page(uuid):
 		db.session.commit()
 		return redirect(url_for('quiz.quiz_register_payment_page', uuid=quiz.uuid))
 	return render_template('quiz/quiz_register.html', quiz=quiz)
+
+@quiz.route("/quiz/plans", methods=['GET', 'POST'])
+def quiz_plans_page():
+	pricing_plans = PricingPlan.query.all()
+	return render_template('quiz/quiz_plans.html', pricing_plans=pricing_plans)
 
 @quiz.route('/quiz/register/pay/<string:uuid>', methods=['GET', 'POST'])
 @login_required
@@ -112,38 +117,25 @@ def quiz_register_payment_page(uuid):
 	razorpay_options = razorpay_order.get_razorpay_order_options()
 	return render_template('quiz/quiz_register_payment_page.html', quiz=quiz, razorpay_options=dict(razorpay_options))
 
-@quiz.route("/quiz/plans", methods=['GET', 'POST'])
-def quiz_plans_page():
-	pricing_plans = PricingPlan.query.all()
-	return render_template('quiz/quiz_plans.html', pricing_plans=pricing_plans)
-
 @quiz.route("/quiz/create/pay/<string:uuid>")
 @login_required
-def quiz_payment_page(uuid):
+def quiz_create_payment_page(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
-	quiz_owner = quiz.quiz_owner.parent_user.id
-	if not (quiz_owner == current_user.id):
+	quiz_owner = quiz.quiz_owner
+	if not (quiz_owner.user_id == current_user.id):
 		flash('You may not pay for quizzes you do not own.')
-		return redirect(url_for(user_dashboard.user_dashboard_page))
-
-	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == quiz.quiz_payment.pricing_plan_id).first()
-
-	pricing_plan_used_id = quiz.quiz_payment.pricing_plan_id
-	pricing_plan_used = PricingPlan.query.filter(PricingPlan.id == pricing_plan_used_id).first()
-	
+		return redirect(url_for('user_dashboard.user_dashboard_page'))
 	razorpay_order = RazorpayOrder(
-
-
-								order_amount=(pricing_plan_used.price*100),
-								order_receipt=pricing_plan_used.name,
+								order_amount=(quiz_owner.payment_amount*100),
+								order_receipt=quiz_owner.parent_pricing_plan.name,
 								order_client_name="fix this later",
 								order_client_email="fixthislater@gmail.com",
-								order_pricing_plan_name=pricing_plan_used.name,
+								order_pricing_plan_name=quiz_owner.parent_pricing_plan.name,
 								quiz_uuid=quiz.uuid
 								)
 
 	razorpay_options = razorpay_order.get_razorpay_order_options()
-	return render_template('quiz/quiz_payment.html', quiz=quiz, pricing_plan_used=pricing_plan_used, razorpay_options=dict(razorpay_options))
+	return render_template('quiz/quiz_create_payment_page.html', quiz=quiz, razorpay_options=dict(razorpay_options))
 
 @csrf_protect.exempt
 @quiz.route('/quiz/register/pay/callback/<string:uuid>', methods=['POST'])
@@ -159,13 +151,13 @@ def quiz_register_payment_callback_url(uuid):
 	}
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	subscriber = QuizSubscriber.query.filter(QuizSubscriber.user_id == current_user.id).first()
-	amount = quiz.payment_amount
+	amount = quiz.subscription_price
 	payment_state = razorpay_verify_payment_signature(params_dict, amount)
+	description = "Registration Fee for Quiz UUID: "+quiz.uuid
 	if payment_state == True:
-		description = "Registration Fee for Quiz UUID: "+quiz.uuid
 		subscriber.payment_status = True
 		subscriber.date = date.today()
-		subscriber.time = datetime.datetime.now().time()
+		subscriber.time = datetime.now().time()
 		subscriber.razorpay_payment_id = razorpay_payment_id
 		subscriber.razorpay_order_id = razorpay_order_id
 		subscriber.razorpay_signature = razorpay_signature

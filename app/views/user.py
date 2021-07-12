@@ -13,11 +13,11 @@ def user_dashboard_page():
 	user = current_user
 	return render_template('user/user_homepage.html', user=user)
 
-@user_dashboard.route('/user/settings', methods=['POST', 'GET'])
-@login_required
-def user_settings_page():
-	user = current_user
-	return render_template('user/user_settings.html', user=user)
+# @user_dashboard.route('/user/settings/edit_user_profile', methods=['POST', 'GET'])
+# @login_required
+# def user_settings_edit_profile_page():
+# 	user = current_user
+# 	return render_template('user/user_settings.html', user=user)
 
 @user_dashboard.route('/user/quiz/owned', methods=['POST', 'GET'])
 @login_required
@@ -37,5 +37,5 @@ def user_quiz_subscribed():
 @login_required
 def user_quiz_master():
 	user = current_user
-	quiz_master_quizzes = QuizMaster.query.filter(QuizMaster.user_id == current_user.id).all()
-	return render_template('user/user_quiz_master.html', quiz_master_quizzes=quiz_master_quizzes)
+	hosted_quizzes = QuizMaster.query.filter(QuizMaster.user_id == current_user.id).all()
+	return render_template('user/user_quiz_master.html', hosted_quizzes=hosted_quizzes)

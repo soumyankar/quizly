@@ -21,7 +21,7 @@
 
 					</div>
 					<div class="item">
-						<span class="price">{{ pricing_plan_used.name }}</span>
+						<span class="price">{{ quiz.quiz_owner.parent_pricing_plan.name }}</span>
 						<p class="item-name">Quiz Pricing Plan</p>
 
 					</div>
@@ -39,20 +39,19 @@
 						<p class="item-name">Quiz Total Slots</p>
 					</div>
 					<div class="item">
-						<span class="price">{{ quiz.quiz_payment.payment_status }}</span>
+						<span class="price">{{ quiz.quiz_owner.payment_status }}</span>
 						<p class="item-name">Quiz Payment Status</p>
 					</div>
-					<div class="total">Total<span class="price">Rs. 150</span></div>
+					<div class="total">Total<span class="price">{{ quiz.quiz_owner.payment_amount }}</span></div>
 				</div>
-				<div class="form-group col-md-12 p-4 ">
-					<div class="d-grid gap-2" >
-						{% block razorpay_payment_button %}
-						{% include 'forms/razorpay_payment_form.html' %}
-						{% endblock %}
-					</div>
-				</div>
-
 			</form>
+			<div class="form-group col-md-12 p-4 ">
+				<div class="d-grid gap-2" >
+					{% block razorpay_payment_button %}
+					{% include 'forms/razorpay_quiz_create_payment_form.html' %}
+					{% endblock %}
+				</div>
+			</div>
 		</div>
 	</section>
 </main>

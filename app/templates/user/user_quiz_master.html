@@ -1,16 +1,48 @@
 {% extends 'dashboardbase.html' %}
 
-
 {% block dashboard_content %}
-<p>Owned Quizzes</p>
-{% if quiz_master_quizzes|length < 1 %}
-<p>You are not the quiz master of any quizzes currently.</p>
+{% if hosted_quizzes|length < 1 %}
+<p>You do not own any quizzes currently.</p>
 {% else %}
-{% for quiz in quiz_master_quizzes %}
-<div class="p-3 m-3 row">
-	<p>Quiz Name: {{ quiz.parent_quiz.name }}</p>
-	<p>Quiz Date: {{ quiz.parent_quiz.date }} {{ quiz.parent_quiz.time }}</p>
-	<p>Quiz Payment Status: {{ quiz.payment_status }}</p>
+{% for quiz in hosted_quizzes %}
+<div class="row g-3 p-3 m-3 quiz-info-item shadow">
+	<div class="row quiz-info-item-header">
+		<div class="text-bold">
+			<h4>{{ quiz.parent_quiz.name }}</h4>
+		</div>
+	</div>
+	<div class="row g-1 p-1 m-1">
+		<div class="row">
+			<div class="col-12">
+				<h5 class="text-muted">Quiz UUID</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.uuid }}</h6>
+			</div>
+			<div class="col-12">
+				<h5 class="text-muted">Pricing Plan</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.quiz_owner.parent_pricing_plan.name }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Host</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.quiz_owner.parent_user.username }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Quiz Master</h5>
+				<h6 class="text-bold">{{ quiz.parent_user.username }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Date</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.date }} {{ quiz.parent_quiz.time }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Slots</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.current_players }} / {{ quiz.parent_quiz.total_players }}</h6>
+			</div>
+			<div class="col-6">
+				<h5 class="text-muted">Subscription Price</h5>
+				<h6 class="text-bold">{{ quiz.parent_quiz.subscription_price }}</h6>
+			</div>
+		</div>
+	</div>
 </div>
 {% endfor %}
 {% endif %}

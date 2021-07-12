@@ -38,16 +38,15 @@
 				</ul>
 			</div>
 			<div class="col-md-9 col-12">
-				<div class="mb-3">
-					<label for="exampleFormControlInput1" class="form-label">Email address</label>
-					<input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-				</div>
-				<div class="mb-3">
-					<label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-				</div>
+				{% if import_form == 'edit_user_profile' %}
+					{% include 'forms/user_profile_settings/edit_user_profile_form.html' %}
+				{% elif import_form == 'change_password' %}
+					{% include 'forms/user_profile_settings/user_change_password_form.html' %}
+				{% elif import_form == 'change_username' %}
+					{% include 'forms/user_profile_settings/user_change_username_form.html' %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
 </main>
-		{% endblock %}
+{% endblock %}

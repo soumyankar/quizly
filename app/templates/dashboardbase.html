@@ -12,8 +12,8 @@
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='css/custom-styles.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css"
-        integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    integrity="sha512-Cv93isQdFwaKBV+Z4X8kaVBYWHST58Xb/jVOcV9aRsGSArZsgAnFIhMpDoMDcFNoUtday1hdjn0nGp3+KZyyFw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {% block head %}
     {% endblock %}
@@ -24,36 +24,33 @@
 <body class="sb-nav-fixed">
 
     {% block admintopnav %}
-
+    {% include 'user/usertopnav.html' %}
     {% endblock %}
 
 
 
     <div id="layoutSidenav">
-        {% block sidenav %}
-
-        {% endblock %}
-
-        
-        {# One-time system messages called Flash messages #}
-        {% block flash_messages %}
-        {%- with messages = get_flashed_messages(with_categories=true) -%}
-        {% if messages %}
-        {% for category, message in messages %}
-        {% if category=='error' %}
-        {% set category='danger' %}
-        {% endif %}
-        <div class="alert alert-{{category}} alert-dismissible fade show">
-            <strong>{{ message|safe }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {%- endwith %}
+        {% block sidenav %}       
+        {% include 'user/usersidenav.html' %}
         {% endblock %}
 
         <div id="layoutSidenav_content">
-
+            {# One-time system messages called Flash messages #}
+            {% block flash_messages %}
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category=='error' %}
+            {% set category='danger' %}
+            {% endif %}
+            <div class="alert alert-{{category}} alert-dismissible fade show">
+                <strong>{{ message|safe }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {%- endwith %}
+            {% endblock %}
             {% block dashboard_content %}
             {% endblock %}
 
@@ -62,7 +59,7 @@
             <!-- Footer Section -->
             {% block admin_footer %}
             
-                {% include 'dashboardfooter.html' %}
+            {% include 'dashboardfooter.html' %}
             
             {% endblock %}
         </div>
@@ -71,11 +68,11 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
-        crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"
-        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
