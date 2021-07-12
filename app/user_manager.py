@@ -2,6 +2,8 @@ from flask import current_app, flash, redirect, render_template, request, url_fo
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_user import UserManager
 from wtforms import ValidationError
+from app.models.models import UserProfile
+from app import db
 
 # Customize Flask-User 
 class CustomUserManager(UserManager):
@@ -10,34 +12,35 @@ class CustomUserManager(UserManager):
         if app:
             self.init_app(app, db, UserClass, **kwargs)
 
+    
     @login_required
     def edit_user_profile_view(self):
         # Initialize form
-        form = self.EditUserProfileFormClass(request.form, obj=current_user)
-
+        form = self.EditUserProfileFormClass()
         # Process valid POST
-        if request.method == 'POST' and form.validate():
+        if request.method == 'POST':
             # Update fields
-            first_name = form.first_name.data
-            last_name = form.last_name.data
-            nationality = form.nationality.data
-            institution = form.institution.data
-            dob = form.dob.data
-            gender = form.gender.data
+            print('hello')
+            if not form.validate():
+                flash('There was a problem with one of the input fields, try again', 'error')
+                return redirect(url_for('user.edit_user_profile'))
             new_user_profile = UserProfile(
                 profile_complete=True,
-                first_name=first_name,
-                last_name=last_name,
-                nationality=nationality,
-                institution=institution,
-                dob=dob,
-                gender=gender,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data,
+                nationality=form.nationality.data,
+                institution=form.institution.data,
+                dob=form.dob.data,
+                gender=form.gender.data,
                 )
             new_user_profile.parent_user = current_user
+            print (new_user_profile)
             db.session.add(new_user_profile)
             db.session.commit()
+            flash('Profile updated!', 'success')
             return redirect(self._endpoint_url(self.USER_AFTER_EDIT_USER_PROFILE_ENDPOINT))
 
+        print('request.method dont work lol')
         return render_template(self.USER_EDIT_USER_PROFILE_TEMPLATE, form=form, import_form="edit_user_profile")
 
     @login_required
@@ -88,7 +91,6 @@ class CustomUserManager(UserManager):
 
         # Process valid POST
         if request.method == 'POST' and form.validate():
-
             # Change username
             new_username = form.new_username.data
             current_user.username=new_username
@@ -120,6 +122,6 @@ class CustomUserManager(UserManager):
         self.RegisterFormClass = CustomRegisterForm
         self.EditUserProfileFormClass = CustomUserProfileForm
         # self.LoginFormClass = CustomLoginForm
-        self.ChangePasswordForm = CustomChangePasswordForm
+        # self.ChangePasswordForm = CustomChangePasswordForm
         # NB: assign:  xyz_form = XyzForm   -- the class!
         #   (and not:  xyz_form = XyzForm() -- the instance!)

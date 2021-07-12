@@ -27,7 +27,7 @@ nav.Bar('user_navbar', [
 
 nav.Bar('user_settings_navbar', [
 	nav.Item('Profile', 'user.edit_user_profile'),
-	nav.Item('Change username', 'user.change_username'),
+	# nav.Item('Change username', 'user.change_username'),
 	nav.Item('Change password', 'user.change_password')
 ])
 

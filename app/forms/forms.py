@@ -43,9 +43,8 @@ def password_validator(form, field):
         raise ValidationError(
             ('Password must have at least 6 characters with one lowercase letter, one uppercase letter and one number'))
 
-today = date.today()
 def date_validator(form, field):
-
+    today = date.today()
     if field.data > today:
         raise ValidationError('Future Date cannot be selected')
 
@@ -75,18 +74,13 @@ class CustomRegisterForm(FlaskForm):
 # Customize the User profile form:
 from flask_user.forms import EditUserProfileForm
 class CustomUserProfileForm(FlaskForm):
-    email = StringField(('Email'), validators=[
-        validators.DataRequired(('Email is required')),
-        validators.Email(('Invalid Email'))])
-    first_name = StringField('First name', validators=[
-        validators.DataRequired('First name is required')])
-    last_name = StringField('Last name', validators=[
-        validators.DataRequired('Last name is required')])
+    first_name = StringField('First name', validators=[InputRequired('First name is required')])
+    last_name = StringField('Last name', validators=[InputRequired('Last name is required')])
     nationality = SelectField('Nationality', choices=nationalityCountries, default="India", validators=[InputRequired()])
     gender = SelectField('Gender', choices=[('Male', 'Male'),('Female', 'Female'),('Others', 'Choose not to identify')], validators=[InputRequired()])
-    age = IntegerField('Age', validators=[InputRequired()])
-    institution = StringField('Institution', validators=[validators.DataRequired('Please input the name of your institution')])
+    institution = StringField('Institution', validators=[InputRequired()])
     dob= DateField('Tell us your Birthday', validators=[InputRequired(), date_validator])
+    # phone_number = 
     submit = SubmitField('Save')
 
 
@@ -97,7 +91,6 @@ class CustomLoginForm(FlaskForm):
     email = StringField(('Email'), validators=[
         validators.DataRequired(('Email is required')),
         validators.Email(('Invalid Email'))])
-
     password = PasswordField('Password', validators=[])
     remember_me = BooleanField(('Remember me'))
     submit = SubmitField(('Sign in'))
