@@ -3,23 +3,32 @@
 <form action="{{ url_for('user.edit_user_profile') }}" method="POST">
   {{ form.hidden_tag() }}
   <h4>Edit User Profile</h4>
-  <div class="col-md-6">
-    <div class="form-floating mb-3 mb-md-0">
-      {{ render_field(form.first_name, class='form-control', placeholder='First Name') }}
-    </div>
+  <div class="form-floating mb-3 mb-md-0">
+    {{ render_field(form.first_name, class='form-control', placeholder='First Name') }}
   </div>
-  <div class="col-md-6">
-    <div class="form-floating mb-3 mb-md-0">
-      {{ render_field(form.last_name, class='form-control', placeholder='Last Name') }}
-    </div>
+  <div class="form-floating mb-3 mb-md-0">
+    {{ render_field(form.last_name, class='form-control', placeholder='Last Name') }}
   </div>
 
+  <div class="col-12 d-flex">
+    <div class="col-2">
+      <div class="form-floating mb-3">
+        {{ render_field(form.phone_number_country_code, class='form-select', placeholder='Country Code') }}
+      </div>
+    </div>
+    <div class="col-10">
+      <div class="form-floating mb-3">
+        {{ render_field(form.phone_number, class='form-control', placeholder='Phone Number') }}
+      </div>
+    </div>
+  </div>
   <div class="form-floating mb-3 ">
     {{ render_field(form.nationality, class='form-select', placeholder='Nationality') }}
   </div>
   <div class="form-floating mb-3 ">
     {{ render_field(form.institution, class='form-control', placeholder='Institution') }}
   </div>
+
 
   <div class="row mb-3">
     <div class="col-md-6">
