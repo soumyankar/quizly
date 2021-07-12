@@ -30,9 +30,9 @@
 
 
     <div id="layoutSidenav">
+
         {% block sidenav %}       
         {% include 'user/usersidenav.html' %}
-        {% endblock %}
 
         <div id="layoutSidenav_content">
             {# One-time system messages called Flash messages #}
@@ -51,10 +51,10 @@
             {% endif %}
             {%- endwith %}
             {% endblock %}
+
             {% block dashboard_content %}
             {% endblock %}
-
-            
+           
 
             <!-- Footer Section -->
             {% block admin_footer %}

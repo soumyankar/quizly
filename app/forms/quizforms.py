@@ -32,3 +32,4 @@ class QuizRegisterForm(FlaskForm):
     quiz_master = SelectField('Quiz Master', choices="", validators=[InputRequired()], render_kw = {"class":"form-control"})
     submit = SubmitField(('Create Quiz'))
 
+

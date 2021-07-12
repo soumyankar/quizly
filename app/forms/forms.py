@@ -69,6 +69,7 @@ class CustomRegisterForm(FlaskForm):
         validators.EqualTo('password', message=('Password and Retype Password did not match'))])
     invite_token = HiddenField(('Token'))
     submit = SubmitField('Register')
+
  
 
 # Customize the User profile form:

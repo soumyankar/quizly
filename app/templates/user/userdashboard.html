@@ -5,100 +5,95 @@
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
         <div class="row">
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-info text-white mb-4">
+            <div class="card mb-3" style="max-width: 300px;">
+                <div class="row g-0">
+                  <div class="col-sm-2">
+                    <img src="..." class="img-fluid rounded-start" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{user.username}}  <span class="flag-icon flag-icon-in"></span></h5>
+                      <p class="card-text">University of Whatsapp</p>
+                      <p class="card-text"><small class="text-muted">Member since {{user.registered_on}}</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <div class="col-xl-4 col-md-6">
+                <div class="card bg-secondary text-white mb-4">
+
+
+
                     <div class="card-body">
 
                         <div class="row px-2">
-                            <div class="col-10">
-                                <h5>{{user.username}}
-                                    <span class="flag-icon flag-icon-in"></span>
-                                </h5>
+                            <h6>About Me</h6>
+                            <div class="col">I am a GigaChad what else do you wanna know. I love participating in
+                                quizzes
                             </div>
 
 
-
                         </div>
-                        <div class="row px-2">
-                            <div class="col">
-                                Member since {{user.registered_on}}
 
-                            </div>
-
-                        </div>
-                        <div class="row px-2 pt-2">
-                            <div class="col">Studies at University of Whatsapp
-                            </div>
-
-                        </div>
 
                     </div>
+
                 </div>
             </div>
             <div class="col-xl-5 col-md-6">
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">
-                        <div class="card-body">
+                        
 
                             <div class="row">
                                 <div class="col">
                                     Rankings
                                 </div>
-                                <div class="col-6">
-                                    Rankings
+                                <div class="col">
+                                    <span class="flag-icon flag-icon-in"></span>9111
                                 </div>
-
-
-
+                                <div class="col">
+                                    <i class="fa fa-globe" aria-hidden="true"></i>128880
+                                </div>
                             </div>
+                            <hr>
                             <div class="row ">
                                 <div class="col">
-                                    Member since {{user.registered_on}}
+                                    Total Matches
+                                </div>
+                                <div class="col">
+                                    50
+                                </div>
+                                <div class="col">
+                                    Overall Win%
+                                </div>
+                                <div class="col">
+                                    52%
+                                </div>
+                            </div>
+                            <hr>
 
+                            <div class="row ">
+                                <div class="col-3">
+                                    Last 5 Quiz
+                                </div>
+                                <div class="col-9">
+                                    W W L W L
                                 </div>
 
-                            </div>
-                            <div class="row px-2 ">
-                                <div class="col">Studies at University of Whatsapp
-                                </div>
 
                             </div>
-
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-4 col-md-6">
-                <div class="card bg-secondary text-white mb-4">
-                    <div class="card-header">
-                        About Me
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="row px-2">
-
-                            <div class="col">I am a GigaChad what else do you wanna know
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Edit</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
+            </div>  
 
         </div>
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-6 col-md-6">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
+
                         Upcoming Events
                     </div>
                     <div class="card-body">
@@ -166,6 +161,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-    </main>
+    </div>
+</main>
+
