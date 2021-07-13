@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash
+from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash, abort
 from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile, User
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_user import roles_required
