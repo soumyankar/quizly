@@ -1,4 +1,6 @@
 import pycountry
+import phonenumbers
+from phonenumbers.phonenumberutil import country_code_for_region
 # Flask-WTF v0.13 renamed Flask to FlaskForm
 try:
     from flask_wtf import FlaskForm             # Try Flask-WTF v0.13+
@@ -12,8 +14,11 @@ from app.models.models import User
 from datetime import date, datetime
 
 nationalityCountries = []
+country_codes_alpha_2 = []
 for country in pycountry.countries:
-	nationalityCountries.append(country.name)
+    nationalityCountries.append(country.name)
+    # country_codes_alpha_2.append( ("(+",phonenumbers.country_code_for_region(country.alpha_2),") ", country.alpha_2), (phonenumbers.country_code_for_region(country.alpha_2)) )
+    # country_codes_alpha_2.append(phonenumbers.country_code_for_region(country.alpha_2))
 
 def unique_username_validator(form, field):
     if (User.query.filter_by(username=field.data).first()):
@@ -79,8 +84,9 @@ class CustomUserProfileForm(FlaskForm):
     nationality = SelectField('Nationality', choices=nationalityCountries, default="India", validators=[InputRequired()])
     gender = SelectField('Gender', choices=[('Male', 'Male'),('Female', 'Female'),('Others', 'Choose not to identify')], validators=[InputRequired()])
     institution = StringField('Institution', validators=[InputRequired()])
-    dob= DateField('Tell us your Birthday', validators=[InputRequired(), date_validator])
-    # phone_number = 
+    dob = DateField('Tell us your Birthday', validators=[InputRequired(), date_validator])
+    phone_number = StringField('Phone Number', validators=[InputRequired()])
+    phone_number_country_code = SelectField('Country Code', choices=[(country.alpha_2, (country_code_for_region(country.alpha_2) )) for country in pycountry.countries], validators=[InputRequired()])
     submit = SubmitField('Save')
 
 

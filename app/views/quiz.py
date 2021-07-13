@@ -3,8 +3,8 @@ from datetime import datetime, date
 from app import db, csrf_protect
 from app.forms.quizforms import QuizRegisterForm
 from app.misc.razorpay_creds import RazorpayOrder, razorpay_verify_payment_signature
-from app.models.models import PricingPlan, Quiz, User, QuizOwner, QuizMaster, QuizSubscriber
-from flask import (Blueprint, Flask, flash, redirect, render_template, request,url_for)
+from app.models.models import PricingPlan, Quiz, User, QuizOwner, QuizMaster, QuizSubscriber, UserProfile
+from flask import (Blueprint, Flask, flash, redirect, render_template, request,url_for,abort)
 from flask_login import current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 
@@ -17,6 +17,11 @@ def quiz_homepage():
 @quiz.route("/quiz/create/<int:plan>", methods=['GET', 'POST'])
 @login_required
 def quiz_create_page(plan):
+	user_profile = UserProfile.query.filter(UserProfile.user_id == current_user.id).first()
+	if not user_profile or user_profile.profile_complete == False:
+		flash('Please <a href="'+url_for('user.edit_user_profile')+'">complete your profile</a> otherwise you may not be allowed to <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
+		return redirect(request.referrer)
+
 	chosen_plan = PricingPlan.query.filter(PricingPlan.id == plan).first()
 	if not chosen_plan:
 		flash('That is not a valid plan ID. Choose again')
@@ -72,6 +77,11 @@ def quiz_browse_page():
 @quiz.route("/quiz/register/<string:uuid>", methods=['GET', 'POST'])
 @login_required
 def quiz_register_page(uuid):
+	user_profile = UserProfile.query.filter(UserProfile.user_id == current_user.id).first()
+	if not user_profile or user_profile.profile_complete == False:
+		flash('Please <a href="'+url_for('user.edit_user_profile')+'">complete your profile</a> otherwise you may not be allowed to <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
+		return redirect(request.referrer)
+	
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	if request.method == 'POST':
 		quiz_owner = quiz.quiz_owner.parent_user.id

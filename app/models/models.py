@@ -46,8 +46,8 @@ class UserProfile(db.Model):
     nationality = db.Column(db.String(50), nullable=True, default=u'')
     dob = db.Column(db.Date(), nullable=True)
     gender = db.Column(db.String(50), nullable=True, default=u'')
-    _phone_number = db.Column(db.Unicode(20))
-    country_code = db.Column(db.Unicode(8))
+    _phone_number = db.Column(db.Unicode(20), nullable=True)
+    country_code = db.Column(db.Unicode(8), nullable=True)
     phone_number = db.composite(
         PhoneNumber,
         _phone_number,

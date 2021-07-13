@@ -4,6 +4,7 @@ from flask_user import UserManager
 from wtforms import ValidationError
 from app.models.models import UserProfile
 from app import db
+from sqlalchemy_utils import PhoneNumber
 
 # Customize Flask-User 
 class CustomUserManager(UserManager):
@@ -20,7 +21,6 @@ class CustomUserManager(UserManager):
         # Process valid POST
         if request.method == 'POST':
             # Update fields
-            print('hello')
             if not form.validate():
                 flash('There was a problem with one of the input fields, try again', 'error')
                 return redirect(url_for('user.edit_user_profile'))
@@ -32,15 +32,14 @@ class CustomUserManager(UserManager):
                 institution=form.institution.data,
                 dob=form.dob.data,
                 gender=form.gender.data,
+                phone_number=(PhoneNumber( str(form.phone_number.data), str(form.phone_number_country_code.data) ))
                 )
             new_user_profile.parent_user = current_user
-            print (new_user_profile)
             db.session.add(new_user_profile)
             db.session.commit()
             flash('Profile updated!', 'success')
             return redirect(self._endpoint_url(self.USER_AFTER_EDIT_USER_PROFILE_ENDPOINT))
-
-        print('request.method dont work lol')
+        # Check if details already exist.
         return render_template(self.USER_EDIT_USER_PROFILE_TEMPLATE, form=form, import_form="edit_user_profile")
 
     @login_required
