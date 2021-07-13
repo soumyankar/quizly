@@ -6,7 +6,7 @@
         </ol>
         <div class="row">
             <div class="col-xl-7 col-md-6">
-                <div class="card bg-success text-white mb-4">
+                <div class="card border-0 shadow rounded-3 overflow-hidden mb-3">
                     <div class="card-body">
 
 
@@ -52,30 +52,31 @@
                 </div>
             </div>
             <div class="col-xl-5 col-md-6">
-                <div class="card mb-3">
+                <div class="card border-0 shadow rounded-3 overflow-hidden mb-3">
                     <div class="row g-0">
                         <div class="col-sm-1">
-                            <div class="dp pt-3">
+                            <div class="dp p-3">
                                 <img class="rounded-circle me-3 " src="https://dummyimage.com/40x40/ced4da/6c757d"
                                     alt="..." />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="card-body">
-                                <h5 class="card-title">{{user.username}} <span class="flag-icon flag-icon-in"></span>
+                                <h5 class="card-title text-center">{{user.username}} <span class="flag-icon flag-icon-in"></span>
                                 </h5>
-                                <p class="card-text">University of Whatsapp</p>
-                                <p class="card-text"><small class="text-muted">Member since
+                                <p class="card-text text-center">University of Whatsapp</p>
+                                <p class="card-text text-center"><small class="text-muted">Member since
                                         {{user.registered_on}}</small>
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class=" card-body">
-                                <h5 class="card-title">
+                            <div class=" card-body" style="max-height: 170px;">
+                                <h5 class="card-title text-center">
                                     About Me
-                                 </h5>
-                                 <p class="card-text text-align-center">I am a GigaChad what else do you wanna know. I love participating in
+                                </h5>
+                                <p class="card-text text-center">I am a GigaChad what else do you wanna know. I love
+                                    participating in
                                     quizzes</p>
                             </div>
                         </div>
@@ -85,15 +86,17 @@
 
         </div>
         <div class="row">
-            <div class="col-xl-6 col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-area me-1"></i>
-
-                        Upcoming Events
-                    </div>
+            <div class="col-xl-7 col-md-6">
+                <div class="card border-0 shadow rounded-3 overflow-hidden mb-3 ">
                     <div class="card-body">
-                        <div id='calendar' width="100%" height="40"></div>
+
+                        <h5 class="card-title ">
+                            <i class="fas fa-chart-area me-1"></i>
+
+                            Upcoming Events
+                        </h5>
+
+                        <div id='calendar' style="text-decoration: none;" ></div>
                     </div>
                 </div>
             </div>
@@ -101,62 +104,18 @@
 
 
 
-            <div class="col-xl-6">
+            <div class="col-xl-5">
                 <div class="card border-0 shadow rounded-3 overflow-hidden">
-                    <div class="card p-0">
-                        <div class="card-header">
+                    <div class="card-body">
+                        <h5 class="card-title">
                             <i class="fas fa-chart-bar me-1"></i>
                             Last Quiz Report
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-xl-6">
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Questions Attempted
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Questions Correct
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Questions Incorrect
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        % Accuracy
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Position
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Quiz Master Remark
-                                    </div>
-
-                                </div>
-                                <div class="col-xl-6">
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        15
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        14
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        1
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        93.33%
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        2nd
-                                    </div>
-                                    <div class="position-relative mb-5 mb-lg-0">
-                                        Wonderful Performance
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </h5>
+                        <p class="card-text text-center">No quizzes to show</p>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </main>
-
