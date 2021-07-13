@@ -1,5 +1,5 @@
 from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash
-from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile
+from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile, User
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_user import roles_required
 from app import db
@@ -14,6 +14,17 @@ def user_dashboard_page():
 	if not user_profile or user_profile.profile_complete == False:
 		flash('Please <a href="'+url_for('user.edit_user_profile')+'">complete your profile</a> otherwise you may not be allowed to <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
 	return render_template('user/user_homepage.html', user=user)
+
+@user_dashboard.route('/user/profile/<username>', methods=['GET'])
+def user_profile_page(username):
+	user = User.query.filter(User.username == username).first()
+	if not user:
+		abort(404) # add description for username not found
+	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
+	if not user_profile or user_profile.profile_complete == False:
+		abort(404) #Add description for profile page not completed yet.
+
+	return render_template('user/user_profile.html', user=user)
 
 @user_dashboard.route('/user/quiz/owned', methods=['POST', 'GET'])
 @login_required
