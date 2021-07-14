@@ -86,7 +86,7 @@ class CustomUserProfileForm(FlaskForm):
     institution = StringField('Institution', validators=[InputRequired()])
     dob = DateField('Tell us your Birthday', validators=[InputRequired(), date_validator])
     phone_number = StringField('Phone Number', validators=[InputRequired()])
-    phone_number_country_code = SelectField('Country Code', choices=[(country.alpha_2, (country_code_for_region(country.alpha_2) )) for country in pycountry.countries], validators=[InputRequired()])
+    phone_number_country_code = SelectField('Code', choices=[(country.alpha_2, (country_code_for_region(country.alpha_2) )) for country in pycountry.countries], validators=[InputRequired()])
     submit = SubmitField('Save')
 
 
