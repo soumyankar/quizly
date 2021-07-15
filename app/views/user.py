@@ -12,17 +12,17 @@ def user_dashboard_page():
 	user = current_user
 	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
 	if not user_profile or user_profile.profile_complete == False:
-		flash('Please <a href="'+url_for('user.edit_user_profile')+'">complete your profile</a> otherwise you may not be allowed to <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
+		flash('You need to  <a href="'+url_for('user.edit_user_profile')+'"> complete your profile </a> before you can <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
 	return render_template('user/user_homepage.html', user=user)
 
 @user_dashboard.route('/user/profile/<username>', methods=['GET'])
 def user_profile_page(username):
 	user = User.query.filter(User.username == username).first()
 	if not user:
-		abort(404) # add description for username not found
+		abort(404, description ='The User you are looking for does not exist.') 
 	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
 	if not user_profile or user_profile.profile_complete == False:
-		abort(404) #Add description for profile page not completed yet.
+		abort(404, description ='Looks like this User has not completed their profile page yet.') 
 
 	return render_template('user/user_profile.html', user=user)
 

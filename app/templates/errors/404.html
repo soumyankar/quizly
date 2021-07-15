@@ -12,14 +12,14 @@
               <div class="col-lg-6 col-xl-5 py-lg-5">
                 <div class="p-4 p-md-5">
                    <div class="h2 fw-bolder">UH OH! You're lost. 404</div>
-                  <p>The page you are looking for does not exist.
-                    How you got here is a mystery. But you can click the button below
+                   <p><strong>{{error.description}}</strong></p>
+                  <p>How you got here is a mystery. But you can click the button below
                     to go back to the homepage.</p>
-                  <a class="stretched-link text-decoration-none" href="{{ url_for('homepage.index')}}">
-                    Take me back to HOME
+                    <a class="stretched-link text-decoration-none" href="{{ url_for('homepage.index')}}">
+                      Take me back Home
                     <i class="bi bi-arrow-right"></i>
                   </a>
-                </div>
+                  </div>
               </div>
               <div class="col-lg-6 col-xl-7">
                 

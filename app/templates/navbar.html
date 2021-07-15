@@ -6,15 +6,15 @@
       <span style="font-size: 1.2em; color: white;">
         <i class="fab fa-gofore"></i>
       </span>E T S E T Q U I Z </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-        class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        {% for item in nav.default_navbar %}
-        {% if item.items %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href=" {{ item.url }}" id="navbarDropdown" role="button"
+      class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          {% for item in nav.default_navbar %}
+          {% if item.items %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href=" {{ item.url }}" id="navbarDropdown" role="button"
             data-bs-toggle="dropdown" aria-expanded="false">
             {{ item.label }}
           </a>
@@ -35,23 +35,27 @@
           <a class="btn btn-outline-light btn-md px-4" href="{{ url_for('user.login') }}">LOGIN</a>
         </div>
         {% else %}
-         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            {% for item in nav.user_topnavbar %}
-            <a class="nav-link active" href="{{ url_for('user_dashboard.user_dashboard_page') }}">{{ current_user.username
-            }}</a>
-            <li><a class="dropdown-item" href="{{ item.url }}">{{ item.label }}</a></li>
-            {% endfor %}
-          </ul>
-        </li>
-
-
-
+            
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false"><img
+                  src="https://ui-avatars.com/api/?background=random&length=1&name={{current_user.username}}"
+                  class="rounded-circle" width="32"></a></a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><p class = "text-center">Signed in as 
+                <a class="dropdown-item" href="{{ url_for('user_dashboard.user_dashboard_page') }}"><strong>{{ current_user.username }}</strong></a></li>
+                <li><hr class="dropdown-divider"></li>
+                  {% for item in nav.user_topnavbar %}
+                  <li><a class="dropdown-item" href="{{ item.url }}">{{ item.label }}</a></li>
+                  {% endfor %}
+              </ul>
+          </li>
+      
+        
+        
         {% endif %}
       </ul>
-
+      
     </div>
   </div>
 </nav>
