@@ -1,99 +1,96 @@
-<main>
-    <div class="container-fluid px-4">
-        <h1 class="mt-4">Dashboard</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-        <div class="row">
-            <div class="col-xl-7 col-md-6">
-                <div class="card border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3">
-                    <div class="d-flex align-items-center">
-                        <div class="ms-1 w-100 pb-2">
-                            <h4 class="mb-0 mt-1 pt-1"> Statistics</h4> <span class = "pt-1"> All time stats for quiz particpations </span>
-                            <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
-                                <div class="d-flex flex-column"> <span class="articles text-center "> Rankings </span>
-                                    <div class="text-center"> <i class="flag-icon flag-icon-in flag-icon-squared"> </i> <span class= "number1">91</span> 
-                                    </div>
-                                    <div class="text-center"> <i class="fa fa-globe" aria-hidden="true"> </i> <span class= "number1">12000</span> </div>
-                                </div>
-                                <div class="d-flex flex-column"> <span class="followers text-center"> Total Quizzes</span>
-                                    <div class="number2 text-center"> <i class="fas fa-book-reader"></i> 122 </div>
-                                </div>
 
-                                <div class="d-flex flex-column"> <span class="rating text-center "> Last 5 </span>
-                                    <div class ="text-success text-center "> W W W W W </div> 
-                                </div>
-                            
-                            <div class="d-flex flex-column"> <span class="rating text-center"> Overall Win%</span>
-                              <div class="number3 text-center"> 52 <i class="fas fa-percentage"></i> </div>
-                            </div> 
+<h1 class="mt-4">Dashboard</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+<div class="row">
+    <div class="col-xl-7 col-md-6">
+        <div class="card border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3">
+            <div class="d-flex align-items-center">
+                <div class="ms-1 w-100 pb-2">
+                    <h4 class="mb-0 mt-1 pt-1"> Statistics</h4> <span class = "pt-1"> All time stats for quiz particpations </span>
+                    <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                        <div class="d-flex flex-column"> <span class="articles text-center "> Rankings </span>
+                            <div class="text-center"> <i class="flag-icon flag-icon-in flag-icon-squared"> </i> <span class= "number1">91</span> 
+                            </div>
+                            <div class="text-center"> <i class="fa fa-globe" aria-hidden="true"> </i> <span class= "number1">12000</span> </div>
+                        </div>
+                        <div class="d-flex flex-column"> <span class="followers text-center"> Total Quizzes</span>
+                            <div class="number2 text-center"> <i class="fas fa-book-reader"></i> 122 </div>
                         </div>
 
-                    </div>
-                </div>
-            </div>
+                        <div class="d-flex flex-column"> <span class="rating text-center "> Last 5 </span>
+                            <div class ="text-success text-center "> W W W W W </div> 
+                        </div>
+                        
+                        <div class="d-flex flex-column"> <span class="rating text-center"> Overall Win%</span>
+                          <div class="number3 text-center"> 52 <i class="fas fa-percentage"></i> </div>
+                      </div> 
+                  </div>
 
-        </div>
-        <div class="col-xl-5 col-md-6">
-            <div class="card border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3">
-                <div class="d-flex align-items-center">
-                    <div class="image"> <img
-                            src="https://ui-avatars.com/api/?background=random&length=1&name={{user.username}}"
-                            class="rounded-circle me-3" width="120"> </div>
-                    <div class="ms-1 w-100">
-                        <h4 class="mb-0 mt-0">{{user.username}}</h4> <span> Member since
-                            {{user.registered_on}}</span>
-                        <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
-                            <div class="d-flex flex-column"> <span class="articles">League</span> <span
-                                    class="number1">Gold</span> </div>
+              </div>
+          </div>
+      </div>
+
+  </div>
+  <div class="col-xl-5 col-md-6">
+    <div class="card border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3">
+        <div class="d-flex align-items-center">
+            <div class="image"> <img
+                src="https://ui-avatars.com/api/?background=random&length=1&name={{user.username}}"
+                class="rounded-circle me-3" width="120"> </div>
+                <div class="ms-1 w-100">
+                    <h4 class="mb-0 mt-0">{{user.username}}</h4> <span> Member since
+                    {{user.registered_on}}</span>
+                    <div class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats">
+                        <div class="d-flex flex-column"> <span class="articles">League</span> <span
+                            class="number1">Gold</span> </div>
                             <div class="d-flex flex-column"> <span class="followers">Followers</span> <span
-                                    class="number2">980</span> </div>
-                            <div class="d-flex flex-column"> <span class="rating">Rating</span> <span
+                                class="number2">980</span> </div>
+                                <div class="d-flex flex-column"> <span class="rating">Rating</span> <span
                                     class="number3">8.9</span> </div>
+                                </div>
+                                <div class="button mt-2 d-flex flex-row align-items-center"> <button
+                                    class="btn btn-sm btn-outline-primary w-100">Profile</button> <button
+                                    class="btn btn-sm btn-primary w-100 ms-2">Edit</button> </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="button mt-2 d-flex flex-row align-items-center"> <button
-                                class="btn btn-sm btn-outline-primary w-100">Profile</button> <button
-                                class="btn btn-sm btn-primary w-100 ms-2">Edit</button> </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
 
 
 
-    <div class="row">
-        <div class="col-xl-7 col-md-6">
-            <div class="card border-0 shadow rounded-3 overflow-hidden mb-3 ">
-                <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-7 col-md-6">
+                        <div class="card border-0 shadow rounded-3 overflow-hidden mb-3 ">
+                            <div class="card-body">
 
-                    <h5 class="card-title ">
-                        <i class="far fa-calendar-alt"></i>
+                                <h5 class="card-title ">
+                                    <i class="far fa-calendar-alt"></i>
 
-                        Upcoming Events
-                    </h5>
+                                    Upcoming Events
+                                </h5>
 
-                    <div id='calendar' style="text-decoration: none;"></div>
+                                <div id='calendar' style="text-decoration: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-xl-5">
+                        <div class="card border-0 shadow rounded-3 overflow-hidden">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    Last Quiz Report
+                                </h5>
+                                <p class="card-text text-center">No quizzes to show</p>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-
-
-
-        <div class="col-xl-5">
-            <div class="card border-0 shadow rounded-3 overflow-hidden">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="fas fa-chart-bar me-1"></i>
-                        Last Quiz Report
-                    </h5>
-                    <p class="card-text text-center">No quizzes to show</p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    </div>
-</main>

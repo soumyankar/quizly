@@ -1,7 +1,8 @@
 from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash, abort
-from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile, User
+from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile, User, Quiz
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_user import roles_required
+from app.forms.quizforms import UserQuizOwnerActionForm
 from app import db
 
 user_dashboard = Blueprint("user_dashboard", __name__, static_folder="static", template_folder="templates")
@@ -31,18 +32,31 @@ def user_profile_page(username):
 def user_quiz_owned():
 	user = current_user
 	owned_quizzes = QuizOwner.query.filter(QuizOwner.user_id == current_user.id).all()
-	return render_template('user/user_quiz_owned.html', owned_quizzes=owned_quizzes)
+	return render_template('user/user_quiz_owned.html', user=current_user, owned_quizzes=owned_quizzes)
 
 @user_dashboard.route('/user/quiz/subscribed', methods=['POST', 'GET'])
 @login_required
 def user_quiz_subscribed():
 	user = current_user
 	subscribed_quizzes = QuizSubscriber.query.filter(QuizSubscriber.user_id == current_user.id).all()
-	return render_template('user/user_quiz_subscribed.html', subscribed_quizzes=subscribed_quizzes)
+	return render_template('user/user_quiz_subscribed.html', user=current_user, subscribed_quizzes=subscribed_quizzes)
 
 @user_dashboard.route('/user/quiz/quiz_master', methods=['POST', 'GET'])
 @login_required
 def user_quiz_master():
 	user = current_user
 	hosted_quizzes = QuizMaster.query.filter(QuizMaster.user_id == current_user.id).all()
-	return render_template('user/user_quiz_master.html', hosted_quizzes=hosted_quizzes)
+	return render_template('user/user_quiz_master.html', user=current_user, hosted_quizzes=hosted_quizzes)
+
+@user_dashboard.route('/user/quiz/owned/<uuid>', methods=['GET', 'POST'])
+@login_required
+def user_quiz_owned_actions(uuid):
+	user = current_user
+	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
+	quiz_owner = quiz.quiz_owner
+	if not quiz_owner.user_id == user.id:
+		flash('It looks like you do not own this quiz.', 'info')
+		return redirect(request.referrer)
+	form = UserQuizOwnerActionForm()
+	form.quiz_master.choices = [(user.id, user.email) for user in User.query.all()]
+	return render_template('user/user_quiz_owned_actions.html', user=user, quiz=quiz, form=form)
