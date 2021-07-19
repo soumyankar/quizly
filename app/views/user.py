@@ -60,3 +60,25 @@ def user_quiz_owned_actions(uuid):
 	form = UserQuizOwnerActionForm()
 	form.quiz_master.choices = [(user.id, user.email) for user in User.query.all()]
 	return render_template('user/user_quiz_owned_actions.html', user=user, quiz=quiz, form=form)
+
+@user_dashboard.route('/user/quiz/subscribed/<uuid>', methods=['GET', 'POST'])
+@login_required
+def user_quiz_subscribed_actions(uuid):
+	user = current_user
+	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
+	if not quiz:
+		flash('No such quiz exists. Check your link. BAD UUID', 'error')
+		return redirect(request.referrer)
+
+	subscriber_exists = False
+	for subscriber in quiz.subscribers:
+		if subscriber.user_id == user.id:
+			subscriber_exists = True
+			subscriber = subscriber
+			break
+
+	if subscriber_exists == False:
+		flash('You are not subscribed to this quiz.', 'error')
+		return redirect(request.referrer)
+
+	return render_template('user/user_quiz_subscribed_actions.html', user=user, quiz=quiz, subscriber=subscriber)

@@ -25,11 +25,11 @@ def date_validator(form, field):
 
 class QuizRegisterForm(FlaskForm):
 
-    name = StringField('Quiz Name', validators=[InputRequired()], render_kw={'disabled':''})
-    date = DateField('Quiz Date', validators=[InputRequired(), date_validator], render_kw={'disabled':''})
-    time = TimeField('Time', validators=[InputRequired()], render_kw={'disabled':''})
-    subscription_price = IntegerField('User Registration Price', validators=[InputRequired()], render_kw={'disabled':''})
-    quiz_master = SelectField('Quiz Master', choices="", validators=[InputRequired()], render_kw={'disabled':''})
+    name = StringField('Quiz Name', validators=[InputRequired()])
+    date = DateField('Quiz Date', validators=[InputRequired(), date_validator])
+    time = TimeField('Time', validators=[InputRequired()])
+    subscription_price = IntegerField('User Registration Price', validators=[InputRequired()])
+    quiz_master = SelectField('Quiz Master', choices="", validators=[InputRequired()])
     submit = SubmitField(('Create Quiz'))
 
 class UserQuizOwnerActionForm(FlaskForm):

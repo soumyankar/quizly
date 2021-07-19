@@ -84,7 +84,7 @@
 							<th scope="col"></th>
 							<th scope="col"></th>
 						</tr>
-						{% if quiz.subscriptions|length < 1%}
+						{% if quiz.subscribers.count() < 1%}
 						<tr>
 							<td align="center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
 						</tr>

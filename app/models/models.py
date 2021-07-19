@@ -90,7 +90,7 @@ class Quiz(db.Model):
     # # One to one relationship to quiz_winner
     quiz_winner = db.relationship("QuizWinner", backref="parent_quiz", uselist=False)
     # Many to many relationship to subscriber
-    subscribers = db.relationship('QuizSubscriber', backref="parent_quiz", uselist=False)
+    subscribers = db.relationship('QuizSubscriber', backref="parent_quiz", lazy='dynamic')
 
 class QuizSubscription(db.Model):
     __tablename__ = 'quiz_subscriptions'

@@ -27,6 +27,16 @@ options ={
     }
 }
 
+def razorpay_refund_oder(params_dict):
+	payment_id = params_dict['payment_id']
+	payment_amount = params_dict['payment_amount']
+	notes = {'Request': 'Request for Refund'}
+	try:
+		resp = razorpay_client.payment.refund(payment_id, payment_amount, notes=notes)
+		return True
+	except:
+		return False
+
 def razorpay_verify_payment_signature(params_dict, amount):
 	result = (razorpay_client.utility.verify_payment_signature(params_dict))
 	payment_id = str(params_dict['razorpay_payment_id'])

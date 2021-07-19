@@ -1,4 +1,5 @@
 import uuid
+import json
 from datetime import datetime, date
 from app import db, csrf_protect
 from app.forms.quizforms import QuizRegisterForm
@@ -84,21 +85,26 @@ def quiz_register_page(uuid):
 	
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
 	if request.method == 'POST':
-		quiz_owner = quiz.quiz_owner.parent_user.id
-		if (quiz_owner == current_user.id):
+		quiz_owner = quiz.quiz_owner
+		if not quiz_owner:
+			flash('This quiz does not have a quiz owner. Registration may not be allowed')
+			return redirect(request.referrer)
+		if (quiz_owner.user_id == current_user.id):
 			flash('You may not register for quizzes you already own.')
 			return redirect(url_for('quiz.quiz_browse_page'))
 		if (quiz.current_players >= quiz.total_players):
 			flash('No slots left for new players. Try registering for some other quiz.')
 			return redirect(url_for('quiz.quiz_register_page', uuid=quiz.uuid))
 		new_subscriber = QuizSubscriber(
-			user_confirm=False,
+			user_confirm=True,
 			payment_amount=quiz.subscription_price,
 			payment_status=False
 			)
 		new_subscriber.parent_quiz=quiz
 		new_subscriber.parent_user=current_user
+		quiz.subscribers.append(new_subscriber)
 		db.session.add(new_subscriber)
+		db.session.add(quiz)
 		db.session.commit()
 		return redirect(url_for('quiz.quiz_register_payment_page', uuid=quiz.uuid))
 	return render_template('quiz/quiz_register.html', quiz=quiz)
@@ -112,10 +118,21 @@ def quiz_plans_page():
 @login_required
 def quiz_register_payment_page(uuid):
 	quiz = Quiz.query.filter(Quiz.uuid == uuid).first()
-	quiz_owner = quiz.quiz_owner.parent_user.id
-	if (quiz_owner == current_user.id):
+	quiz_owner = quiz.quiz_owner
+	if (quiz_owner.user_id == current_user.id):
 		flash('You may not register for quizzes you already own.')
 		return redirect(url_for('quiz.quiz_browse_page'))
+
+	subscriber_exists = False
+	for subscriber in quiz.subscribers:
+		if subscriber.user_id == user.id:
+			subscriber_exists = True
+			break
+
+	if subscriber_exists == False:
+		flash('You are not subscribed to this quiz. Please subscribe first.', 'error')
+		return redirect(request.referrer)
+
 	razorpay_order = RazorpayOrder(
 						order_amount=(quiz.subscription_price*100),
 						order_receipt="Registering for Quiz "+quiz.name,
@@ -166,8 +183,8 @@ def quiz_register_payment_callback_url(uuid):
 	description = "Registration Fee for Quiz UUID: "+quiz.uuid
 	if payment_state == True:
 		subscriber.payment_status = True
-		subscriber.date = date.today()
-		subscriber.time = datetime.now().time()
+		subscriber.payment_date = date.today()
+		subscriber.payment_time = datetime.now().time()
 		subscriber.razorpay_payment_id = razorpay_payment_id
 		subscriber.razorpay_order_id = razorpay_order_id
 		subscriber.razorpay_signature = razorpay_signature
@@ -205,3 +222,34 @@ def quiz_create_payment_callback_url(uuid):
 
 	return render_template('razorpay/payment_invoice.html', payment_state=payment_state, description=description , client=owner, uuid=uuid, params_dict=params_dict)
 
+@csrf_protect.exempt
+@quiz.route('/quiz/register/refund', methods=['POST'])
+@login_required
+def quiz_register_refund():
+	request_data = request.get_json()
+	subscriber_id = request_data['subscriber_id']
+	quiz_uuid = request_data['quiz_uuid']
+	subscriber = QuizSubscriber.query.filter(QuizSubscriber.user_id == subscriber_id).first()
+	quiz = Quiz.query.filter(Quiz.uuid == quiz_uuid).first()
+
+	if not subscriber in quiz.subscribers:
+		abort(404, description="You are not a subscriber to this quiz, hence you may not rescind the participation.")
+
+	if not subscriber.payment_status:
+		response = {
+		"status": "OK",
+		"payment_status": False,
+		"payment_message": "You did not pay for the quiz, hence you shall recieve no refund.",
+		"participation_message": "Your participation has been successfully rescinded."
+		}
+		# Delete subscription here
+		return json.dumps(response)
+
+	response = {
+	"status": "OK",
+	"payment_status": True,
+	"payment_message": "We have issued an refund of ₹ "+str(subscriber.payment_amount)+" to your source of debit. You should recieve it within 5 - 7 working days. Feel free to contact us on Discord for any queries.",
+	"participation_message": "Your participation has been successfully rescinded."
+	}
+	
+	return json.dumps(response)

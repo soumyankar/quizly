@@ -1,11 +1,11 @@
 {% extends 'dashboardbase.html' %}
 
 {% block dashboard_content %}
-{% if hosted_quizzes|length < 1 %}
+{% if subscribed_quizzes|length < 1 %}
 <p>You have not subscribed for any quizzes yet.</p>
 {% else %}
 {% for quiz in subscribed_quizzes %}
-<div class="row g-3 p-3 m-3 quiz-info-item shadow">
+<div class="row g-3 p-3 m-3 quiz-info-item shadow" onclick="location.href='{{ url_for('user_dashboard.user_quiz_subscribed_actions', uuid=quiz.parent_quiz.uuid) }}';">
 	<div class="row quiz-info-item-header">
 		<div class="text-bold">
 			<h4>{{ quiz.parent_quiz.name }}</h4>

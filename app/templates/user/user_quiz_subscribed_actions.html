@@ -1,0 +1,127 @@
+{% extends 'dashboardbase.html' %}
+{% from "forms/_formhelper.html" import render_field, render_button %}
+
+{% block dashboard_content %}
+
+<div id="subscriber_info" class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">{{ quiz.name }}</h5>
+				<p class="card-text">Quiz Date & Time: <strong>{{ quiz.date }} {{ quiz.time }} </strong></p>
+				<p class="card-text">Quiz Owner: <strong>{{ quiz.quiz_owner.parent_user.username }}</strong></p>
+				<p class="card-text">Quiz Master: <strong>{{ quiz.quiz_master.parent_user.username }}</strong></p>
+				<p class="card-text">Slots: <strong>{{ quiz.current_players}} / {{ quiz.total_players }}</strong></p>
+				{% if subscriber.payment_status %}
+				<p class="card-text">Payment Status: <span class="badge bg-success">PAID</span></p>
+				<p class="card-text">Payment Amount: ₹ <strong>{{ subscriber.payment_amount }}</strong></p>
+				<p class="card-text">Payment Timestamp: <strong>{{ subscriber.payment_date}} {{ subscriber.payment_time }}</strong></p>
+				{% else %}
+				<p class="card-text">Payment Status: <span class="badge bg-warning text-dark">UNPAID</span></p>
+				<a href="{{ url_for('quiz.quiz_register_payment_page', uuid=quiz.uuid) }}">Pay</a>
+				{% endif %}
+				<button class="btn btn-warning" id="rescind_participation">Rescind Participation</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="quiz_subscribers_info" class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Subscribers</h5>
+				<p>Currently participating players: </p>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Name</th>
+							<th scope="col">Nationality</th>
+							<th scope="col">Registration Date</th>
+							<th scope="col">Participation Status</th>
+						</tr>
+						{% if quiz.subscribers.count() < 1%}
+						<tr>
+							<td align="center" colspan="9">Sorry, nobody has registered for this quiz yet.</td>
+						</tr>
+						{% else %}
+						{% set increment = 1 %}
+						{% for subscriber in quiz.subscribers %}
+							{% if subscriber.payment_status %}
+							<tr>
+								<th scope="row">{{ increment }}</th>
+								{% if subscriber.parent_user.profile %}
+								<td>{{ subscriber.parent_user.profile.first_name }} {{ subscriber.parent_user.profile.last_name }}</td>
+								<td>{{ subscriber.parent_user.profile.nationality }}</td>
+								{% else %}
+								<td>404</td>
+								<td>404</td>
+								{% endif %}
+								<td>{{ subscriber.payment_date }}</td>
+								<td>
+										{% if subscriber.user_confirm %} 
+										<button type="button" class="btn btn-sm btn-success">Confirmed</button>
+										{% else %}
+										<button type="button" class="btn btn-warning">Unconfirmed</button>
+										{% endif %}
+								</td>
+							</tr>
+							{% endif %}
+						{% endfor %}
+						{% endif %}
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="rescind_participation_info" class="card m-3" style="min-width: 540px; display: none;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Rescind Participation Response</h5>
+				<p class="card-text" id="payment_message"></p>
+				<p class="card-text" id="participation_message"></p>
+				<p class="card-text text-muted" id="status"></p>
+				<p class="card-text" id="error_message"></p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block ui_scripts %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#rescind_participation').click(function(){
+			rescind_participation_text = "Rescinding your application will lead to deletion of your participation to this quiz, as well as refund your participation cost. Are you sure you want to do this? This action cannot be reverted.";
+			if(window.confirm(rescind_participation_text)){
+				$('#subscriber_info').fadeOut(300);
+				$('#quiz_subscribers_info').fadeOut(300);
+				data = {"subscriber_id": "{{ subscriber.user_id}}", "quiz_uuid": "{{ quiz.uuid }}" };
+				$.ajax({
+					type: "POST",
+					url: "{{ url_for('quiz.quiz_register_refund') }}",
+					data: JSON.stringify(data),
+					dataType:"json",
+					contentType: 'application/json',
+					success: function(response){
+						console.log(response);
+						$('#payment_message').html(response['payment_message']);
+						$('#participation_message').html(response['participation_message']);
+						$('#status').html("STATUS: "+response['status']);
+						$('#rescind_participation_info').fadeIn(300);
+					}.bind(this),
+					error: function(xhr, status, err){
+						console.error(xhr, status, err.toString());
+						$('#error_message').html(err.toString());
+						$('#rescind_participation_info').fadeIn(300);
+					}.bind(this)
+				});
+			}
+		});
+	});
+</script>
+{% endblock %}
