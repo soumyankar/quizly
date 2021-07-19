@@ -403,6 +403,7 @@
   padding-top: 19px;
   font-weight: 600;
   line-height: 1;
+  margin-bottom: 1em;  
 }
 
 
@@ -413,7 +414,7 @@
   }
 
   .payment-form .products {
-    padding: 40px;
+    padding: 25px 25px 15px 25px;
   }
 
   .payment-form .products .item-name {
