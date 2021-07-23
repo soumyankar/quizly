@@ -38,7 +38,7 @@
 									{{ client.parent_user.username  }}
 								</strong>
 								<p>
-									[ Put name here ]<br>
+									{{ client.parent_user.profile.first_name }} {{ client.parent_user.profile.last_name }}<br>
 									<a href="#">
 										{{ client.parent_user.email }}
 									</a>
@@ -73,7 +73,7 @@
 									{{ description }}
 								</div>
 								<div class="col-sm-3 qty">
-									{{ plan }}
+									{{ quiz.parent_pricing_plan.name }}
 								</div>
 								<div class="col-sm-5 amount text-end">
 									₹{{ client.payment_amount}}
@@ -101,7 +101,7 @@
 							this receipt</a>
 						</div>
 						<div class="continue">
-							<a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('user_dashboard.user_dashboard_page') }}"><i
+							<a class="btn btn-outline-light btn-lg px-4" href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.id) }}"><i
 								class="fas fa-long-arrow-alt-right"></i> Continue</a>
 							</div>
 						</div>

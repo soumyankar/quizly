@@ -12,37 +12,22 @@
 				<div class="products">
 					<h3 class="title">Checkout</h3>
 					<div class="item">
-						<span class="price">{{ quiz.name }}</span>
-						<p class="item-name">Quiz Name</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.uuid }}</span>
+						<span class="price">{{ quiz.id }}</span>
 						<p class="item-name">Quiz UUID</p>
-
 					</div>
 					<div class="item">
-						<span class="price">{{ quiz.quiz_owner.parent_pricing_plan.name }}</span>
+						<span class="price">{{ quiz.parent_pricing_plan.name }}</span>
 						<p class="item-name">Quiz Pricing Plan</p>
-
 					</div>
 					<div class="item">
-						<span class="price">{{ quiz.date }}</span>
-						<p class="item-name">Quiz Date</p>
-
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.time }}</span>
-						<p class="item-name">Quiz Time</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.total_players }}</span>
+						<span class="price">{{ quiz.parent_pricing_plan.total_players }}</span>
 						<p class="item-name">Quiz Total Slots</p>
 					</div>
 					<div class="item">
 						<span class="price">{{ quiz.quiz_owner.payment_status }}</span>
 						<p class="item-name">Quiz Payment Status</p>
 					</div>
-					<div class="total">Total<span class="price">{{ quiz.quiz_owner.payment_amount }}</span></div>
+					<div class="total">Total<span class="price">{{ quiz.parent_pricing_plan.price }}</span></div>
 				</div>
 			</form>
 			<div class="col-md-12 p-4 ">

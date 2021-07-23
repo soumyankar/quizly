@@ -1,18 +1,27 @@
 {% extends 'dashboardbase.html' %}
 
 {% block dashboard_content %}
-{% if owned_quizzes|length < 1 %}
+{% if owned_quizzes.count() < 1 %}
 <p>You do not own any quizzes currently.</p>
 {% else %}
-{% for quiz in owned_quizzes %}
-<a href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.parent_quiz.uuid) }}" style="text-decoration:none;">
+{% for owner in owned_quizzes %}
+<a href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=owner.parent_quiz.id) }}" style="text-decoration:none;">
 <div class="card m-3" style="min-width: 540px;">
 	<div class="row g-0">
 		<div class="col-md-8">
 			<div class="card-body">
-				<h5 class="card-title" class="text-bold">{{ quiz.parent_quiz.name }}</h5>
-				<p class="card-text" class="text-normal ">Slots: {{ quiz.parent_quiz.current_players }} / {{ quiz.parent_quiz.total_players }}</p>
-				<p class="card-text"><small class="text-muted">{{ quiz.parent_quiz.date }} {{ quiz.parent_quiz.time }}</small></p>
+				{% if owner.parent_quiz.details %}
+					<h5 class="card-title" class="text-bold">{{ owner.parent_quiz.details.name }}</h5>
+					<p class="card-text" class="text-normal ">Slots: [fix this] / {{ owner.parent_quiz.parent_pricing_plan.total_players }}</p>
+					<p class="card-text"><small class="text-muted">{{ owner.parent_quiz.details.date }} {{ owner.parent_quiz.details.time }}</small></p>
+				{% else %}
+					<h5 class="card-title" class="text-bold">Requires Attention!</h5>
+					{% if not owner.payment_status %}
+						<button class="btn btn-sm btn-outline-warning">UNPAID</button>
+					{% else %}
+					<button class="btn btn-sm btn-outline-warning">Finish Editing Details!</button>
+					{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</div>

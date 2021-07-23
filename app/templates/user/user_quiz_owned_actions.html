@@ -26,33 +26,45 @@
 	<div class="row g-0">
 		<div class="col-md-8">
 			<div class="card-body">
-				<div id="quiz_info" class="p-1 m-1" style="display: block;">
-					<h5 class="card-title text-bold">{{ quiz.name }}</h5>
-					<p class="card-text"><span class="badge bg-success">{{ quiz.quiz_owner.parent_pricing_plan.name }}</span></p>
-					<p class="card-text">Subscription Price: <strong>₹ {{ quiz.subscription_price }}</strong></p>
-					<p class="card-text">Date & Time: <strong>{{ quiz.date }} {{ quiz.time }}</strong></p>
+				<div id="quiz_info" style="display: block;">
+					{% if quiz.details %}
+						<h5 class="card-title text-bold">{{ quiz.details.name }}</h5>
+						<p class="card-text"><span class="badge bg-success">{{ quiz.parent_pricing_plan.name }}</span></p>
+						<p class="card-text">Subscription Price: <strong>₹ {{ quiz.details.subscription_price }}</strong></p>
+						<p class="card-text">Date & Time: <strong>{{ quiz.details.date }} {{ quiz.details.time }}</strong></p>
+					{% else %}
+						<h5 class="card-title text-bold">Fill in the details.</h5>
+						<p class="card-text">Quizzes do not show up on the browsing section until the details are fulfilled.</p>
+					{% endif %}
 					<button class="btn btn-info" id="show_quiz_edit_form">Edit (Add edit icon here)</button>
+					<button class="btn btn-warning" id="deactivate_quiz">Deactivate Quiz</button>
+					<button class="btn btn-danger" id="delete_quiz">Delete Quiz</button>
 				</div>
-				<form id="quiz_edit_form" action="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.uuid) }}" action="POST" style="display: none;">
+				<form id="quiz_edit_form" action="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.id) }}"  method="POST" style="display: none;">
+					{{ form.hidden_tag() }}
 					<div class="form-floating mb-3">
-						{{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz', id="quizNameHelp", value=quiz.name) }}
+						{{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz', id="quizNameHelp") }}
 						<div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
 					</div>
 					<div class="form-floating mb-3">
-						{{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master email', selected=quiz.quiz_master.parent_user.email) }}
+						{{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master email') }}
 					</div>
 					<div class="form-floating mb-3">
-						{{ render_field(form.subscription_price, type='nummber', class='form-control', placeholder='₹ 50 ',
-						id="subscriptionHelp", value=quiz.subscription_price)}}
+						{{ render_field(form.subscription_price, type='number', class='form-control', placeholder='₹ 50 ',
+						id="subscriptionHelp")}}
 						<div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
 					</div>
 					<div class="form-floating mb-3">
-						{{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971', id="dateHelp", value=quiz.date) }}
+						{{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971', id="dateHelp") }}
 						<div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
 					</div>
 					<div class="form-floating mb-3">
-						{{ render_field(form.time, type='time', class='form-control', placeholder='23:59', id="timeHelp", value=quiz.time) }}
+						{{ render_field(form.time, type='time', class='form-control', placeholder='23:59', id="timeHelp") }}
 						<div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
+					</div>
+					<div class="form-floating mb-3">
+						{{ render_field(form.tags, type='text', class='form-select', class='select', id="tagsHelp") }}
+						<div id="tagsHelp" class="form-text">Select a few tags for your quiz.</div>
 					</div>
 					<div class="col-12 d-flex">
 						{{ render_button(form.submit, class='btn btn-info', value='Submit') }}
@@ -60,6 +72,27 @@
 						<input class="btn btn-danger" type="button" id="show_quiz_info" value="Stop Edit (add cancel icon)"></button>
 					</div>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Quiz Master</h5>
+				{% if not quiz.quiz_master %}
+				<p class="card-text">No quiz master has been assigned yet,</p>
+				{% else %}
+				<p class="card-text">{{ quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.quiz_master.parent_user.email }})</strong></p>
+				{% if not quiz.quiz_master.user_confirm %}
+					<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+				{% else %}
+					<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+					<p class="card-text">Confirmation Timestamp: {{ quiz.quiz_master.user_confirm_date }} {{ quiz.quiz_master.user_confirm.time }}</p>
+				{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -109,6 +142,13 @@
 							</td>
 							<td>{{ subscriber.payment_date }}</td>
 							<td>{{ subscriber.payment_amount }}</td>
+							<td>
+								{% if subscriber.user_confirm %}
+								<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+								{% else %}
+								<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+								{% endif %}
+							</td>
 							{% if not subscriber.payment_status %}
 							<td><button type="button" class="btn btn-outline-info">Forgive entry fee</button></td>
 							{% endif %}

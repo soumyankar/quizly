@@ -16,7 +16,8 @@ options ={
     "order_id": "", #This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     "prefill": {
         "name": "",
-        "email": ""
+        "email": "",
+        "contact": ""
     }, # Client details here.
     "quiz_uuid": "",
     "notes": {
@@ -56,12 +57,13 @@ def razorpay_verify_payment_signature(params_dict, amount):
 
 class RazorpayOrder():
 
-	def __init__(self, order_amount, order_receipt, order_client_name, order_client_email, order_pricing_plan_name, quiz_uuid):
+	def __init__(self, order_amount, order_receipt, order_client_name, order_client_email, order_client_phone, order_pricing_plan_name, quiz_uuid):
 		self.new_order_id = ""
 		self.new_order_amount = order_amount
 		self.new_order_receipt = order_receipt
 		self.new_order_client_name = order_client_name
 		self.new_order_client_email = order_client_email
+		self.new_order_client_phone = order_client_phone
 		self.new_order_pricing_plan_name = order_pricing_plan_name
 		self.new_quiz_uuid = quiz_uuid
 		self.create_order()
@@ -86,6 +88,7 @@ class RazorpayOrder():
 		new_order_options['order_id'] = str(self.new_order_id)
 		new_order_options['prefill']['name'] = str(self.new_order_client_name)
 		new_order_options['prefill']['email'] = str(self.new_order_client_email)
+		new_order_options['prefill']['contact'] = str(self.new_order_client_phone)
 		new_order_options['quiz_uuid'] = str(self.new_quiz_uuid)
 
 		return dict(new_order_options)

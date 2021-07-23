@@ -1,0 +1,98 @@
+{% extends 'dashboardbase.html' %}
+
+{% block dashboard_content %}
+<div class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-8">
+			<div class="card-body">
+				<div id="quiz_info" style="display: block;">					
+					<h5 class="card-title text-bold">{{ quiz.details.name }}</h5>
+					<p class="card-text"><span class="badge bg-success">{{ quiz.parent_pricing_plan.name }}</span></p>
+					<p class="card-text">Subscription Price: <strong>₹ {{ quiz.details.subscription_price }}</strong></p>
+					<p class="card-text">Date & Time: <strong>{{ quiz.details.date }} {{ quiz.details.time }}</strong></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Quiz Master</h5>
+				{% if not quiz.quiz_master %}
+				<p class="card-text">No quiz master has been assigned yet,</p>
+				{% else %}
+				<p class="card-text">{{ quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.quiz_master.parent_user.email }})</strong></p>
+				{% if not quiz.quiz_master.user_confirm %}
+					<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+				{% else %}
+					<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+					<p class="card-text">Confirmation Timestamp: {{ quiz.quiz_master.user_confirm_date }} {{ quiz.quiz_master.user_confirm.time }}</p>
+				{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Subscribers</h5>
+				<p>Find your quiz participants here, you may choose to kick them from your quiz or you may even forgive their payment if you wish to do so.</p>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Name</th>
+							<th scope="col">Nationality</th>
+							<th scope="col">Payment Status</th>
+							<th scope="col">Payment Date</th>
+							<th scope="col">Payment Amount</th>
+							<th scope="col">Participation Status</th>
+						</tr>
+						{% if quiz.subscribers.count() < 1%}
+						<tr>
+							<td align="center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
+						</tr>
+						{% else %}
+						{% set increment = 1 %}
+						{% for subscriber in quiz.subscribers %}
+						<tr>
+							<th scope="row">{{ increment }}</th>
+							{% if subscriber.parent_user.profile %}
+							<td>{{ subscriber.parent_user.profile.first_name }} {{ subscriber.parent_user.profile.last_name }}</td>
+							<td>{{ subscriber.parent_user.profile.nationality }}</td>
+							{% else %}
+							<td>404</td>
+							<td>404</td>
+							{% endif %}
+							<td>
+								{% if subscriber.payment_status %} 
+								<button type="button" class="btn btn-sm btn-success">PAID</button>
+								{% else %}
+								<button type="button" class="btn btn-warning">UNPAID</button>
+								{% endif %}
+							</td>
+							<td>{{ subscriber.payment_date }}</td>
+							<td>₹ {{ subscriber.payment_amount }}</td>
+							<td>
+								{% if subscriber.user_confirm %}
+								<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+								{% else %}
+								<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+								{% endif %}
+							</td>
+						</tr>
+						{% endfor %}
+						{% endif %}
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

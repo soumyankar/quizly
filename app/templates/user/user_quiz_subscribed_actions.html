@@ -7,11 +7,11 @@
 	<div class="row g-0">
 		<div class="col-md-12">
 			<div class="card-body">
-				<h5 class="card-title">{{ quiz.name }}</h5>
-				<p class="card-text">Quiz Date & Time: <strong>{{ quiz.date }} {{ quiz.time }} </strong></p>
-				<p class="card-text">Quiz Owner: <strong>{{ quiz.quiz_owner.parent_user.username }}</strong></p>
-				<p class="card-text">Quiz Master: <strong>{{ quiz.quiz_master.parent_user.username }}</strong></p>
-				<p class="card-text">Slots: <strong>{{ quiz.current_players}} / {{ quiz.total_players }}</strong></p>
+				<h5 class="card-title">{{ quiz.details.name }}</h5>
+				<p class="card-text">Quiz Date & Time: <strong>{{ quiz.details.date }} {{ quiz.details.time }} </strong></p>
+				<p class="card-text">Quiz Owner: {{ quiz.quiz_owner.parent_user.profile.first_name }} {{ quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{ quiz.quiz_owner.parent_user.username }})</strong></p>
+				<p class="card-text">Quiz Master: {{ quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.quiz_master.parent_user.profile.first_name }} <strong>({{ quiz.quiz_master.parent_user.username }})</strong></p>
+				<p class="card-text">Slots: <strong>{{ quiz.details.current_players}} / {{ quiz.parent_pricing_plan.total_players }}</strong></p>
 				{% if subscriber.payment_status %}
 				<p class="card-text">Payment Status: <span class="badge bg-success">PAID</span></p>
 				<p class="card-text">Payment Amount: ₹ <strong>{{ subscriber.payment_amount }}</strong></p>
