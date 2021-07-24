@@ -14,31 +14,11 @@
             <div class="input-group mb-3">
               <label class="input-group-text" for="planselect">Plan</label>
               <select class="form-select" id="planselect" disabled>
-                <option id="{{ chosen_plan.id }}" value="{{ chosen_plan.id }}" selected>{{ chosen_plan.name }}</option>
+                <option id="form_name" value="{{ form.plan.choices[0][0] }}" selected>{{ form.plan.choices[0][1] }}</option>
               </select>
             </div>
-            <div class="form-floating mb-3">
-              {{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz', id="quizNameHelp") }}
-              <div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
-            </div>
-            <div class="form-floating mb-3">
-              {{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master email') }}
-            </div>
-            <div class="form-floating mb-3">
-              {{ render_field(form.subscription_price, type='nummber', class='form-control', placeholder='₹ 50 ',
-              id="subscriptionHelp")}}
-              <div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
-            </div>
-            <div class="form-floating mb-3">
-              {{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971', id="dateHelp") }}
-              <div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
-            </div>
-            <div class="form-floating mb-3">
-              {{ render_field(form.time, type='time', class='form-control', placeholder='23:59', id="timeHelp") }}
-              <div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )</div>
-            </div>
             <div class="col-12">
-              {{ render_button(form.submit, class='btn btn-info', value='Submit') }}
+              {{ render_button(form.submit, class='btn btn-info') }}
             </div>
           </div>
         </div>

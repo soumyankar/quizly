@@ -9,47 +9,44 @@
 {% endblock %}
 
 {% block dashboard_content %}
-<main>
-	<div class="container-fluid px-4">
-		<h1 class="mt-4">User Profile</h1>
-		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item active px-1"> Edit User Profile</li>
-		</ol>
-		<div class="d-md-flex flex-items-center justify-content-center mt-1 mb-4">
-			<div class="d-flex flex-items-center mb-2 mb-md-0">
-				<img
-                src=" https://ui-avatars.com/api/?background=random&length=1&name={{ current_user.username}}" size="48"
-					width="48" height="48" class="rounded-circle me-2">
-				<div class="flex-auto">
-					<h3 class="h3 lh-condensed"> {{ current_user.username }} </h1>
-						<div class="d-flex flex-items-center flex-wrap">
-							<a class="color-text-tertiary mb-0 mr-3" href="{{ url_for('user_dashboard.user_profile_page', username=current_user.username) }}"> Your personal account </a>
-						</div>
+<h1 class="mt-4">User Profile</h1>
+<ol class="breadcrumb mb-4">
+	<li class="breadcrumb-item active px-1"> Edit User Profile</li>
+</ol>
+<div class="d-md-flex flex-items-center justify-content-center mt-1 mb-4">
+	<div class="d-flex flex-items-center mb-2 mb-md-0">
+		<img
+		src=" https://ui-avatars.com/api/?background=random&length=1&name={{ current_user.username}}" size="48"
+		width="48" height="48" class="rounded-circle me-2">
+		<div class="flex-auto">
+			<h3 class="h3 lh-condensed"> {{ current_user.username }} </h1>
+				<div class="d-flex flex-items-center flex-wrap">
+					<a class="color-text-tertiary mb-0 mr-3" href="{{ url_for('user_dashboard.user_profile_page', username=current_user.username) }}"> Your personal account </a>
 				</div>
 			</div>
-			
 		</div>
-		<div class="row d-flex flex-md-row flex-column px-md-0 px-3">
-			<div class="col-md-3 col-12 pr-md-4 pr-0">
-				<ul class="nav nav-pills flex-column">
-					{% for item in nav.user_settings_navbar %}
-					<li class="nav-item">
-						<a class="nav-link {{ 'active' if item.is_active }}" aria-current="page"
-							href="{{ item.url }}">{{ item.label }}</a>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
-			<div class="col-md-9 col-12">
-				{% if import_form == 'edit_user_profile' %}
-				{% include 'forms/user_profile_settings/edit_user_profile_form.html' %}
-				{% elif import_form == 'change_password' %}
-				{% include 'forms/user_profile_settings/user_change_password_form.html' %}
-				{% elif import_form == 'change_username' %}
-				{% include 'forms/user_profile_settings/user_change_username_form.html' %}
-				{% endif %}
-			</div>
+		
+	</div>
+	<div class="row d-flex flex-md-row flex-column px-md-0 px-3">
+		<div class="col-md-3 col-12 pr-md-4 pr-0">
+			<ul class="nav nav-pills flex-column">
+				{% for item in nav.user_settings_navbar %}
+				<li class="nav-item">
+					<a class="nav-link {{ 'active' if item.is_active }}" aria-current="page"
+					href="{{ item.url }}">{{ item.label }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="col-md-9 col-12">
+			{% if import_form == 'edit_user_profile' %}
+			{% include 'forms/user_profile_settings/edit_user_profile_form.html' %}
+			{% elif import_form == 'change_password' %}
+			{% include 'forms/user_profile_settings/user_change_password_form.html' %}
+			{% elif import_form == 'change_username' %}
+			{% include 'forms/user_profile_settings/user_change_username_form.html' %}
+			{% endif %}
 		</div>
 	</div>
-</main>
-{% endblock %}
+
+	{% endblock %}
