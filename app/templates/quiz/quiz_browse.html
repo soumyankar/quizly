@@ -14,38 +14,58 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				{% if quizzes|length < 1 %} <h4>There are currently no quizzes!</h4>
-				{% else %}
-				{% for quiz in quizzes %}
-				<div class="col-xl-4 col-md-6">
-					<div class="card border-0 shadow rounded-3 overflow-hidden mb-3"
-					onclick="location.href='{{ url_for('quiz.quiz_register_page', uuid= quiz.id) }}';">
-					<div class="row g-0">
-						<div class="card-body">
-							<div class="col">
-								<h5 class="card-title text-uppercase">
-									{{ quiz.name }}
-								</h5>
-								<div class="px-2">
-									<ul class="list-group list-group-flush">
-										<li class="list-group-item">Quiz Master: {{ quiz.quiz_master.parent_user.username }}</li>
-										<li class="list-group-item">Pricing Plan: {{ quiz.parent_pricing_plan.name }}</li>
-										<li class="list-group-item">Slots: [fix] / {{ quiz.parent_pricing_plan.total_players }}</li>
-										<li class="list-group-item">Date: {{ quiz.details.date }}</li>
-										<li class="list-group-item">Time: {{ quiz.details.time }}</li>
-										<li class="list-group-item">Subscription Price: {{ quiz.details.subscription_price }}</li>
-										<li class="list-group-item">Host: {{ quiz.quiz_owner.parent_user.username }}</li>
-									</ul>
+					{% else %}
+					{% for quiz in quizzes %}
+					<div class="col-xl-5 col-md-6">
+						<div class="card cards border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3"
+							onclick="location.href='{{ url_for('quiz.quiz_register_page', uuid= quiz.id) }}';">
+							{% if quiz.parent_pricing_plan.payment_required %}
+							<div class="ribbon"><span>PAID</span></div>
+							{% endif %}
+
+							<div class="d-flex align-items-center">
+								<div class="image"> <img
+										src="https://ui-avatars.com/api/?background=random&length=1&name={{current_user.username}}"
+										class=" me-3" width="120"> </div>
+								<div class="ms-1 w-100">
+									<h4 class="mb-0 mt-0">{{ quiz.details.name }}</h4> <span>
+										{{quiz.quiz_master.parent_user.username }}</span>
+									<div class="p-2 mt-2 d-flex justify-content-between rounded">
+										<div class="d-flex flex-column"> <span class="articles"></span> <span
+												class="number1"><i class="fas fa-user-plus"></i> {{
+												quiz.details.current_players }} / {{
+												quiz.parent_pricing_plan.total_players }}</span>
+										</div>
+										<div class="d-flex flex-column"> <span class="followers"></span> <span
+												class="number2"><i class="fas fa-calendar-check"></i> {{
+												quiz.details.date }}</span>
+										</div>
+										<div class="d-flex flex-column"> <span class="rating"></span> <span
+												class="number3"><i class="far fa-clock"></i> {{ quiz.details.time
+												}}</span> </div>
+									</div>
 								</div>
+							</div>
+							<div class="mt-1 d-flex justify-content-between rounded">
+								<div class="d-flex flex-column"> <span class="articles"></span> <span
+										class="number1">#Category1 </span>
+								</div>
+								<div class="d-flex flex-column"> <span class="followers"></span> <span
+										class="number2">#Category2</span>
+								</div>
+								<div class="d-flex flex-column"> <span class="rating"></span> <span
+										class="number3">#PrizePool</span> </div>
 							</div>
 						</div>
 					</div>
-				</div>
 			</div>
-			{% endfor %} 
-		{% endif %}
 		</div>
+
+		{% endfor %}
+		{% endif %}
 	</div>
-</div>
+	</div>
+	</div>
 </section>
 
 {% endblock %}

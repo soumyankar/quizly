@@ -3,27 +3,73 @@
 
 {% block dashboard_content %}
 
-<div id="subscriber_info" class="card m-3" style="min-width: 540px;">
-	<div class="row g-0">
-		<div class="col-md-12">
-			<div class="card-body">
-				<h5 class="card-title">{{ quiz.details.name }}</h5>
-				<p class="card-text">Quiz Date & Time: <strong>{{ quiz.details.date }} {{ quiz.details.time }} </strong></p>
-				<p class="card-text">Quiz Owner: {{ quiz.quiz_owner.parent_user.profile.first_name }} {{ quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{ quiz.quiz_owner.parent_user.username }})</strong></p>
-				<p class="card-text">Quiz Master: {{ quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.quiz_master.parent_user.profile.first_name }} <strong>({{ quiz.quiz_master.parent_user.username }})</strong></p>
-				<p class="card-text">Slots: <strong>{{ quiz.details.current_players}} / {{ quiz.parent_pricing_plan.total_players }}</strong></p>
-				{% if subscriber.payment_status %}
-				<p class="card-text">Payment Status: <span class="badge bg-success">PAID</span></p>
-				<p class="card-text">Payment Amount: ₹ <strong>{{ subscriber.payment_amount }}</strong></p>
-				<p class="card-text">Payment Timestamp: <strong>{{ subscriber.payment_date}} {{ subscriber.payment_time }}</strong></p>
-				{% else %}
-				<p class="card-text">Payment Status: <span class="badge bg-warning text-dark">UNPAID</span></p>
-				<a href="{{ url_for('quiz.quiz_register_payment_page', uuid=quiz.uuid) }}">Pay</a>
-				{% endif %}
-				<button class="btn btn-warning" id="rescind_participation">Rescind Participation</button>
+<div id="subscriber_info">
+	<main class="page payment-page pt-5" style="min-width: 540px;">
+		<section class="payment-form ">
+			<div class="container">
+				<form action="{{ url_for('quiz.quiz_register_page', uuid=quiz.id) }}" method="POST">
+					<div class="products">
+						<h3 class="title">Details</h3>
+						<div class="item">
+							<span class="price">{{ quiz.details.name }}</span>
+							<p class="item-name">Quiz Name</p>
+						</div>
+						<div class="item">
+							<span class="price">{{ quiz.quiz_owner.parent_user.profile.first_name }} {{
+								quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{
+									quiz.quiz_owner.parent_user.username }})</strong></span>
+							<p class="item-name"> Quiz Owner</p>
+						</div>
+						<div class="item">
+							<span class="price">{{ quiz.quiz_master.parent_user.profile.first_name }} {{
+								quiz.quiz_master.parent_user.profile.last_name }} ({{
+								quiz.quiz_master.parent_user.username }})</span>
+							<p class="item-name">Quiz Master</p>
+						</div>
+						<div class="item">
+							<span class="price">{{ quiz.details.date }}</span>
+							<p class="item-name">Quiz Date</p>
+
+						</div>
+						<div class="item">
+							<span class="price">{{ quiz.details.time }}</span>
+							<p class="item-name">Quiz Time</p>
+						</div>
+						<div class="item">
+							<span class="price">{{ quiz.details.current_players }} / {{
+								quiz.parent_pricing_plan.total_players }}</span>
+							<p class="item-name">Slots</p>
+						</div>
+						{% if subscriber.payment_status %}
+						<div class="item">
+							<span class="price"><span class="badge bg-success">PAID</span></span>
+							<p class="item-name">Payment Status</p>
+						</div>
+						<div class="item">
+							<span class="price">₹ <strong>{{ subscriber.payment_amount }}</strong></span>
+							<p class="item-name">Payment Amount</p>
+						</div>
+						<div class="item">
+							<span class="price"> <strong>{{ subscriber.payment_date}} {{
+									subscriber.payment_time}}</strong></span>
+							<p class="item-name">Payment Timestamp</p>
+						</div>
+						{% else %}
+						<div class="item">
+							<span class="price"><span class="badge bg-warning text-dark">UNPAID</span></span>
+							<p class="item-name">Payment Status</p>
+							<a href="{{ url_for('quiz.quiz_register_payment_page', uuid=quiz.uuid) }}">Pay</a>
+						</div>
+						{% endif %}
+						<div class="d-grid col-6 mx-auto">
+							<button class="btn btn-warning" id="rescind_participation">Rescind Participation</button>
+						</div>
+					</div>
+				</form>
 			</div>
-		</div>
-	</div>
+
+		</section>
+	</main>
 </div>
 
 <div id="quiz_subscribers_info" class="card m-3" style="min-width: 540px;">
@@ -41,18 +87,18 @@
 							<th scope="col">Registration Date</th>
 							<th scope="col">Participation Status</th>
 						</tr>
-						{% if quiz.subscribers.count() < 1%}
-						<tr>
+						{% if quiz.subscribers.count() < 1%} <tr>
 							<td align="center" colspan="9">Sorry, nobody has registered for this quiz yet.</td>
-						</tr>
-						{% else %}
-						{% set increment = 1 %}
-						{% for subscriber in quiz.subscribers %}
+							</tr>
+							{% else %}
+							{% set increment = 1 %}
+							{% for subscriber in quiz.subscribers %}
 							{% if subscriber.payment_status %}
 							<tr>
 								<th scope="row">{{ increment }}</th>
 								{% if subscriber.parent_user.profile %}
-								<td>{{ subscriber.parent_user.profile.first_name }} {{ subscriber.parent_user.profile.last_name }}</td>
+								<td>{{ subscriber.parent_user.profile.first_name }} {{
+									subscriber.parent_user.profile.last_name }}</td>
 								<td>{{ subscriber.parent_user.profile.nationality }}</td>
 								{% else %}
 								<td>404</td>
@@ -60,16 +106,16 @@
 								{% endif %}
 								<td>{{ subscriber.payment_date }}</td>
 								<td>
-										{% if subscriber.user_confirm %} 
-										<button type="button" class="btn btn-sm btn-success">Confirmed</button>
-										{% else %}
-										<button type="button" class="btn btn-warning">Unconfirmed</button>
-										{% endif %}
+									{% if subscriber.user_confirm %}
+									<button type="button" class="btn btn-sm btn-success">Confirmed</button>
+									{% else %}
+									<button type="button" class="btn btn-warning">Unconfirmed</button>
+									{% endif %}
 								</td>
 							</tr>
 							{% endif %}
-						{% endfor %}
-						{% endif %}
+							{% endfor %}
+							{% endif %}
 					</thead>
 				</table>
 			</div>
@@ -94,27 +140,27 @@
 
 {% block ui_scripts %}
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('#rescind_participation').click(function(){
+	$(document).ready(function () {
+		$('#rescind_participation').click(function () {
 			rescind_participation_text = "Rescinding your application will lead to deletion of your participation to this quiz, as well as refund your participation cost. Are you sure you want to do this? This action cannot be reverted.";
-			if(window.confirm(rescind_participation_text)){
+			if (window.confirm(rescind_participation_text)) {
 				$('#subscriber_info').fadeOut(300);
 				$('#quiz_subscribers_info').fadeOut(300);
-				data = {"subscriber_id": "{{ subscriber.user_id}}", "quiz_uuid": "{{ quiz.uuid }}" };
+				data = { "subscriber_id": "{{ subscriber.user_id}}", "quiz_uuid": "{{ quiz.uuid }}" };
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('quiz.quiz_register_refund') }}",
 					data: JSON.stringify(data),
-					dataType:"json",
+					dataType: "json",
 					contentType: 'application/json',
-					success: function(response){
+					success: function (response) {
 						console.log(response);
 						$('#payment_message').html(response['payment_message']);
 						$('#participation_message').html(response['participation_message']);
-						$('#status').html("STATUS: "+response['status']);
+						$('#status').html("STATUS: " + response['status']);
 						$('#rescind_participation_info').fadeIn(300);
 					}.bind(this),
-					error: function(xhr, status, err){
+					error: function (xhr, status, err) {
 						console.error(xhr, status, err.toString());
 						$('#error_message').html(err.toString());
 						$('#rescind_participation_info').fadeIn(300);
