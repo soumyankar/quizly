@@ -1,0 +1,76 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block dashboard_content %}
+<h1>Admin Moderation Panel</h1>
+<div class="row d-flex">
+	<div class="card m-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">Total Users:</h5>
+					<p class="card-text">888</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card m-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">Total Quizzes:</h5>
+					<p class="card-text">888</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card m-3" style="max-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-8">
+				<div class="card-body">
+					<h5 class="card-title">Orders Processed:</h5>
+					<p class="card-text">888</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% block chart %}
+<div class="row">
+	<canvas id="myChart"></canvas>
+</div>
+{% endblock %}
+{% block plugins %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block ui_scripts %}
+<script>
+	var labels = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	];
+	var data = {
+		labels: labels,
+		datasets: [{
+			label: 'My First dataset',
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgb(255, 99, 132)',
+			data: [0, 10, 5, 2, 20, 30, 45],
+		}]
+	};
+	var chart_config = {
+		type: 'line',
+		data,
+		options: {}
+	};
+  // === include 'setup' then 'config' above ===
+  var myChart = new Chart(
+  	document.getElementById('myChart'),
+  	chart_config
+  	);
+  </script>
+  {% endblock %}
+  {% endblock %}

@@ -93,6 +93,8 @@
     <script src="{{ url_for('static', filename='js/demo/chart-pie-demo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/demo/datatables-demo.js') }}"></script>
     <script src="{{ url_for('static', filename='js/404.js') }}"></script>
+    {% block plugins %}
+    {% endblock %}
     {% block ui_scripts %}
 
     {% endblock %}

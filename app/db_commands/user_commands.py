@@ -60,3 +60,25 @@ def get_quiz_master_for_user_id(user, quiz):
 	if not quiz_master:
 		return None
 	return quiz_master
+
+def user_profile_exists(user):
+	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
+	if not user_profile or user_profile.profile_complete == False:
+		return False
+	return True
+
+def user_exists(username):
+	user = User.query.filter(User.username == username).first()
+	if user:
+		return True
+	return False
+
+def get_user_for_username(username):
+	user = User.query.filter(User.username == username).first()
+	if user:
+		return user
+	return False
+
+def get_all_quiz_owners():
+	all_quiz_owners = QuizOwner.query.all()
+	return all_quiz_owners

@@ -12,21 +12,17 @@ user_dashboard = Blueprint("user_dashboard", __name__, static_folder="static", t
 @user_dashboard.route('/user/dashboard/', methods=['POST','GET'])
 @login_required
 def user_dashboard_page():
-	user = current_user
-	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
-	if not user_profile or user_profile.profile_complete == False:
+	if not user_profile_exists(current_user):
 		flash('You need to  <a href="'+url_for('user.edit_user_profile')+'"> complete your profile </a> before you can <b>Create a Quiz</b> or <b>Subscribe to a Quiz</b>.', 'error')
-	return render_template('user/user_homepage.html', user=user)
+	return render_template('user/user_homepage.html', user=current_user)
 
 @user_dashboard.route('/user/profile/<username>', methods=['GET'])
 def user_profile_page(username):
-	user = User.query.filter(User.username == username).first()
-	if not user:
-		abort(404, description ='The User you are looking for does not exist.') 
-	user_profile = UserProfile.query.filter(UserProfile.user_id == user.id).first()
-	if not user_profile or user_profile.profile_complete == False:
-		abort(404, description ='Looks like this User has not completed their profile page yet.') 
-
+	if not user_exists(username):
+		abort(404, description ='The User you are looking for does not exist.')
+	user = get_user_for_username(username) 
+	if not user_profile_exists(user):
+		abort(404, description ='Looks like this User has not completed their profile page yet.')
 	return render_template('user/user_profile.html', user=user)
 
 @user_dashboard.route('/user/quiz/owned', methods=['POST', 'GET'])

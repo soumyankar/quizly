@@ -1,0 +1,40 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block dashboard_content %}
+<h1>Quiz Owners</h1>
+<div class="card m-3" style="min-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-12">
+			<div class="card-body">
+				<h5 class="card-title">Quiz Owners</h5>
+				<p>Find your quiz participants here, you may choose to kick them from your quiz or you may even forgive their payment if you wish to do so.</p>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Name</th>
+							<th scope="col">Nationality</th>
+							<th scope="col">Payment Status</th>
+							<th scope="col">Payment Date</th>
+							<th scope="col">Payment Amount</th>
+							<th scope="col">Participation Status</th>
+							<th scope="col"></th>
+							<th scope="col"></th>
+						</tr>
+						{% if all_quiz_owners|length < 1 %}
+						<tr>
+							<td align="center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
+						</tr>
+						{% else %}
+						{% set increment = 1 %}
+						{% for quiz_owner in all_quiz_owners %}
+						{% endfor %}
+						{% endif %}
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

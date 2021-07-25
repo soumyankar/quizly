@@ -12,6 +12,8 @@ nav.Bar('default_navbar', [
 ])
 
 nav.Bar('user_navbar', [
+    nav.Item('Admin Dashboard', 'admin.admin_dashboard',
+                html_attrs={'icon-name': 'fas fa-tachometer-alt'}),
         nav.Item('Dashboard', 'user_dashboard.user_dashboard_page',
                  html_attrs={'icon-name': 'fas fa-tachometer-alt'}),
         nav.Item('Edit Profile', 'user.edit_user_profile',
@@ -42,3 +44,18 @@ nav.Bar('user_topnavbar', [
         nav.Item('Settings', 'user.edit_user_profile'),
         nav.Item('Sign-out', 'user.logout')
         ])
+
+nav.Bar('admin_sidenav', [
+    nav.Item('Back to User Dashboard', 'user_dashboard.user_dashboard_page'),
+    nav.Item('Admin Dashboard', 'admin.admin_dashboard'),
+    nav.Item('Manage Users', 'admin.admin_dashboard', items=[
+        nav.Item('Owners', 'admin.admin_user_quiz_owners'),
+        nav.Item('Subscribers', 'admin.admin_dashboard'),
+        nav.Item('Masters', 'admin.admin_dashboard')]),
+    nav.Item('Manage Quizzes', 'admin.admin_dashboard', items=[
+        nav.Item('Active Quizzes', 'admin.admin_dashboard'),
+        nav.Item('Inactive Quizzes', 'admin.admin_dashboard')]),
+    nav.Item('Payments', 'admin.admin_dashboard', items=[
+        nav.Item('Orders', 'admin.admin_dashboard'),
+        nav.Item('Refunds', 'admin.admin_dashboard')])
+    ])
