@@ -2,13 +2,16 @@
 
 {% block dashboard_content %}
 {% if owned_quizzes.count() < 1 %}
-<p>You do not own any quizzes currently.</p>
+<div class ="text-center">
+	<h2>You do not own any quizzes currently.</h2>
+</div>
+
 {% else %}
 {% for owner in owned_quizzes %}
 <a href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=owner.parent_quiz.id) }}" style="text-decoration:none;">
-<div class="card m-3" style="min-width: 540px;">
+<div class="card mt-3" style="min-width: 540px;">
 	<div class="row g-0">
-		<div class="col-md-8">
+		<div class="col-md-2">
 			<div class="card-body">
 				{% if owner.parent_quiz.details %}
 					<h5 class="card-title" class="text-bold">{{ owner.parent_quiz.details.name }}</h5>

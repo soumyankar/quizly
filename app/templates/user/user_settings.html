@@ -39,6 +39,7 @@
 			</ul>
 		</div>
 		<div class="col-md-9 col-12">
+			<div class = " card border-0 shadow rounded-3 mb-3 p-3 pt-1">
 			{% if import_form == 'edit_user_profile' %}
 			{% include 'forms/user_profile_settings/edit_user_profile_form.html' %}
 			{% elif import_form == 'change_password' %}
@@ -46,6 +47,7 @@
 			{% elif import_form == 'change_username' %}
 			{% include 'forms/user_profile_settings/user_change_username_form.html' %}
 			{% endif %}
+		</div>
 		</div>
 	</div>
 

@@ -2,49 +2,64 @@
 
 {% block dashboard_content %}
 {% if subscribed_quizzes.count() < 1 %}
-<p>You have not subscribed for any quizzes yet.</p>
+<div class ="text-center pt-6">
+	<h2>You have not subscribed for any quizzes yet.</h2>
+</div>
+
 {% else %}
 {% for quiz in subscribed_quizzes %}
-<div class="row g-3 p-3 m-3 quiz-info-item shadow" onclick="location.href='{{ url_for('user_dashboard.user_quiz_subscribed_actions', uuid=quiz.quiz_id) }}';">
-	<div class="row quiz-info-item-header">
-		<div class="text-bold">
-			<h4>{{ quiz.parent_quiz.details.name }}</h4>
+<main class="page payment-page pt-5" onclick="location.href='{{ url_for('user_dashboard.user_quiz_subscribed_actions', uuid=quiz.quiz_id) }}';" ">
+	<section class="payment-form ">	
+	<div class="container" style="width: 540px;">
+			<form class = "cards" action="{{ url_for('quiz.quiz_register_page', uuid=quiz.id) }}" method="POST">
+				<div class="products">
+					<h3 class="title">{{ quiz.parent_quiz.details.name }}</h3>
+					<div class="item">
+						<span class="price">{{ quiz.quiz_id  }}</span>
+						<p class="item-name">Quiz UUID</p>
+
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.quiz_owner.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_owner.parent_user.email }})</strong></span>
+						<p class="item-name"> Host</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_master.parent_user.email }})</strong></span>
+						<p class="item-name">Quiz Master</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.parent_pricing_plan.name}}</span>
+						<p class="item-name">Quiz Pricing Plan</p>
+
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.details.date }}</span>
+						<p class="item-name">Quiz Date</p>
+
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.details.time }}</span>
+						<p class="item-name">Quiz Time</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.details.subscription_price }}</span>
+						<p class="item-name">Entry Fee</p>
+					</div>
+					<div class="item">
+						<span class="price">{{ quiz.parent_quiz.details.current_players }} / {{ quiz.parent_quiz.parent_pricing_plan.total_players }}</span>
+						<p class="item-name">Slots</p>
+					</div>
+					
+				
+			</form>
 		</div>
-	</div>
-	<div class="row g-1 p-1 m-1">
-		<div class="row">
-			<div class="col-12">
-				<h5 class="text-muted">Quiz UUID</h5>
-				<h6 class="text-bold">{{ quiz.quiz_id }}</h6>
-			</div>
-			<div class="col-12">
-				<h5 class="text-muted">Pricing Plan</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.parent_pricing_plan.name }}</h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Host</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.quiz_owner.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_owner.parent_user.email }})</strong></h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Quiz Master</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_master.parent_user.email }})</strong></h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Date</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.details.date }} {{ quiz.parent_quiz.details.time }}</h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Slots</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.details.current_players }} / {{ quiz.parent_quiz.parent_pricing_plan.total_players }}</h6>
-			</div>
-			<div class="col-6">
-				<h5 class="text-muted">Subscription Price</h5>
-				<h6 class="text-bold">{{ quiz.parent_quiz.details.subscription_price }}</h6>
-			</div>
 		</div>
-	</div>
-</div>
+	</section>
+</main>
+
 {% endfor %}
 {% endif %}
 
 {% endblock %}
+
+
