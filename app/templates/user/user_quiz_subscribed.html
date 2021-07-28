@@ -8,54 +8,27 @@
 
 {% else %}
 {% for quiz in subscribed_quizzes %}
-<main class="page payment-page pt-5" onclick="location.href='{{ url_for('user_dashboard.user_quiz_subscribed_actions', uuid=quiz.quiz_id) }}';" ">
-	<section class="payment-form ">	
-	<div class="container" style="width: 540px;">
-			<form class = "cards" action="{{ url_for('quiz.quiz_register_page', uuid=quiz.id) }}" method="POST">
-				<div class="products">
-					<h3 class="title">{{ quiz.parent_quiz.details.name }}</h3>
-					<div class="item">
-						<span class="price">{{ quiz.quiz_id  }}</span>
-						<p class="item-name">Quiz UUID</p>
-
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.quiz_owner.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_owner.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_owner.parent_user.email }})</strong></span>
-						<p class="item-name"> Host</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.parent_quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.parent_quiz.quiz_master.parent_user.email }})</strong></span>
-						<p class="item-name">Quiz Master</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.parent_pricing_plan.name}}</span>
-						<p class="item-name">Quiz Pricing Plan</p>
-
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.details.date }}</span>
-						<p class="item-name">Quiz Date</p>
-
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.details.time }}</span>
-						<p class="item-name">Quiz Time</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.details.subscription_price }}</span>
-						<p class="item-name">Entry Fee</p>
-					</div>
-					<div class="item">
-						<span class="price">{{ quiz.parent_quiz.details.current_players }} / {{ quiz.parent_quiz.parent_pricing_plan.total_players }}</span>
-						<p class="item-name">Slots</p>
-					</div>
-					
-				
-			</form>
+<a href="{{ url_for('user_dashboard.user_quiz_subscribed_actions', uuid=quiz.parent_quiz.id) }}" style="text-decoration:none;">
+	<div class="card mt-3" style="min-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-2">
+				<p>Quiz DP?</p>
+			</div>
+			<div class="col-md-10">
+				<div class="card-body">
+					{% if quiz.parent_quiz.details %}
+					<h5 class="card-title" class="text-bold">{{ quiz.parent_quiz.details.name }}</h5>
+					<p class="card-text" class="text-normal ">Slots: {{ quiz.parent_quiz.details.current_players }} / {{ quiz.parent_quiz.parent_pricing_plan.total_players }}</p>
+					<p class="card-text"><small class="text-muted">{{ quiz.parent_quiz.details.date }} {{ quiz.parent_quiz.details.time }}</small></p>
+					{% if not quiz.payment_status %}
+					<button class="btn btn-sm btn-outline-warning">UNPAID</button>
+					{% endif %}
+					{% endif %}
+				</div>
+			</div>
 		</div>
-		</div>
-	</section>
-</main>
+	</div>
+</a>
 
 {% endfor %}
 {% endif %}

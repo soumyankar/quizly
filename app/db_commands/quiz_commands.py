@@ -13,6 +13,7 @@ def create_quiz(plan, owner):
 	new_quiz.quiz_owner = new_quiz_owner
 
 	append_owned_quiz_to_user(new_quiz_owner, owner)
+	append_child_quiz_to_pricing_plan(new_quiz, plan)
 	db.session.add(new_quiz)
 	db.session.add(new_quiz_owner)
 	db.session.commit()
@@ -99,3 +100,39 @@ def add_quiz_subscriber_payment_details(user, quiz, razorpay_payment_keys):
 	db.session.add(subscriber)
 	db.session.commit()
 	return subscriber
+
+def quiz_master_toggle_status(user, quiz):
+	if not quiz.quiz_master.user_id == user.id:
+		return False
+	if not quiz.quiz_master.user_confirm:
+		quiz.quiz_master.user_confirm = True
+		quiz.quiz_master.user_confirm_date = date.today()
+		quiz.quiz_master.user_confirm_time = datetime.now().time()
+	else:
+		quiz.quiz_master.user_confirm = False
+		quiz.quiz_master.user_confirm_date = None
+		quiz.quiz_master.user_confirm_time = None
+	quiz_master_info = {
+	"user_confirm": quiz.quiz_master.user_confirm,
+	"user_confirm_date": quiz.quiz_master.user_confirm_date,
+	"user_confirm_time": quiz.quiz_master.user_confirm_time
+	}
+	db.session.add(quiz)
+	db.session.commit()
+	return quiz_master_info
+
+def quiz_subscriber_toggle_status(user,quiz):
+	if not subscriber_exists_in_quiz(user,quiz):
+		return False
+
+	subscriber = get_subscriber_for_user_id(user,quiz)
+	if not subscriber:
+		return False
+	if subscriber.user_confirm:
+		subscriber.user_confirm = False
+	else:
+		subscriber.user_confirm = True
+	response = {"status": "OK", "user_confirm": subscriber.user_confirm}
+	db.session.add(subscriber)
+	db.session.commit()
+	return response

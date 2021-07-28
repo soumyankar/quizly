@@ -123,7 +123,7 @@ class QuizMaster(db.Model):
 
     user_confirm = db.Column(db.Boolean(), nullable=True, default=False)
     user_confirm_date = db.Column(db.Date(), nullable=True)
-    user_confirm_time = db.Column(db.Date(), nullable=True)
+    user_confirm_time = db.Column(db.Time(), nullable=True)
 
 class QuizOwner(db.Model):
     __tablename__ = 'quiz_owners'
@@ -163,7 +163,7 @@ class PricingPlan(db.Model):
     monthly_status_reports = db.Column(db.Boolean(), nullable=False, default=False)
 
     # One to one relationship with quiz owner payments
-    children_quizzes = db.relationship('Quiz', backref="parent_pricing_plan", uselist=False)
+    children_quizzes = db.relationship('Quiz', backref="parent_pricing_plan", lazy='dynamic')
 
 
 

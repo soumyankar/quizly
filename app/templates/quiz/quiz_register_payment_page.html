@@ -44,6 +44,7 @@
 						<p class="item-name">Quiz Payment Status</p>
 					</div>
 					<div class="total">Total<span class="price">{{ quiz.details.subscription_price }}</span></div>
+					<button class="btn btn-warning" type="button" id="skip_payment">Pay Later</button>
 				</div>
 			</form>
 			<div class="form-group col-md-12 p-4 ">
@@ -57,4 +58,13 @@
 	</section>
 </main>
 
+{% endblock %}
+{% block ui_scripts %}
+<script type="text/javascript">
+	$('#skip_payment').click(function(){
+		if (confirm('You can always find your unpaid quizzes on your dashboard. Click OK to continue.')){
+			window.location.replace('{{ url_for('user_dashboard.user_quiz_subscribed') }}');
+		}
+	});
+</script>
 {% endblock %}

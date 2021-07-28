@@ -2,10 +2,15 @@ from app import db
 from datetime import datetime, date
 from app.misc.razorpay_creds import RazorpayOrder, razorpay_verify_payment_signature
 from app.models.models import PricingPlan, Quiz, User, QuizOwner, QuizMaster, QuizSubscriber, UserProfile
+from sqlalchemy_utils import PhoneNumber
 
 def append_owned_quiz_to_user(quiz, user):
 	user.quizzes_owned.append(quiz)
-	db.session.commit()
+	db.session.add(user)
+
+def append_child_quiz_to_pricing_plan(quiz,plan):
+	plan.children_quizzes.append(quiz)
+	db.session.add(plan)
 
 def get_user_profile(user_id):
 	user_profile = UserProfile.query.filter(UserProfile.user_id == user_id).first()
@@ -82,3 +87,18 @@ def get_user_for_username(username):
 def get_all_quiz_owners():
 	all_quiz_owners = QuizOwner.query.all()
 	return all_quiz_owners
+
+def create_new_user_profile(form, user):
+	new_user_profile = UserProfile(
+		profile_complete=True,
+		first_name=form.first_name.data,
+		last_name=form.last_name.data,
+		nationality=form.nationality.data,
+		institution=form.institution.data,
+		dob=form.dob.data,
+		gender=form.gender.data,
+		phone_number=(PhoneNumber( str(form.phone_number.data), str(form.phone_number_country_code.data) ))
+	)
+	new_user_profile.parent_user = user
+	db.session.add(new_user_profile)
+	db.session.commit()

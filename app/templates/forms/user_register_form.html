@@ -2,7 +2,7 @@
 {% from "forms/_formhelper.html" import render_field,render_button %}
 
 <main>
-  <div class="container pt-5 " action="{{ url_for('user.register') }}" method="POST">
+  <div class="container pt-5 ">
     {{ form.hidden_tag() }}
     <div class="row justify-content-center">
       <div class="col-lg-7">
@@ -11,7 +11,8 @@
             <h3 class="text-center font-weight-light my-4">Create an account</h3>
           </div>
           <div class="card-body">
-            <form>
+            <form action="{{ url_for('user.register') }}" method="POST">
+              {{ form.hidden_tag() }}
               <div class="form-floating mb-3">
                 {{ render_field(form.email, class='form-control', placeholder='name@example.com', id="emailHelp") }}
 

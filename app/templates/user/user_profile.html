@@ -84,7 +84,7 @@
                                 <h6 class="mb-0">Full Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ user.first_name}} {{ user.last_name}}
+                                {{ user.profile.first_name}} {{ user.profile.last_name}}
                             </div>
                         </div>
                         <hr>
@@ -102,7 +102,7 @@
                                 <h6 class="mb-0">Phone</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ user.phone_number_country_code }} {{ user.phone_number }}
+                                {{ user.profile.phone_number_country_code }} {{ user.profile.phone_number }}
                             </div>
                         </div>
                         <hr>
@@ -111,7 +111,7 @@
                                 <h6 class="mb-0">Institution</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ user.institution }}
+                                {{ user.profile.institution }}
                             </div>
                         </div>
                         <hr>
@@ -120,7 +120,7 @@
                                 <h6 class="mb-0">Birthday</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{ user.dob }}
+                                {{ user.profile.dob }}
                             </div>
                         </div>
                         

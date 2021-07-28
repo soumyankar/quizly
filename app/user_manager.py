@@ -2,9 +2,8 @@ from flask import current_app, flash, redirect, render_template, request, url_fo
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_user import UserManager
 from wtforms import ValidationError
-from app.models.models import UserProfile
 from app import db
-from sqlalchemy_utils import PhoneNumber
+from app.db_commands.user_commands import *
 
 # Customize Flask-User 
 class CustomUserManager(UserManager):
@@ -17,28 +16,21 @@ class CustomUserManager(UserManager):
     @login_required
     def edit_user_profile_view(self):
         # Initialize form
-        form = self.EditUserProfileFormClass()
+        form = self.EditUserProfileFormClass
+        if user_profile_exists(current_user):
+            user_profile = get_user_profile(current_user.id)
+            form = self.EditUserProfileFormClass(obj=user_profile)
         # Process valid POST
         if request.method == 'POST':
             # Update fields
             if not form.validate():
                 flash('There was a problem with one of the input fields, try again', 'error')
                 return redirect(url_for('user.edit_user_profile'))
-            new_user_profile = UserProfile(
-                profile_complete=True,
-                first_name=form.first_name.data,
-                last_name=form.last_name.data,
-                nationality=form.nationality.data,
-                institution=form.institution.data,
-                dob=form.dob.data,
-                gender=form.gender.data,
-                phone_number=(PhoneNumber( str(form.phone_number.data), str(form.phone_number_country_code.data) ))
-                )
-            new_user_profile.parent_user = current_user
-            db.session.add(new_user_profile)
-            db.session.commit()
+
+            create_new_user_profile(form, current_user)
             flash('Profile updated!', 'success')
-            return redirect(self._endpoint_url(self.USER_AFTER_EDIT_USER_PROFILE_ENDPOINT))
+            # return redirect(self._endpoint_url(self.USER_AFTER_EDIT_USER_PROFILE_ENDPOINT))
+            return redirect(url_for('user_dashboard.user_profile_page', username=current_user.username))
         # Check if details already exist.
         return render_template(self.USER_EDIT_USER_PROFILE_TEMPLATE, form=form, import_form="edit_user_profile")
 

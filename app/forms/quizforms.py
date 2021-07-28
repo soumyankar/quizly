@@ -40,7 +40,7 @@ class UserQuizOwnerActionForm(FlaskForm):
     name = StringField('Quiz Name', validators=[InputRequired()])
     date = DateField('Quiz Date', validators=[InputRequired(), date_validator])
     time = TimeField('Time', validators=[InputRequired()])
-    tags = SelectMultipleField(u'Categories', choices=[('1','M.E.L.A'), ('2','H.E.L.M'), ('3', 'spEnt'), ('4', 'General'), ('5', 'Sports'), ('6' , 'Pop Culture'),('7','Sci-tech'), ('8', 'Tech'), ('9', 'Misc') ], validators=[InputRequired()], render_kw={"multiple": "multiple"})
+    # tags = SelectMultipleField(u'Categories', choices=[('1','M.E.L.A'), ('2','H.E.L.M'), ('3', 'spEnt'), ('4', 'General'), ('5', 'Sports'), ('6' , 'Pop Culture'),('7','Sci-tech'), ('8', 'Tech'), ('9', 'Misc') ], validators=[InputRequired()], render_kw={"multiple": "multiple"})
     subscription_price = IntegerField('User Registration Price', validators=[InputRequired()])
     quiz_master = SelectField('Quiz Master', choices="", validators=[InputRequired()], render_kw = {"class":"form-control"})
     submit = SubmitField(('Create Quiz'))

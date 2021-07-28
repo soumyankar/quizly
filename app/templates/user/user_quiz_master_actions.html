@@ -17,20 +17,29 @@
 </div>
 
 <div class="card m-3" style="min-width: 540px;">
-	<div class="row g-0">
+	<div class="h-100 d-none d-flex justify-content-center align-items-center" id="info_overlay">
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+	<div class="row g-0" id="quiz_master_info">
 		<div class="col-md-12">
 			<div class="card-body">
 				<h5 class="card-title">Quiz Master</h5>
 				{% if not quiz.quiz_master %}
-				<p class="card-text">No quiz master has been assigned yet,</p>
+				<p class="card-text">No quiz master has been assigned yet.</p>
 				{% else %}
 				<p class="card-text">{{ quiz.quiz_master.parent_user.profile.first_name }} {{ quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.quiz_master.parent_user.email }})</strong></p>
 				{% if not quiz.quiz_master.user_confirm %}
-					<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+				<button type="button" class="btn btn-sm btn-warning" id="quiz_master_user_confirm_status">UNCONFIRMED</button>
 				{% else %}
-					<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
-					<p class="card-text">Confirmation Timestamp: {{ quiz.quiz_master.user_confirm_date }} {{ quiz.quiz_master.user_confirm.time }}</p>
+				<p class="card-text" id="quiz_master_user_confirm_timestamp">Confirmation Timestamp: 
+					<span id="quiz_master_user_confirm_date">{{ quiz.quiz_master.user_confirm_date }}</span> 
+					<span id="quiz_master_user_confirm_time">{{ quiz.quiz_master.user_confirm_time }}</span>
+				</p>
+				<button type="button" class="btn btn-sm btn-success" id="quiz_master_user_confirm_status">CONFIRMED</button>
 				{% endif %}
+				<button type="button" class="btn btn-sm btn-danger" id="quiz_master_decline_invite">DECLINE INVITE</button>
 				{% endif %}
 			</div>
 		</div>
@@ -95,4 +104,51 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block ui_scripts %}
+<script type="text/javascript">
+	$('#quiz_master_user_confirm_status').click(function(){
+		$('#quiz_master_info').fadeOut();
+		$('#info_overlay').toggleClass('d-none');
+		$('#info_overlay').delay(50).fadeIn(150);
+		data = {"user_id": "{{ current_user.id }}", "quiz_uuid": "{{ quiz.id }}"};
+		$.ajax({
+			url: "{{ url_for('user_dashboard.user_quiz_master_toggle_status') }}",
+			type: "POST",
+			dataType: "json",
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			success: function (response) {
+				console.log(response);
+				if(response['user_confirm'] == true){
+					$('#quiz_master_user_confirm_status').removeClass();
+					$('#quiz_master_user_confirm_status').addClass('btn btn-sm btn-success');
+					$('#quiz_master_user_confirm_status').html('CONFIRMED');
+					$('#quiz_master_user_confirm_timestamp').removeClass('d-none');
+					$('#quiz_master_user_confirm_date').html(response['user_confirm_date']);
+					$('#quiz_master_user_confirm_time').html(response['user_confirm_time']);
+				}
+				else{
+					$('#quiz_master_user_confirm_status').removeClass();
+					$('#quiz_master_user_confirm_status').addClass('btn btn-sm btn-warning');
+					$('#quiz_master_user_confirm_status').html('UNCONFIRMED');
+					$('#quiz_master_user_confirm_timestamp').addClass('d-none');
+				}
+				$('#info_overlay').delay(50).fadeOut(150);
+				$('#info_overlay').toggleClass('d-none');
+				$('#quiz_master_info').fadeIn();
+			}.bind(this),
+			error: function(xhr, status, err) {				
+				$('#quiz_master_user_confirm_status').removeClass();
+				$('#quiz_master_user_confirm_status').addClass('btn btn-sm btn-warning');
+				$('#quiz_master_user_confirm_status').html('Something went wrong (Error = 500).');
+
+				$('#info_overlay').delay(50).fadeOut(150);
+				$('#info_overlay').toggleClass('d-none');
+				$('#quiz_master_info').fadeIn();
+			}.bind(this)
+		});
+	});
+</script>
 {% endblock %}

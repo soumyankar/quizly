@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, redirect, url_for, Blueprint, render_template, flash, abort
 from app.models.models import QuizSubscriber, QuizOwner, QuizMaster, UserProfile, User, Quiz
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -5,7 +6,7 @@ from flask_user import roles_required
 from app.forms.quizforms import UserQuizOwnerActionForm
 from app.db_commands.user_commands import *
 from app.db_commands.quiz_commands import *
-from app import db
+from app import db, csrf_protect
 
 user_dashboard = Blueprint("user_dashboard", __name__, static_folder="static", template_folder="templates")
 
@@ -47,7 +48,19 @@ def user_quiz_master():
 @user_dashboard.route('/user/quiz/owned/<uuid>', methods=['GET', 'POST'])
 @login_required
 def user_quiz_owned_actions(uuid):
-	form = UserQuizOwnerActionForm()
+	quiz = get_quiz_for_uuid(uuid)
+	if quiz.quiz_owner.payment_status == False:
+		flash('You still need to complete your quiz payment', 'error')
+		return redirect(url_for('quiz.quiz_create_payment_page', uuid=quiz.id))
+	if not quiz:
+		flash('Could find not quiz against UUID='+uuid, 'error')
+		return redirect(url_for('user_dashboard.user_quiz_owned'))
+	quiz_owner = quiz.quiz_owner
+	if not quiz_owner.user_id == current_user.id:
+		flash('It looks like you do not own this quiz.', 'info')
+		return redirect(url_for('user_dashboard.user_quiz_owned'))
+
+	form = UserQuizOwnerActionForm(obj=quiz.details)
 	form.quiz_master.choices = get_quiz_master_choices_for_uuid(uuid)
 	if request.method == 'POST':
 		if form.validate():
@@ -58,14 +71,6 @@ def user_quiz_owned_actions(uuid):
 				flash('Something went wrong while updating your quiz details :/', 'error')
 				return redirect(url_for('user_dashboard.user_quiz_owned_actions', uuid=uuid))
 
-	quiz = get_quiz_for_uuid(uuid)
-	if not quiz:
-		flash('Could find not quiz against UUID='+uuid, 'error')
-		return redirect(url_for('user_dashboard.user_quiz_owned'))
-	quiz_owner = quiz.quiz_owner
-	if not quiz_owner.user_id == current_user.id:
-		flash('It looks like you do not own this quiz.', 'info')
-		return redirect(url_for('user_dashboard.user_quiz_owned'))
 	return render_template('user/user_quiz_owned_actions.html', user=current_user, quiz=quiz, form=form)
 
 @user_dashboard.route('/user/quiz/quiz_master/<uuid>', methods=['POST', 'GET'])
@@ -81,6 +86,41 @@ def user_quiz_hosted_actions(uuid):
 
 	quiz_master = get_quiz_master_for_user_id(current_user, quiz)
 	return render_template('user/user_quiz_master_actions.html', user=current_user, quiz=quiz, quiz_master=quiz_master)
+
+@user_dashboard.route('/user/quiz/quiz_master/user_confirm', methods=['POST'])
+@login_required
+@csrf_protect.exempt
+def user_quiz_master_toggle_status():
+	request_data = request.get_json()
+	user_id = request_data['user_id']
+	quiz_uuid = request_data['quiz_uuid']
+	quiz = get_quiz_for_uuid(quiz_uuid)
+	if not master_exists_in_quiz(current_user, quiz):
+		abort(500)
+	try:
+		resp = quiz_master_toggle_status(current_user, quiz)
+		return json.dumps(resp, default=str)
+	except Exception as e:
+		print(e)
+		abort(500)
+
+@user_dashboard.route('/user/quiz/subscriber/user_confirm', methods=['POST'])
+@login_required
+@csrf_protect.exempt
+def user_quiz_subscriber_toggle_status():
+	request_data = request.get_json()
+	user_id = request_data['user_id']
+	quiz_uuid = request_data['quiz_uuid']
+	quiz = get_quiz_for_uuid(quiz_uuid)
+	if not subscriber_exists_in_quiz(current_user, quiz):
+		abort(500)
+	try:
+		resp = quiz_subscriber_toggle_status(current_user, quiz)
+		print(resp)
+		return json.dumps(resp, default=str)
+	except Exception as e:
+		print(e)
+		abort(500)
 
 @user_dashboard.route('/user/quiz/owned/receipt/<uuid>', methods=['GET'])
 @login_required
