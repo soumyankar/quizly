@@ -9,30 +9,34 @@
 {% else %}
 {% for owner in owned_quizzes %}
 <a href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=owner.parent_quiz.id) }}" style="text-decoration:none;">
-	<div class="card mt-3" style="min-width: 540px;">
-		<div class="row g-0">
-			<div class="col-md-2">
-				<p>Quiz DP?</p>
-			</div>
-			<div class="col-md-10">
-				<div class="card-body">
-					{% if owner.parent_quiz.details %}
-					<h5 class="card-title" class="text-bold">{{ owner.parent_quiz.details.name }}</h5>
-					<p class="card-text" class="text-normal ">Slots: {{ owner.parent_quiz.details.current_players }} / {{ owner.parent_quiz.parent_pricing_plan.total_players }}</p>
-					<p class="card-text"><small class="text-muted">{{ owner.parent_quiz.details.date }} {{ owner.parent_quiz.details.time }}</small></p>
-					{% else %}
-					<h5 class="card-title" class="text-bold">Requires Attention!</h5>
-					{% if not owner.payment_status %}
-					<button class="btn btn-sm btn-outline-warning">UNPAID</button>
-					{% else %}
-					<button class="btn btn-sm btn-outline-warning">Finish Editing Details!</button>
-					{% endif %}
-					{% endif %}
-				</div>
+<div class="col-xl-5 col-md-6">
+	<div class="card cards border-0 shadow rounded-3  d-flex overflow-hidden m-3 p-3">
+		<div class="d-flex align-items-center">
+			<div class="image"> <img
+				src="https://ui-avatars.com/api/?background=random&length=1&name={{owner.parent_quiz.details.name }}"
+				class="rounded-circle m-3" width="120"> </div>
+			<div class="ms-1 w-100">
+			
+				{% if owner.parent_quiz.details %}
+				<h5 class="card-title" class="text-bold">{{ owner.parent_quiz.details.name }}</h5>
+				<p class="card-text" class="text-normal ">Slots: {{ owner.parent_quiz.details.current_players }} / {{ owner.parent_quiz.parent_pricing_plan.total_players }}</p>
+				<p class="card-text"><small class="text-muted">{{ owner.parent_quiz.details.date }} {{ owner.parent_quiz.details.time }}</small></p>
+				{% else %}
+				<h5 class="card-title" class="text-bold">Requires Attention!</h5>
+				{% if not owner.payment_status %}
+				<button class="btn btn-sm btn-outline-warning">UNPAID</button>
+				{% else %}
+				<button class="btn btn-sm btn-outline-warning">Finish Editing Details!</button>
+				{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
-</a>
+</div>
+</a>		
+			
+		
+	
 {% endfor %}
 {% endif %}
 {% endblock %}

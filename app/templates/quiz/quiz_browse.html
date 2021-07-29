@@ -15,8 +15,9 @@
 			<div class="row justify-content-center">
 				{% if quizzes|length < 1 %} <h4>There are currently no quizzes!</h4>
 					{% else %}
-					{% for quiz in quizzes %}
+					
 					<div class="col-xl-5 col-md-6">
+						{% for quiz in quizzes %}
 						<div class="card cards border-0 shadow rounded-3  d-flex overflow-hidden mb-3 p-3"
 							onclick="location.href='{{ url_for('quiz.quiz_register_page', uuid= quiz.id) }}';">
 							{% if quiz.parent_pricing_plan.payment_required %}
