@@ -27,6 +27,9 @@
 					{% else %}
 					<button class="btn btn-sm btn-outline-warning">Finish Editing Details!</button>
 					{% endif %}
+					{% if not quiz.active %}
+					<button class="btn btn-sm btn-outline-info">You deactivated this quiz :(</button>
+					{% endif %}
 					{% endif %}
 				</div>
 			</div>

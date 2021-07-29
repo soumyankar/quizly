@@ -73,7 +73,7 @@ class Quiz(db.Model):
     __tablename__ = 'quizzes'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     pricing_plan_id = db.Column(db.Integer(), db.ForeignKey('pricing_plans.id'))
-    active = db.Column(db.Boolean(), nullable=False, default=False)
+    active = db.Column(db.Boolean(), nullable=False, default=True)
     quiz_completion = db.Column(db.Boolean(), nullable=False, default=False)
     # Relationships
     # One to one relationship to quiz details
@@ -84,6 +84,8 @@ class Quiz(db.Model):
     quiz_master = db.relationship("QuizMaster", backref="parent_quiz", uselist=False)
     # One to one relationship to quiz standings
     quiz_standings = db.relationship("QuizStandings", backref="parent_quiz", uselist=False)
+    # One to one relationship to refund requests
+    refund = db.relationship("RefundRequest", backref="parent_quiz", uselist=False)
     # One to many relationship to subscriber
     subscribers = db.relationship('QuizSubscriber', backref="parent_quiz", lazy='dynamic')
 
@@ -165,5 +167,11 @@ class PricingPlan(db.Model):
     # One to one relationship with quiz owner payments
     children_quizzes = db.relationship('Quiz', backref="parent_pricing_plan", lazy='dynamic')
 
+class RefundRequest(db.Model):
+    __tablename__ = 'refund_requests'
+    id = db.Column(db.Integer, primary_key=True)
 
-
+    quiz_id = db.Column(UUID(as_uuid=True), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
+    refund_confirm = db.Column(db.Boolean(), nullable=True, default=False)
+    request_date = db.Column(db.Date(), nullable=True)
+    request_time = db.Column(db.Time(), nullable=True)

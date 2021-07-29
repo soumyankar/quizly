@@ -49,14 +49,13 @@ def user_quiz_master():
 @login_required
 def user_quiz_owned_actions(uuid):
 	quiz = get_quiz_for_uuid(uuid)
-	if quiz.quiz_owner.payment_status == False:
-		flash('You still need to complete your quiz payment', 'error')
-		return redirect(url_for('quiz.quiz_create_payment_page', uuid=quiz.id))
 	if not quiz:
 		flash('Could find not quiz against UUID='+uuid, 'error')
 		return redirect(url_for('user_dashboard.user_quiz_owned'))
-	quiz_owner = quiz.quiz_owner
-	if not quiz_owner.user_id == current_user.id:
+	if quiz.quiz_owner.payment_status == False:
+		flash('You still need to complete your quiz payment', 'error')
+		return redirect(url_for('quiz.quiz_create_payment_page', uuid=quiz.id))
+	if not quiz.quiz_owner.user_id == current_user.id:
 		flash('It looks like you do not own this quiz.', 'info')
 		return redirect(url_for('user_dashboard.user_quiz_owned'))
 
@@ -72,6 +71,27 @@ def user_quiz_owned_actions(uuid):
 				return redirect(url_for('user_dashboard.user_quiz_owned_actions', uuid=uuid))
 
 	return render_template('user/user_quiz_owned_actions.html', user=current_user, quiz=quiz, form=form)
+
+@user_dashboard.route('/user/quiz/owned/deactivate', methods=['POST'])
+@login_required
+@csrf_protect.exempt
+def user_quiz_owned_actions_deactivate():
+	request_data = request.get_json()
+	user_id = request_data['user_id']
+	quiz_uuid = request_data['quiz_uuid']
+	quiz = get_quiz_for_uuid(quiz_uuid)
+	if not quiz:
+		abort(500)
+	try:
+		resp = quiz_deactivate(quiz)
+		if resp:
+			return json.dumps(resp, default=str)
+		else:
+			resp = {"status": "500"}
+			return json.dumps(resp, default=str)
+	except Exception as e:
+		print (e)
+		abort(500)
 
 @user_dashboard.route('/user/quiz/quiz_master/<uuid>', methods=['POST', 'GET'])
 @login_required

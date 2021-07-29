@@ -23,6 +23,9 @@
 					{% if not quiz.payment_status %}
 					<button class="btn btn-sm btn-outline-warning">UNPAID</button>
 					{% endif %}
+					{% if not quiz.active %}
+					<button class="btn btn-sm btn-outline-info">Owner has deactivated this quiz :(</button>
+					{% endif %}
 					{% endif %}
 				</div>
 			</div>
