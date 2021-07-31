@@ -1,31 +1,17 @@
 {% extends 'dashboardbase.html' %}
 {% from "forms/_formhelper.html" import render_field, render_button %}
 
-{% block ui_scripts %}
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('#show_quiz_edit_form').click(function () {
-			// $('#quiz_info').toggle("slide", {direction: "right"}, 150);
-			// $('#quiz_edit_form').toggle("slide", {direction: "right"}, 150);
-			$('#quiz_info').fadeOut(150);
-			$('#quiz_edit_form').fadeIn(150);
-		});
-
-		$('#show_quiz_info').click(function () {
-			// $('#quiz_edit_form').toggle("slide", {direction: "right"}, 150);
-			// $('#quiz_info').toggle("slide", {direction: "right"}, 150);
-			$('#quiz_edit_form').fadeOut(150);
-			$('#quiz_info').fadeIn(150);
-		});
-	});
-</script>
-{% endblock%}
 {% block dashboard_content %}
 
 <div class="card border-0 shadow rounded-3 m-3">
 	<div class="row g-0">
 		<div class="col-xl-12">
 			<div class="card-body">
+				<div class="h-100 d-none d-flex justify-content-center align-items-center" id="info_overlay">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
 				<div id="quiz_info">
 					{% if quiz.details %}
 					<h5 class="card-title text-bold">{{ quiz.details.name }}</h5>
@@ -39,48 +25,44 @@
 					<p class="card-text">Quizzes do not show up on the browsing section until the details are fulfilled.
 					</p>
 					{% endif %}
-					<button class="btn btn-info" id="show_quiz_edit_form">Edit (Add edit icon here)</button>
-					<button class="btn btn-warning" id="deactivate_quiz">Deactivate Quiz</button>
-					<button class="btn btn-danger" id="delete_quiz">Delete Quiz</button>
+					{% if quiz.active %}
+						<button class="btn btn-info" id="show_quiz_edit_form">Edit (Add edit icon here)</button>
+						<button class="btn btn-warning" id="quiz_toggle_active_status">Deactivate Quiz</button>
+					{% else %}
+						<p class="card-text">This quiz has been deactivated.</p>
+						<p class="card-text">Refund request Timestamp: <strong>{{ quiz.refund.request_date }} {{ quiz.refund.request_time }}</strong></p>
+					{% endif %}
 				</div>
 				<form id="quiz_edit_form" action="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.id) }}"
-					method="POST" style="display: none;">
-					{{ form.hidden_tag() }}
+				method="POST" style="display: none;">
+				{{ form.hidden_tag() }}
 
-					<div class="form-floating mb-3">
-						{{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz',
-						id="quizNameHelp") }}
-						<div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
-					</div>
-					<div class="form-floating mb-3">
-						{{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master
-						email') }}
-					</div>
-					<div class="row mb-3">
-						<div class="col-md-6">
-							<div class="form-floating mb-3 mb-md-0">
-								{{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971',
-								id="dateHelp") }}
-								<div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-floating mb-3 mb-md-0">
-								{{ render_field(form.time, type='time', class='form-control', placeholder='23:59',
-								id="timeHelp") }}
-								<div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )
-								</div>
-							</div>
+				<div class="form-floating mb-3">
+					{{ render_field(form.name, class='form-control', placeholder='Super Awesome Quiz',
+					id="quizNameHelp") }}
+					<div id="quizNameHelp" class="form-text">Think of a cool quiz name!</div>
+				</div>
+				<div class="form-floating mb-3">
+					{{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master
+					email') }}
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-6">
+						<div class="form-floating mb-3 mb-md-0">
+							{{ render_field(form.date, type='date', class='form-control', placeholder='01/01/1971',
+							id="dateHelp") }}
+							<div id="dateHelp" class="form-text">Set the Date of the Quiz. ( MM - DD - YYYY )</div>
 						</div>
 					</div>
-					<div class="row mb-3">
-						<div class="col-md-6">
-							<div class="form-floating mb-3 mb-md-0">
-								{{ render_field(form.subscription_price, type='number', class='form-control', placeholder='₹ 50',id="subscriptionHelp")}}
-						<div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
+					<div class="col-md-6">
+						<div class="form-floating mb-3 mb-md-0">
+							{{ render_field(form.time, type='time', class='form-control', placeholder='23:59',
+							id="timeHelp") }}
+							<div id="timeHelp" class="form-text">Set the Time of the Quiz. ( 24-hour clock format )
 							</div>
 						</div>
 					</div>
+
 					
 					<div class="d-grid gap-2 d-md-flex justify-content-md-end ">
 						{{ render_button(form.submit, class='btn btn-info', value='Submit') }}
@@ -88,12 +70,29 @@
 							<i class="far fa-window-close"></i><input type="button" id="show_quiz_info" value="Cancel">
 						</span>
 						
-					</div>
 
-				</form>
-			</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-6">
+						<div class="form-floating mb-3 mb-md-0">
+							{{ render_field(form.subscription_price, type='number', class='form-control', placeholder='₹ 50',id="subscriptionHelp")}}
+							<div id="subscriptionHelp" class="form-text">Set the registration cost for the quiz.</div>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="col-12 d-flex">
+					{{ render_button(form.submit, class='btn btn-info', value='Submit') }}
+					<br>
+					<input class="btn btn-danger" type="button" id="show_quiz_info"
+					value="Stop Edit (add cancel icon)"></button>
+				</div>
+
+			</form>
 		</div>
 	</div>
+</div>
 </div>
 
 <div class="card m-3" style="min-width: 540px;">
@@ -106,42 +105,42 @@
 				{% else %}
 				<p class="card-text">{{ quiz.quiz_master.parent_user.profile.first_name }} {{
 					quiz.quiz_master.parent_user.profile.last_name }} <strong>({{ quiz.quiz_master.parent_user.email
-						}})</strong></p>
-				{% if not quiz.quiz_master.user_confirm %}
-				<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
-				{% else %}
-				<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
-				<p class="card-text">Confirmation Timestamp: {{ quiz.quiz_master.user_confirm_date }} {{
-					quiz.quiz_master.user_confirm.time }}</p>
-				{% endif %}
-				{% endif %}
+					}})</strong></p>
+					{% if not quiz.quiz_master.user_confirm %}
+					<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+					{% else %}
+					<p class="card-text">Confirmation Timestamp: {{ quiz.quiz_master.user_confirm_date }} {{
+					quiz.quiz_master.user_confirm_time }}</p>
+					<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+					{% endif %}
+					{% endif %}
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="card m-3" style="min-width: 540px;">
-	<div class="row g-0">
-		<div class="col-md-12">
-			<div class="card-body">
-				<h5 class="card-title">Subscribers</h5>
-				<p>Find your quiz participants here, you may choose to kick them from your quiz or you may even forgive
+	<div class="card m-3" style="min-width: 540px;">
+		<div class="row g-0">
+			<div class="col-md-12">
+				<div class="card-body">
+					<h5 class="card-title">Subscribers</h5>
+					<p>Find your quiz participants here, you may choose to kick them from your quiz or you may even forgive
 					their payment if you wish to do so.</p>
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Name</th>
-							<th scope="col">Nationality</th>
-							<th scope="col">Payment Status</th>
-							<th scope="col">Payment Date</th>
-							<th scope="col">Payment Amount</th>
-							<th scope="col">Participation Status</th>
-							<th scope="col"></th>
-							<th scope="col"></th>
-						</tr>
-						{% if quiz.subscribers.count() < 1%} <tr>
-							<td class="text-center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Name</th>
+								<th scope="col">Nationality</th>
+								<th scope="col">Payment Status</th>
+								<th scope="col">Payment Date</th>
+								<th scope="col">Payment Amount</th>
+								<th scope="col">Participation Status</th>
+								<th scope="col"></th>
+								<th scope="col"></th>
+							</tr>
+							{% if quiz.subscribers.count() < 1%} <tr>
+								<td class="text-center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
 							</tr>
 							{% else %}
 							{% set increment = 1 %}
@@ -150,7 +149,7 @@
 								<th scope="row">{{ increment }}</th>
 								{% if subscriber.parent_user.profile %}
 								<td>{{ subscriber.parent_user.profile.first_name }} {{
-									subscriber.parent_user.profile.last_name }}</td>
+								subscriber.parent_user.profile.last_name }}</td>
 								<td>{{ subscriber.parent_user.profile.nationality }}</td>
 								{% else %}
 								<td>404</td>
@@ -164,7 +163,7 @@
 									{% endif %}
 								</td>
 								<td>{{ subscriber.payment_date }}</td>
-								<td>{{ subscriber.payment_amount }}</td>
+								<td>₹ {{ subscriber.payment_amount }}</td>
 								<td>
 									{% if subscriber.user_confirm %}
 									<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
@@ -179,11 +178,13 @@
 							</tr>
 							{% endfor %}
 							{% endif %}
-					</thead>
-				</table>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
+
 </div>
 <style>
 	span > input {
@@ -197,3 +198,64 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 {% endblock %}
+
+
+	<!-- bootstrap-select -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+	{% endblock %}
+
+	{% block ui_scripts %}
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#show_quiz_edit_form').click(function () {
+			// $('#quiz_info').toggle("slide", {direction: "right"}, 150);
+			// $('#quiz_edit_form').toggle("slide", {direction: "right"}, 150);
+			$('#quiz_info').fadeOut(150);
+			$('#quiz_edit_form').fadeIn(150);
+		});
+
+			$('#show_quiz_info').click(function () {
+			// $('#quiz_edit_form').toggle("slide", {direction: "right"}, 150);
+			// $('#quiz_info').toggle("slide", {direction: "right"}, 150);
+			$('#quiz_edit_form').fadeOut(150);
+			$('#quiz_info').fadeIn(150);
+		});
+
+
+			$('#quiz_toggle_active_status').click(function(){
+				if(confirm('You sure you want to proceed? This action cannot be reversed. A refund request would be sent to the admin and then you would recieve your money back.')) {
+
+					$('#quiz_info').fadeOut();
+					$('#info_overlay').toggleClass('d-none');
+					$('#info_overlay').delay(50).fadeIn(150);
+					data ={"user_id": "{{ current_user.id }}", "quiz_uuid": "{{ quiz.id }}"}
+					$.ajax({
+						url: "{{ url_for('user_dashboard.user_quiz_owned_actions_deactivate') }}",
+						type: "POST",
+						dataType: "json",
+						data: JSON.stringify(data),
+						contentType: 'application/json',
+						success: function (response) {
+							console.log(response);
+							$('#quiz_toggle_active_status').removeClass();
+							$('#quiz_toggle_active_status').addClass('btn btn-success')
+							$('#quiz_toggle_active_status').html('Refund Request Sent');
+							$('#info_overlay').delay(50).fadeOut(150);
+							$('#info_overlay').toggleClass('d-none');
+							$('#quiz_info').fadeIn();
+						}.bind(this),
+						error:function(xhr, status, err) {
+							$('#quiz_toggle_active_status').html('Something went wrong. Try refreshing the page and retrying.');
+							$('#info_overlay').delay(50).fadeOut(150);
+							$('#info_overlay').toggleClass('d-none');
+							$('#quiz_info').fadeIn();
+						}.bind(this)
+					});
+				}
+			});
+		});
+
+	</script>
+	{% endblock %}
+
