@@ -42,7 +42,7 @@ def get_browse_quizzes():
 	browse_quizzes = []
 	all_quizzes = Quiz.query.all()
 	for quiz in all_quizzes:
-		if not quiz.quiz_master or not quiz.quiz_owner or not quiz.details:
+		if not quiz.quiz_owner or not quiz.details or not quiz.active:
 			continue
 		browse_quizzes.append(quiz)
 	return browse_quizzes

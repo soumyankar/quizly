@@ -136,3 +136,32 @@ def quiz_subscriber_toggle_status(user,quiz):
 	db.session.add(subscriber)
 	db.session.commit()
 	return response
+
+def create_refund_request(quiz):
+	if quiz.refund:
+		return quiz.refund
+	new_refund_request = RefundRequest(
+		refund_confirm = False,
+		request_date = date.today(),
+		request_time = datetime.now().time())
+	new_refund_request.parent_quiz = quiz
+	quiz.active = False
+	quiz.refund = new_refund_request
+	db.session.add(new_refund_request)
+	db.session.commit()
+
+	return new_refund_request
+
+def quiz_deactivate(quiz):
+	try:
+		new_refund_request = create_refund_request(quiz)
+		response = {
+		"status": "OK",
+		"refund_date": str(new_refund_request.request_date),
+		"refund_time": str(new_refund_request.request_time)
+		}
+		return response
+	except Exception as e:
+		print (e)
+		return None
+
