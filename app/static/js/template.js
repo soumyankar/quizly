@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', event => {
             }
         }
     })
-})
+});
 
 function fadeOut(el) {
     el.style.opacity = 1;
@@ -78,3 +78,20 @@ function fadeIn(el, display) {
         }
     })();
 };
+
+$(document).ajaxStart(function() { Pace.restart(); console.log('Pace restart.')});
+
+Pace.on('restart', function(){
+    console.log('Pace restarts');
+});
+
+Pace.on("start", function(){
+    console.log("Pace starts.");
+    $('.page_overlay').delay(50).fadeIn(150);
+});
+
+
+Pace.on("done", function(){
+    console.log("pace stops.");
+    $('.page_overlay').delay(300).fadeOut(600);
+});

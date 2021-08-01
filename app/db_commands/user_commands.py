@@ -16,6 +16,9 @@ def get_user_profile(user_id):
 	user_profile = UserProfile.query.filter(UserProfile.user_id == user_id).first()
 	return user_profile
 
+def get_user_for_id(id):
+	user = User.query.filter(User.id == id).first()
+	return user
 def get_quiz_for_uuid(uuid):
 	quiz = Quiz.query.filter(Quiz.id == uuid).first()
 	return quiz

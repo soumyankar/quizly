@@ -63,7 +63,7 @@ def user_quiz_owned_actions(uuid):
 	form.quiz_master.choices = get_quiz_master_choices_for_uuid(uuid)
 	if request.method == 'POST':
 		if form.validate():
-			if create_quiz_details(form, current_user, uuid):
+			if create_quiz_details(form, uuid):
 				flash('Details updated succesfully!', 'success')
 				return redirect(url_for('user_dashboard.user_quiz_owned_actions', uuid=uuid))
 			else:

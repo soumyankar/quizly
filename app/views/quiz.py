@@ -54,6 +54,10 @@ def quiz_create_page(plan):
 @csrf_protect.exempt
 def quiz_register_page(uuid):
 	quiz = get_quiz_for_uuid(uuid)
+	if not quiz:
+		flash('This quiz does not seem to exist', 'error')
+		return redirect(url_for('quiz.quiz_browse_page'))
+
 	if request.method == 'POST':
 		quiz_owner = quiz.quiz_owner
 		if not quiz_owner:
@@ -67,6 +71,9 @@ def quiz_register_page(uuid):
 			return redirect(url_for('quiz.quiz_browse_page'))
 		if subscriber_exists_in_quiz(current_user, quiz):
 			flash('You seem to have already registered for this quiz', 'info')
+			return redirect(url_for('quiz.quiz_browse_page'))
+		if quiz.quiz_master.user_id == current_user.id:
+			flash('You may not register for quizzes that you are hosting.', 'error')
 			return redirect(url_for('quiz.quiz_browse_page'))
 
 		new_subscriber = create_quiz_subscriber(current_user, quiz)
