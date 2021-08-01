@@ -10,8 +10,6 @@
 	<div class="col-xl-4 col-md-6">
 		<a href="{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=owner.parent_quiz.id) }}"
 			style="text-decoration:none;">
-
-
 			<div class="card cards border-0 shadow rounded-3  d-flex overflow-hidden m-3 p-3">
 				<div class="d-flex align-items-center">
 					<div class="image"> <img
@@ -32,7 +30,7 @@
 						{% else %}
 						<button class="btn btn-sm btn-outline-warning">Finish Editing Details!</button>
 						{% endif %}
-						{% if not owner.parent_quiz.active %}
+						{% if not owner.active %}
 						<button class="btn btn-sm btn-outline-info">You deactivated this quiz</button>
 						{% endif %}
 						{% endif %}
