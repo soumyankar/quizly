@@ -37,6 +37,11 @@
 <body class="d-flex flex-column h-100" id="page-top">
 	
 	<main class="flex-no-shrink">
+		
+		{% block navbar_section %}
+		{% include 'navbar.html' %}
+		{% endblock %}
+		
 		{# One-time system messages called Flash messages #}
 		{% block flash_messages %}
 		{%- with messages = get_flashed_messages(with_categories=true) -%}
@@ -54,9 +59,6 @@
 		{% endfor %}
 		{% endif %}
 		{%- endwith %}
-		{% endblock %}
-		{% block navbar_section %}
-		{% include 'navbar.html' %}
 		{% endblock %}
 
 		{% block content %}
