@@ -12,9 +12,11 @@ WTF_CSRF_ENABLED = True
 # For smtp.gmail.com to work, you MUST set "Allow less secure apps" to ON in Google Accounts.
 # Change it in https://myaccount.google.com/security#connectedapps (near the bottom).
 MAIL_SERVER = 'smtp.gmail.com'
-MAIL_PORT = 587
-MAIL_USE_SSL = False
-MAIL_USE_TLS = True
+# MAIL_PORT = 587
+# MAIL_USE_SSL = False
+# MAIL_USE_TLS = True
+MAIL_PORT = 465
+MAIL_USE_SSL = True
 MAIL_USERNAME = 'getsetquizindia@gmail.com'
 MAIL_PASSWORD = 'Gsquiz123'
 MAIL_DEFAULT_SENDER = 'getsetquizindia@gmail.com'
