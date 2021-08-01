@@ -16,7 +16,7 @@ class CustomUserManager(UserManager):
     @login_required
     def edit_user_profile_view(self):
         # Initialize form
-        form = self.EditUserProfileFormClass
+        form = self.EditUserProfileFormClass()
         if user_profile_exists(current_user):
             user_profile = get_user_profile(current_user.id)
             form = self.EditUserProfileFormClass(obj=user_profile)

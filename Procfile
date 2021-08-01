@@ -1,2 +1,1 @@
-
-web: gunicorn flask_app:app
+web: gunicorn heroku_worker:app

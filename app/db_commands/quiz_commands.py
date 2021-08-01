@@ -35,11 +35,9 @@ def add_quiz_owner_payment_details(quiz_owner_id, payment_amount, razorpay_payme
 	db.session.commit()
 	return quiz_owner
 
-def create_quiz_master(user, quiz):
-	new_quiz_master = quiz.quiz_master
-	if not new_quiz_master:
-		new_quiz_master = QuizMaster(user_confirm = False)
-
+def create_quiz_master(quiz_master, quiz):
+	user = get_user_for_id(quiz_master)
+	new_quiz_master = QuizMaster(user_confirm = False)
 	new_quiz_master.parent_user = user
 	new_quiz_master.parent_quiz = quiz
 	user.quizzes_hosted.append(new_quiz_master)
@@ -49,7 +47,12 @@ def create_quiz_master(user, quiz):
 
 	return new_quiz_master
 
-def create_quiz_details(form, user, uuid):
+def remove_quiz_master(quiz_master):
+	user = quiz_master.parent_user
+	user.quizzes_hosted.remove(quiz_master)
+	db.session.commit()
+
+def create_quiz_details(form, uuid):
 
 	quiz=Quiz.query.filter(Quiz.id == uuid).first()
 	if not quiz:
@@ -62,12 +65,17 @@ def create_quiz_details(form, user, uuid):
 		subscription_price = form.subscription_price.data)
 	new_quiz_details.parent_quiz = quiz
 	quiz.details = new_quiz_details
-	quiz.quiz_master = create_quiz_master(user, quiz)
-	db.session.add(new_quiz_details)
-	db.session.add(quiz)
-	db.session.commit()
-
-	return new_quiz_details
+	if quiz.quiz_master:
+		remove_quiz_master(quiz.quiz_master)
+	try:
+		create_quiz_master(form.quiz_master.data, quiz)
+		db.session.add(new_quiz_details)
+		db.session.add(quiz)
+		db.session.commit()
+		return new_quiz_details
+	except Exception as e:
+		print(e)
+		return False
 
 def create_quiz_subscriber(user, quiz):
 	new_subscriber = QuizSubscriber(
