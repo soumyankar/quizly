@@ -28,7 +28,7 @@ options ={
     }
 }
 
-def razorpay_refund_oder(params_dict):
+def razorpay_refund_order(params_dict):
 	payment_id = params_dict['payment_id']
 	payment_amount = params_dict['payment_amount']
 	notes = {'Request': 'Request for Refund'}

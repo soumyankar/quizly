@@ -93,6 +93,60 @@ def user_quiz_owned_actions_deactivate():
 		print (e)
 		abort(500)
 
+@user_dashboard.route('/user/quiz/owned/forgive_payment', methods=['POST'])
+@login_required
+@csrf_protect.exempt
+def user_quiz_owned_actions_forgive():
+	request_data = request.get_json()
+	user_id = request_data['user_id']
+	quiz_uuid = request_data['quiz_uuid']
+	user_subscriber = get_user_for_id(user_id)
+	quiz = get_quiz_for_uuid(quiz_uuid)
+	if not quiz:
+		flash('Something went wrong with quiz uuid.')
+		abort(500)
+	if total_player_exceeded(quiz):
+		flash('The quiz is already full. Forgiving payment consumes another slot.')
+	subscriber = get_subscriber_for_user_id(user_subscriber, quiz)
+	if not subscriber:
+		flash('Could not find this subscriber in this quiz.')
+		abort(500)
+	try:
+		resp = quiz_forgive_payment(subscriber, quiz)
+		if resp:
+			return json.dumps(resp, default=str)
+		else:
+			abort(500)
+	except Exception as e:
+		print(e)
+		abort(500)
+
+@user_dashboard.route('/user/quiz/owned/kick', methods=['POST'])
+@login_required
+@csrf_protect.exempt
+def user_quiz_owned_actions_kick():
+	request_data = request.get_json()
+	user_id = request_data['user_id']
+	quiz_uuid = request_data['quiz_uuid']
+	user_subscriber = get_user_for_id(user_id)
+	quiz = get_quiz_for_uuid(quiz_uuid)
+	if not quiz:
+		flash('Something went wrong with quiz uuid.')
+		abort(500)
+	subscriber = get_subscriber_for_user_id(user_subscriber, quiz)
+	if not subscriber:
+		flash('Could not find this subscriber in this quiz.')
+		abort(500)
+	try:
+		if kick_subscriber_from_quiz(subscriber, quiz):
+			resp ={"status": "OK"}
+			return json.dumps(resp, default=str)
+		resp = {"status": "500"}
+		return json.dumps(resp, default=str)
+	except Exception as e:
+		print(e)
+		abort(500)
+
 @user_dashboard.route('/user/quiz/quiz_master/<uuid>', methods=['POST', 'GET'])
 @login_required
 def user_quiz_hosted_actions(uuid):
@@ -136,7 +190,6 @@ def user_quiz_subscriber_toggle_status():
 		abort(500)
 	try:
 		resp = quiz_subscriber_toggle_status(current_user, quiz)
-		print(resp)
 		return json.dumps(resp, default=str)
 	except Exception as e:
 		print(e)

@@ -99,7 +99,8 @@ def quiz_register_payment_page(uuid):
 		return redirect(url_for('quiz.quiz_register_page',uuid=uuid))
 
 	subscriber = get_subscriber_for_user_id(current_user, quiz)
-	if subscriber.payment_status == True:
+	print('pop=',subscriber.payment_status)
+	if subscriber.payment_status:
 		flash('You have already paid for this quiz! :)', 'success')
 		return redirect(url_for('user_dashboard.user_dashboard_page'))
 

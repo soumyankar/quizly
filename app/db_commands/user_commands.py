@@ -38,7 +38,7 @@ def get_quiz_master_choices_for_uuid(uuid):
 	return choices
 
 def get_subscriber_for_user_id(user, quiz):
-	subscriber = QuizSubscriber.query.filter(QuizSubscriber.user_id == user.id and QuizSubscriber.quiz_id == quiz.id).first()
+	subscriber = QuizSubscriber.query.filter(QuizSubscriber.user_id == user.id, QuizSubscriber.quiz_id == quiz.id).first()
 	return subscriber
 
 def get_browse_quizzes():
@@ -64,7 +64,7 @@ def master_exists_in_quiz(user, quiz):
 	return False
 
 def get_quiz_master_for_user_id(user, quiz):
-	quiz_master = QuizMaster.query.filter(QuizMaster.user_id == user.id and QuizMaster.quiz_id == quiz.id).first()
+	quiz_master = QuizMaster.query.filter(QuizMaster.user_id == user.id, QuizMaster.quiz_id == quiz.id).first()
 	if not quiz_master:
 		return None
 	return quiz_master
@@ -105,3 +105,8 @@ def create_new_user_profile(form, user):
 	new_user_profile.parent_user = user
 	db.session.add(new_user_profile)
 	db.session.commit()
+
+def total_player_exceeded(quiz):
+	if quiz.details.current_players <= quiz.parent_pricing_plan.total_players:
+		return False
+	return True 

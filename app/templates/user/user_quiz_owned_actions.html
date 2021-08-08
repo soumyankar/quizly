@@ -121,6 +121,12 @@
 					<h5 class="card-title">Subscribers</h5>
 					<p>Find your quiz participants here, you may choose to kick them from your quiz or you may even forgive
 					their payment if you wish to do so.</p>
+					<div style="position:relative;">
+						<div class="text-center d-none h-100 d-flex justify-content-center align-items-center" align="center" style="width:100%;height:100%;z-index:999;position:absolute;background-color:#000000;opacity:0.6;" id="subscribers_table_info_overlay" >
+							<div class="spinner-border text-primary" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
 					<table class="table">
 						<thead class="thead-dark">
 							<tr>
@@ -134,14 +140,18 @@
 								<th scope="col"></th>
 								<th scope="col"></th>
 							</tr>
-							{% if quiz.subscribers.count() < 1%} <tr>
-								<td class="text-center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
-							</tr>
-							{% else %}
-							{% set increment = 1 %}
+						</thead>
+						{% if quiz.subscribers.count() < 1%} 
+						<tr>
+							<td class="text-center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
+						</tr>
+						{% else %}
+						<tbody id="subscribers_table">
+							{% set increment = namespace(value=1) %}
+
 							{% for subscriber in quiz.subscribers %}
-							<tr>
-								<th scope="row">{{ increment }}</th>
+							<tr class="{{ 'table-danger table-striped' if not subscriber.active }}" >
+								<th scope="row">{{ increment.value }}</th>
 								{% if subscriber.parent_user.profile %}
 								<td>{{ subscriber.parent_user.profile.first_name }} {{
 								subscriber.parent_user.profile.last_name }}</td>
@@ -154,7 +164,7 @@
 									{% if subscriber.payment_status %}
 									<button type="button" class="btn btn-sm btn-success">PAID</button>
 									{% else %}
-									<button type="button" class="btn btn-warning">UNPAID</button>
+									<button type="button" class="btn btn-sm btn-warning">UNPAID</button>
 									{% endif %}
 								</td>
 								<td>{{ subscriber.payment_date }}</td>
@@ -166,28 +176,33 @@
 									<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
 									{% endif %}
 								</td>
+								{% if subscriber.active %}
 								{% if not subscriber.payment_status %}
-								<td><button type="button" class="btn btn-outline-info">Forgive entry fee</button></td>
+								<td><button type="button" class="btn btn-sm btn-outline-info subscriber_forgive_payment" value="{{ subscriber.user_id }}">Forgive entry fee</button></td>
 								{% endif %}
-								<td><button type="button" class="btn btn-outline-danger">Kick</button></td>
+								<td><button type="button" value="{{ subscriber.user_id }}" class="btn btn-sm btn-outline-danger subscriber_kick">Kick</button></td>
+								{% else %}
+								<td><button type="button" class="btn btn-sm btn-danger">KICKED</button></td>
+								<td></td>
+								{% endif %}
 							</tr>
+							{% set increment.value = increment.value + 1 %}
 							{% endfor %}
-							{% endif %}
-						</thead>
+						</tbody>
+						{% endif %}
 					</table>
+				</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-</div>
-<style>
-span>input {
-	background: none;
-	color: white;
-	padding: 0;
-	border: 0;
-}
+	<style>
+	input {
+		background: none;
+		color: white;
+		padding: 0;
+		border: 0;
+	}
 </style>
 <!-- bootstrap-select -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
@@ -222,7 +237,7 @@ span>input {
 				$('#quiz_info').fadeOut();
 				$('#info_overlay').toggleClass('d-none');
 				$('#info_overlay').delay(50).fadeIn(150);
-				data = { "user_id": "{{ current_user.id }}", "quiz_uuid": "{{ quiz.id }}" }
+				data = { "user_id": "{{ current_user.id }}", "quiz_uuid": "{{ quiz.id }}" };
 				$.ajax({
 					url: "{{ url_for('user_dashboard.user_quiz_owned_actions_deactivate') }}",
 					type: "POST",
@@ -247,6 +262,52 @@ span>input {
 				});
 			}
 		});
+
+		$('.subscriber_forgive_payment').click(function(){
+			if(confirm('You sure you want to forgive payment for this user?')){
+				$('#subscribers_table_info_overlay').toggleClass('d-none');
+				$('subscribers_table_info_overlay').delay(50).fadeIn(150);
+				data = {"user_id": $(this).val(), "quiz_uuid": "{{ quiz.id }}"};
+				$.ajax({
+					url: "{{ url_for('user_dashboard.user_quiz_owned_actions_forgive') }}",
+					type: "POST",
+					dataType: "json",
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					success: function(response){
+						location.reload();
+					}.bind(this),
+					error: function(xhr, status, err){
+						$('subscribers_table_info_overlay').empty();
+						$('subscribers_table_info_overlay').append("<p>Something went wronng. Sorry :/</p>");
+					}.bind(this)
+				});
+			}
+		});
+
+		$('.subscriber_kick').click(function(){
+			if(confirm('You sure you want to kick this subscriber? These actions may not be undone.')){
+				$('#subscribers_table_info_overlay').toggleClass('d-none');
+				$('subscribers_table_info_overlay').delay(50).fadeIn(150);
+				data = {"user_id": $(this).val(), "quiz_uuid": "{{ quiz.id }}"};
+				$.ajax({
+					url: "{{ url_for('user_dashboard.user_quiz_owned_actions_kick') }}",
+					type: "POST",
+					dataType: "json",
+					data: JSON.stringify(data),
+					contentType: 'application/json',
+					success: function(response){
+						window.location.replace('{{ url_for('user_dashboard.user_quiz_owned_actions', uuid=quiz.id) }}');
+					}.bind(this),
+					error: function(xhr, status, err){
+						$('subscribers_table_info_overlay').empty();
+						$('subscribers_table_info_overlay').append("<p>Something went wronng. Sorry :/</p>");
+					}.bind(this)
+				});
+			}
+		});
+
+
 	});
 
 </script>

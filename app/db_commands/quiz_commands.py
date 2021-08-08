@@ -173,3 +173,31 @@ def quiz_deactivate(quiz):
 		print (e)
 		return None
 
+def quiz_forgive_payment(subscriber, quiz):
+	try:
+		subscriber.payment_amount = -9999
+		subscriber.payment_status = True
+		subscriber.payment_date = date.today()
+		subscriber.payment_time = datetime.now().time()
+		subscriber.razorpay_payment_id = 'forgiven'
+		subscriber.razorpay_order_id = 'forgiven'
+		subscriber.razorpay_signature = 'forgiven'
+		# Add Slots
+		quiz.details.current_players = quiz.details.current_players + 1
+		db.session.commit()
+
+		resp = {"status": "OK"}
+		return resp
+	except Exception as e:
+		resp = {"status":"500"}
+		return resp
+
+def kick_subscriber_from_quiz(subscriber, quiz):
+	try:
+		subscriber.active = False
+		quiz.details.current_players = quiz.details.current_players - 1
+		db.session.commit()
+		return True
+	except Exception as e:
+		print(e)
+		return False

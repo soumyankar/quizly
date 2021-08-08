@@ -26,8 +26,38 @@
 							<td align="center" colspan="9">Sorry, nobody has registered for your quiz yet.</td>
 						</tr>
 						{% else %}
-						{% set increment = 1 %}
+						{% set increment = namespace(value=1) %}
 						{% for quiz_owner in all_quiz_owners %}
+						<tr>
+							<td>{{ increment.value }}</td>
+							<td>{{ quiz_owner.parent_user.profile.first_name }} {{ quiz_owner.parent_user.profile.last_name }}</td>
+							<td>{{ quiz_owner.parent_user.profile.nationality }}</td>
+							<td>
+								{% if quiz_owner.payment_status %}
+								<button type="button" class="btn btn-sm btn-success">PAID</button>
+								{% else %}
+								<button type="button" class="btn btn-sm btn-warning">UNPAID</button>
+								{% endif %}
+							</td>
+							<td>
+								{{ quiz_owner.payment_date }} {{ quiz_owner.payment_time }}
+							</td>
+							<td>{{ quiz_owner.payment_amount }}</td>
+							<td>
+								{% if quiz_owner.user_confirm %}
+								<button type="button" class="btn btn-sm btn-success">CONFIRMED</button>
+								{% else %}
+								<button type="button" class="btn btn-sm btn-warning">UNCONFIRMED</button>
+								{% endif %}
+							</td>
+							<td>
+								<button class="btn btn-sm btn-outline-warning">Disable</button>
+							</td>
+							<td>
+								<button class="btn btn-sm btn-outline-info">Info</button>
+							</td>
+						</tr>
+						{% set increment.value = increment.value + 1 %}
 						{% endfor %}
 						{% endif %}
 					</thead>

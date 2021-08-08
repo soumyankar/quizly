@@ -105,6 +105,7 @@ class QuizSubscriber(db.Model):
     __tablename__ = 'quiz_subscribers'
 
     id = db.Column(db.Integer(), primary_key=True)
+    active = db.Column(db.Boolean(), nullable=True, default=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
     quiz_id = db.Column(UUID(as_uuid=True), db.ForeignKey('quizzes.id', ondelete='CASCADE'))
     user_confirm = db.Column(db.Boolean(), nullable=False, default=False)
