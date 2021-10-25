@@ -28,6 +28,7 @@
 					{% if quiz.active %}
 					<button class="btn btn-info" id="show_quiz_edit_form">Edit (Add edit icon here)</button>
 					<button class="btn btn-warning" id="quiz_toggle_active_status">Deactivate Quiz</button>
+					<button class="btn btn-success" id="quiz_scoring_sheet">Scoring Sheet</button>
 					{% else %}
 					<p class="card-text">This quiz has been deactivated.</p>
 					<p class="card-text">Refund request Timestamp: <strong>{{ quiz.refund.request_date }} {{
@@ -46,6 +47,9 @@
 				<div class="form-floating mb-3">
 					{{ render_field(form.quiz_master, type='text', class='form-select', placeholder='quiz master
 					email') }}
+				</div>
+				<div class="form-floating mb-3">
+					{{ render_field(form.tags, placeholder='audio, hardware, chip') }}
 				</div>
 				<div class="row mb-3">
 					<div class="col-md-6">

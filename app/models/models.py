@@ -98,6 +98,7 @@ class QuizDetails(db.Model):
     name = db.Column(db.String(50), nullable=False)
     date = db.Column(db.Date(), nullable=False)
     time = db.Column(db.Time(), nullable=False)
+    tags = db.Column(db.String(255), nullable=True)
     current_players = db.Column(db.Integer(), nullable=False, default=0)
     subscription_price = db.Column(db.Integer(), nullable=False, default=0)
 

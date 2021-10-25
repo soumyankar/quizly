@@ -57,8 +57,10 @@ def create_quiz_details(form, uuid):
 	quiz=Quiz.query.filter(Quiz.id == uuid).first()
 	if not quiz:
 		return False
+
 	new_quiz_details = QuizDetails(
 		name = form.name.data,
+		tags = ", ".join(form.tags.data),
 		date = form.date.data,
 		time = form.time.data,
 		current_players = 0,
